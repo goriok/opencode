@@ -1,0 +1,13 @@
+# Agents are installed by setup.sh — not tracked in this repo
+agents/
+
+# opencode plugin deps (managed by opencode itself)
+node_modules/
+package.json
+bun.lock
+
+# Per-project dirs (should not exist here, but just in case)
+.opencode/
+
+# Cursor config (created by agency-agents install)
+.cursor/

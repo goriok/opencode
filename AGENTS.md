@@ -15,9 +15,13 @@ and to mirror those agents to `.cursor/rules/` for Cursor IDE compatibility.
 - `setup.sh` — one-time machine setup script
 - `install-agents.sh` — per-project agent installer
 - `AGENTS.md` — this file
+- `agents/alan-turing.md` — primary agent: SDLC orchestrator (tracked exception)
+- `agents/grace-hopper.md` — primary agent: troubleshooting orchestrator (tracked exception)
+- `agents/maestro.md` — primary agent: legacy orchestrator (tracked exception, superseded by Alan Turing)
+- `skills/` — team-shareable skill definitions (all tracked)
 
 **Gitignored** (generated at runtime, do not commit):
-- `agents/` — 156 installed opencode agent `.md` files
+- `agents/` — 191 installed opencode agent `.md` files from agency-agents (exception: primary agents above)
 - `.opencode/` — runtime opencode directory
 - `.cursor/` — Cursor IDE rule files (`.mdc`)
 - `node_modules/`, `package.json`, `bun.lock`
@@ -228,11 +232,58 @@ Agents follow a consistent section order using emoji headers:
 
 ---
 
+## Primary Agents (Orchestrators)
+
+These are tracked custom agents that orchestrate specialist squads under the AI Fluency Framework 4Ds,
+ISO-25010, ATAM, and RM-ODP. They reference subagents from the agency-agents collection by name.
+
+| Agent | File | Purpose |
+|---|---|---|
+| **Alan Turing** | `agents/alan-turing.md` | SDLC orchestrator — requirements through monitoring |
+| **Grace Hopper** | `agents/grace-hopper.md` | Troubleshooting orchestrator — detection through prevention |
+| **Maestro** | `agents/maestro.md` | Legacy orchestrator — superseded by Alan Turing |
+
+### Integrated Frameworks
+
+All primary agents apply:
+- **AI Fluency 4Ds**: Delegation, Description, Discernment, Diligence
+- **ISO-25010**: Quality attribute evaluation at Requirements and Testing phases
+- **ATAM**: Architectural tradeoff analysis at Architecture phase; retrospective at RCA
+- **RM-ODP**: Five-viewpoint summary at Documentation phase; fault localization in post-mortem
+
+### Companion Skills
+
+Each primary agent has a companion skill for direct invocation:
+
+| Skill | File | Invocation |
+|---|---|---|
+| `alan-turing` | `skills/alan-turing/SKILL.md` | `/alan-turing` (opencode) / Skill tool (Claude Code) |
+| `grace-hopper` | `skills/grace-hopper/SKILL.md` | `/grace-hopper` (opencode) / Skill tool (Claude Code) |
+
+### Subagent References
+
+Primary agents reference agency-agents subagents by their installed slug names. Run `setup.sh` to
+install them. Key subagents used:
+
+**Alan Turing squad:** `product-manager`, `software-architect`, `backend-architect`,
+`security-engineer`, `senior-developer`, `frontend-developer`, `database-optimizer`,
+`code-reviewer`, `api-tester`, `performance-benchmarker`, `evidence-collector`,
+`reality-checker`, `accessibility-auditor`, `devops-automator`, `sre`,
+`git-workflow-master`, `incident-response-commander`, `technical-writer`, `compliance-auditor`
+
+**Grace Hopper squad:** `incident-response-commander`, `sre`, `infrastructure-maintainer`,
+`backend-architect`, `security-engineer`, `database-optimizer`, `devops-automator`,
+`code-reviewer`, `software-architect`, `senior-developer`, `api-tester`,
+`performance-benchmarker`, `compliance-auditor`, `test-results-analyzer`, `technical-writer`
+
+---
+
 ## Important Notes for Agents
 
-- **Do not commit** `agents/`, `.opencode/`, `.cursor/`, `node_modules/`, `package.json`, or `bun.lock`
+- **Do not commit** `agents/` (except tracked primary agents above), `.opencode/`, `.cursor/`, `node_modules/`, `package.json`, or `bun.lock`
 - **Do not create** application source files, test files, or build configs unless explicitly asked
 - **Do not modify** `opencode.json` permission gates without explicit user approval
 - The `.cursor/rules/*.mdc` files are auto-generated mirrors of `agents/*.md`; edit the source `.md`
   files, not the `.mdc` files directly
 - When adding a new agent, follow the YAML frontmatter and body structure above exactly
+- Primary agents (`mode: primary`) are tracked in git; subagents (`mode: subagent`) are gitignored

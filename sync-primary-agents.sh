@@ -10,8 +10,8 @@
 #   2. Strips opencode-specific frontmatter fields (mode, permission)
 #   3. Copies adapted files to ~/.claude/agents/
 #
-# Source of truth: ~/.config/opencode/agents/{alan-turing,grace-hopper,maestro}.md
-# Claude Code target: ~/.claude/agents/{alan-turing,grace-hopper,maestro}.md
+# Source of truth: ~/.config/opencode/agents/{alan-turing,grace-hopper,ada-lovelace,maestro}.md
+# Claude Code target: ~/.claude/agents/{alan-turing,grace-hopper,ada-lovelace,maestro}.md
 
 set -euo pipefail
 
@@ -31,6 +31,7 @@ TARGET_DIR="$HOME/.claude/agents"
 PRIMARY_AGENTS=(
   "alan-turing.md"
   "grace-hopper.md"
+  "ada-lovelace.md"
   "maestro.md"
 )
 

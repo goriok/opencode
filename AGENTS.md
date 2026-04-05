@@ -17,6 +17,7 @@ and to mirror those agents to `.cursor/rules/` for Cursor IDE compatibility.
 - `AGENTS.md` — this file
 - `agents/alan-turing.md` — primary agent: SDLC orchestrator (tracked exception)
 - `agents/grace-hopper.md` — primary agent: troubleshooting orchestrator (tracked exception)
+- `agents/ada-lovelace.md` — primary agent: analysis orchestrator (tracked exception)
 - `agents/maestro.md` — primary agent: legacy orchestrator (tracked exception, superseded by Alan Turing)
 - `skills/` — team-shareable skill definitions (all tracked)
 
@@ -254,6 +255,7 @@ ISO-25010, ATAM, and RM-ODP. They reference subagents from the agency-agents col
 |---|---|---|
 | **Alan Turing** | `agents/alan-turing.md` | SDLC orchestrator — requirements through monitoring |
 | **Grace Hopper** | `agents/grace-hopper.md` | Troubleshooting orchestrator — detection through prevention |
+| **Ada Lovelace** | `agents/ada-lovelace.md` | Analysis orchestrator — scope through validation, ATAM-driven |
 | **Maestro** | `agents/maestro.md` | Legacy orchestrator — superseded by Alan Turing |
 
 ### Integrated Frameworks
@@ -272,6 +274,7 @@ Each primary agent has a companion skill for direct invocation:
 |---|---|---|
 | `alan-turing` | `skills/alan-turing/SKILL.md` | `/alan-turing` (opencode) / Skill tool (Claude Code) |
 | `grace-hopper` | `skills/grace-hopper/SKILL.md` | `/grace-hopper` (opencode) / Skill tool (Claude Code) |
+| `ada-lovelace` | `skills/ada-lovelace/SKILL.md` | `/ada-lovelace` (opencode) / Skill tool (Claude Code) |
 
 ### Subagent References
 
@@ -288,6 +291,12 @@ install them. Key subagents used:
 `backend-architect`, `security-engineer`, `database-optimizer`, `devops-automator`,
 `code-reviewer`, `software-architect`, `senior-developer`, `api-tester`,
 `performance-benchmarker`, `compliance-auditor`, `test-results-analyzer`, `technical-writer`
+
+**Ada Lovelace squad:** `software-architect`, `backend-architect`, `security-engineer`,
+`code-reviewer`, `senior-developer`, `database-optimizer`, `data-engineer`,
+`performance-benchmarker`, `api-tester`, `evidence-collector`, `reality-checker`,
+`infrastructure-maintainer`, `sre`, `devops-automator`, `accessibility-auditor`,
+`compliance-auditor`, `analytics-reporter`, `technical-writer`, `product-manager`
 
 ---
 

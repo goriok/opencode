@@ -38,3 +38,6 @@ cp "$TMP/agency-agents/integrations/opencode/agents/"*.md "$AGENTS_DIR/"
 
 COUNT=$(ls "$AGENTS_DIR"/*.md 2>/dev/null | wc -l | tr -d ' ')
 info "Done! $COUNT agents installed to $AGENTS_DIR"
+
+info "Syncing primary agents to Claude Code..."
+bash "$HOME/.config/opencode/sync-primary-agents.sh"

@@ -36,8 +36,21 @@ and to mirror those agents to `.cursor/rules/` for Cursor IDE compatibility.
 bash ~/.config/opencode/setup.sh
 ```
 
-Clones [agency-agents](https://github.com/msitarzewski/agency-agents), converts, and installs 156 agent
-definitions to `~/.config/opencode/agents/`.
+Clones [agency-agents](https://github.com/msitarzewski/agency-agents), converts, and installs agent
+definitions to `~/.config/opencode/agents/`. Also runs `sync-primary-agents.sh` automatically.
+
+### Sync primary agents to Claude Code
+
+```bash
+bash ~/.config/opencode/sync-primary-agents.sh
+```
+
+Copies `alan-turing.md`, `grace-hopper.md`, and `maestro.md` from `~/.config/opencode/agents/` to
+`~/.claude/agents/`, stripping opencode-specific fields (`mode`, `permission`) that Claude Code does
+not support. Run this after editing any primary agent file.
+
+**Source of truth:** `~/.config/opencode/agents/*.md`
+**Claude Code mirror:** `~/.claude/agents/*.md` (generated — do not edit directly)
 
 ### Per-project Agent Installation
 

@@ -1,5 +1,7 @@
 # Agents are installed by setup.sh — not tracked in this repo
 agents/
+# Exception: custom agents defined in this repo
+!agents/agents-orchestrator.md
 
 # opencode plugin deps (managed by opencode itself)
 node_modules/

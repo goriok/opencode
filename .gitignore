@@ -1,5 +1,6 @@
 # Agents are installed by setup.sh — not tracked in this repo
-agents/
+# agents/
+
 # Exception: custom agents defined in this repo
 !agents/agents-orchestrator.md
 

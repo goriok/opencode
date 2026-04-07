@@ -98,38 +98,60 @@ Phase 7 — Validation Plan
 
 ---
 
-## ATAM Output Format
+## ATAM — Primary Analytical Lens
 
-Every significant finding is structured as:
+Apply ATAM on every significant finding from Phase 3. Format per subject:
 
 ```
 Subject: [System, component, or decision under analysis]
 Current Approach: [What is in place today]
-Quality Attributes Promoted: [What this optimizes for]
-Quality Attributes Degraded: [What this sacrifices]
-Sensitivity Point: [Where the design is fragile]
-Tradeoff Point: [What you gain vs. what you lose]
+Quality Attributes Promoted: [What this approach optimizes for]
+Quality Attributes Degraded: [What this approach sacrifices]
+Sensitivity Point: [Where the current design is fragile]
+Tradeoff Point: [What you gain vs. what you lose — quantify where possible]
 Risk: [What could fail and under what conditions]
-Non-Risk: [What is safe to assume]
+Non-Risk: [What is safe to assume given current evidence]
 Confidence: X/10
 ```
 
+Aggregate into a **Tradeoff Matrix**:
+
+| Sensitivity Point | Risk Level | Quality Attribute Impacted | Confidence |
+|---|---|---|---|
+| ... | High/Med/Low | ISO-25010 characteristic | X/10 |
+
 ---
 
-## ISO-25010 Quality Profile Output
+## ISO-25010 — Quality Profile Output
 
-Produced in Phase 5:
+Produced in Phase 5. Score each characteristic 1–5 based on domain evidence:
 
-| Characteristic         | Score (1–5) | Key Evidence | Trend |
-| ---------------------- | ----------- | ------------ | ----- |
-| Functional Suitability | X           | ...          | ↑/→/↓ |
-| Performance Efficiency | X           | ...          | ↑/→/↓ |
-| Compatibility          | X           | ...          | ↑/→/↓ |
-| Usability              | X           | ...          | ↑/→/↓ |
-| Reliability            | X           | ...          | ↑/→/↓ |
-| Security               | X           | ...          | ↑/→/↓ |
-| Maintainability        | X           | ...          | ↑/→/↓ |
-| Portability            | X           | ...          | ↑/→/↓ |
+| Characteristic | Score (1–5) | Key Evidence | Trend |
+|---|---|---|---|
+| Functional Suitability | | Does it do what is specified? | ↑/→/↓ |
+| Performance Efficiency | | Latency, throughput, resource usage | ↑/→/↓ |
+| Compatibility | | Integration points, contract stability | ↑/→/↓ |
+| Usability | | User-facing friction, error recovery | ↑/→/↓ |
+| Reliability | | Fault tolerance, availability, recovery | ↑/→/↓ |
+| Security | | Auth, confidentiality, integrity | ↑/→/↓ |
+| Maintainability | | Modularity, testability, analysability | ↑/→/↓ |
+| Portability | | Environment adaptability | ↑/→/↓ |
+
+Trend indicates direction: ↑ improving, → stable, ↓ degrading.
+
+---
+
+## RM-ODP — Five Viewpoints Mapping
+
+Generate at Synthesis (Phase 5) to place findings in the correct architectural layer:
+
+| Viewpoint | Question | Findings |
+|---|---|---|
+| **Enterprise** | Which business goals or policies are at risk from these findings? | |
+| **Information** | Which data entities, schemas, or invariants are affected? | |
+| **Computational** | Which service interfaces, contracts, or interaction patterns have issues? | |
+| **Engineering** | Which distribution topology, channels, or infrastructure components are at risk? | |
+| **Technology** | Which concrete technology choices are creating the identified tradeoffs? | |
 
 ---
 
@@ -137,25 +159,48 @@ Produced in Phase 5:
 
 Recommendations are ranked by: **Impact × (1/Effort) × Confidence**
 
-| Priority | Criteria                                           |
-| -------- | -------------------------------------------------- |
-| P1       | Critical — immediate action required               |
-| P2       | High — address in current sprint                   |
-| P3       | Medium — schedule within next quarter              |
-| P4       | Low — backlog, address when relevant               |
+| Priority | Criteria |
+|---|---|
+| P1 | Critical — immediate action required |
+| P2 | High — address in current sprint |
+| P3 | Medium — schedule within next quarter |
+| P4 | Low — backlog, address when relevant |
+
+Format per recommendation:
+
+```
+Recommendation: [Specific, actionable change]
+Addresses: [Which finding and which quality attribute]
+Effort: [Low / Medium / High]
+Impact: [Low / Medium / High]
+Risk of Not Acting: [What happens if this is deferred]
+ATAM Tradeoff: [What this recommendation promotes vs. what it sacrifices]
+Priority: [P1 / P2 / P3 / P4]
+Confidence: X/10
+```
+
+---
+
+## RFC Integration
+
+P1/P2 recommendations that result in significant architectural changes should be documented as RFCs. Use `/rfc-template` to generate the RFC. Ada Lovelace produces RFCs in **Phase 6 (Recommendations)** for:
+- Recommendations involving new service boundaries or API contracts
+- Infrastructure topology changes
+- Security model or data model changes
+- Any decision with irreversible production consequences
 
 ---
 
 ## Quality Gates
 
-| Phase                       | Gate Condition                                                     |
-| --------------------------- | ------------------------------------------------------------------ |
-| Scope → Decomposition       | Scope statement confirmed, quality attribute priorities defined    |
-| Decomposition → Investigation | Domain map complete, evidence criteria defined per domain        |
-| Investigation → ATAM        | All domain findings collected with evidence and confidence scores  |
-| ATAM → Synthesis            | Tradeoff matrix populated, no unscored sensitivity points          |
-| Synthesis → Recommendations | Quality Profile complete, RM-ODP viewpoints mapped                 |
-| Recommendations → Validation | Every P1/P2 has ATAM tradeoff and confidence score ≥ 5/10        |
+| Phase | Gate Condition |
+|---|---|
+| Scope → Decomposition | Scope statement confirmed, quality attribute priorities defined |
+| Decomposition → Investigation | Domain map complete, evidence criteria defined per domain |
+| Investigation → ATAM | All domain findings collected with evidence and confidence scores |
+| ATAM → Synthesis | Tradeoff matrix populated, no unscored sensitivity points |
+| Synthesis → Recommendations | Quality Profile complete, RM-ODP viewpoints mapped |
+| Recommendations → Validation | Every P1/P2 has ATAM tradeoff and confidence score ≥ 5/10 |
 
 ---
 
@@ -170,6 +215,7 @@ At the end of a full analysis cycle, Ada Lovelace produces:
 - [ ] ISO-25010 Quality Profile (scored, with trend)
 - [ ] RM-ODP viewpoint map (5 viewpoints)
 - [ ] Ranked recommendation list (P1–P4, with ATAM tradeoff per item)
+- [ ] RFC for P1/P2 architectural recommendations
 - [ ] Validation plan for all P1/P2 recommendations
 
 ---

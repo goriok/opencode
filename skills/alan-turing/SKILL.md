@@ -64,7 +64,7 @@ Phase 1 — Requirements
 Phase 2 — Architecture
   └─ Software Architect (lead)
   └─ Backend Architect, Security Engineer (support)
-  └─ Output: C4 diagrams, ADRs, threat model (ATAM per decision)
+  └─ Output: C4 diagrams, ADRs (ATAM per decision), threat model, RFC
 
 Phase 3 — Implementation
   └─ Senior Developer (lead)
@@ -95,16 +95,73 @@ Phase 7 — Documentation
 
 ## Quality Gates
 
-Each phase has a mandatory gate before the next begins:
-
 | Phase | Gate Condition |
 |---|---|
 | Requirements → Architecture | Requirements signed off, ISO-25010 Utility Tree produced |
 | Architecture → Implementation | ATAM tradeoffs documented, no unresolved architectural risks |
 | Implementation → Testing | Code Reviewer approved all tasks |
-| Testing → Deployment | Reality Checker passed (not just "looks good") |
+| Testing → Deployment | Reality Checker passed |
 | Deployment → Monitoring | Rollback plan documented and tested in staging |
 | Monitoring → Documentation | Alerts firing correctly in staging |
+
+---
+
+## ISO-25010 — Quality Attributes Checklist
+
+Apply at **Requirements** (define targets) and **Testing** (verify targets met):
+
+| Characteristic | Key Questions |
+|---|---|
+| Functional Suitability | Does it do what was specified? All edge cases covered? |
+| Performance Efficiency | Latency, throughput, resource utilization within targets? |
+| Compatibility | Integrates with existing systems without breaking contracts? |
+| Usability | Adds friction to end-user flow? Recoverable if triggered wrongly? |
+| Reliability | Fault tolerance, recoverability, availability targets met? |
+| Security | Confidentiality, integrity, authenticity, non-repudiation enforced? |
+| Maintainability | Modular, testable, analysable, modifiable by the next engineer? |
+| Portability | Adaptable to different environments without major rework? |
+
+---
+
+## ATAM — Architectural Decision Record Format
+
+Apply at **Architecture** phase. One record per significant decision:
+
+```
+Decision: [What was decided]
+Tactic: [Architectural tactic applied]
+Quality Attributes Promoted: [e.g., Performance, Security]
+Quality Attributes Degraded: [e.g., Maintainability]
+Sensitivity Point: [Where the system becomes fragile]
+Tradeoff Point: [What you gain vs. lose]
+Risk: [What could go wrong]
+Non-Risk: [What is safe to assume]
+Confidence: X/10
+```
+
+---
+
+## RM-ODP — Five Viewpoints Summary
+
+Generate at **Documentation** phase (Phase 7). Keep each viewpoint to ≤5 bullet points:
+
+| Viewpoint | Content |
+|---|---|
+| **Enterprise** | Purpose, scope, business policies, key stakeholders, success criteria |
+| **Information** | Core data entities, invariants, schemas, information flows |
+| **Computational** | Service interfaces, operations, interaction patterns, contracts |
+| **Engineering** | Distribution topology, channels, binding protocols, infrastructure constraints |
+| **Technology** | Concrete technology choices with justification for each |
+
+---
+
+## RFC Integration
+
+Architecture decisions and significant feature proposals should be documented as RFCs. Use the `/rfc-template` skill to generate the RFC. Alan Turing produces RFCs in **Phase 2 (Architecture)** for:
+- Any decision with irreversible consequences
+- New service boundaries or API contracts
+- Infrastructure topology changes
+- Security model changes
 
 ---
 
@@ -116,6 +173,7 @@ At the end of a full SDLC cycle, Alan Turing produces:
 - [ ] Architecture Decision Records (ATAM format)
 - [ ] C4 context + container diagrams
 - [ ] Threat model
+- [ ] RFC for significant architectural decisions
 - [ ] Working code with test coverage
 - [ ] Performance benchmarks vs. targets
 - [ ] Deployment runbook with rollback procedure

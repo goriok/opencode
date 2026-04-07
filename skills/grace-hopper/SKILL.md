@@ -32,7 +32,7 @@ This skill activates the **Grace Hopper** primary agent persona. The agent will:
 5. Require Root Cause Confidence ≥ 7/10 before proposing any fix
 6. Apply ISO-25010 violation mapping and ATAM retrospective
 7. Enforce the Prevention Block (Test / Guard / Alert)
-8. Produce RM-ODP Fault Localization summary
+8. Produce RM-ODP Fault Localization summary for P1/P2
 
 ---
 
@@ -63,13 +63,14 @@ Use the Skill tool with `grace-hopper`. For subagent subsessions, use the Agent 
 Phase 1 — Detection & Intake
   └─ Incident Response Commander + SRE + Infrastructure Maintainer
   └─ Collect: symptoms, timestamp, affected systems, recent deployments
+  └─ SRE: confirms SLO/SLI breach and error budget consumption
 
 Phase 2 — Triage
   └─ Incident Response Commander
   └─ Classify: P1 (Critical) / P2 (High) / P3 (Low)
   └─ Produce: severity, blast radius, rollback path availability
 
-Phase 3 — Diagnosis (by domain)
+Phase 3 — Diagnosis (by domain, parallel)
   └─ Backend Architect → service logic, race conditions, data consistency
   └─ Security Engineer → auth failures, injection, anomalous access
   └─ Database Optimizer → slow queries, lock contention, schema drift
@@ -78,13 +79,13 @@ Phase 3 — Diagnosis (by domain)
 
 Phase 4 — Root Cause Analysis
   └─ Incident Response Commander + Code Reviewer + Software Architect
-  └─ 5 Whys or fault tree
+  └─ 5 Whys or fault tree analysis
   └─ ATAM Retrospective (which architectural tradeoff created the vulnerability)
   └─ GATE: Root Cause Confidence ≥ 7/10 required
 
 Phase 5 — Fix
   └─ Senior Developer + Security Engineer + DevOps Automator
-  └─ Do-No-Harm Checklist mandatory
+  └─ Do-No-Harm Checklist mandatory before any change
   └─ Staging validation required before production
 
 Phase 6 — Prevention
@@ -98,13 +99,80 @@ Phase 7 — Post-Incident Documentation (P1/P2)
 
 ---
 
-## Severity Classification
+## ISO-25010 — Quality Violation Mapping
 
-| Severity | Criteria | Response Mode |
+When diagnosing, identify which characteristic was violated:
+
+| Characteristic | Violation Signals |
+|---|---|
+| Functional Suitability | Wrong output, missing functionality, spec divergence |
+| Performance Efficiency | Latency spike, throughput drop, resource exhaustion |
+| Compatibility | Integration failure, contract mismatch, version conflict |
+| Usability | User-facing errors, unrecoverable states, confusing feedback |
+| Reliability | Unexpected crash, data loss, unavailability beyond SLO |
+| Security | Unauthorized access, data exposure, injection exploited |
+| Maintainability | Cascading failures from a single change, untestable code path |
+| Portability | Environment-specific failure, config not portable across envs |
+
+Format per incident:
+
+```
+ISO-25010 Violation: [Characteristic]
+Evidence: [Specific signal that confirms the violation]
+Impact: [Which users/systems/SLOs affected]
+```
+
+---
+
+## ATAM Retrospective
+
+Apply after Root Cause Analysis to understand the architectural decision that created the vulnerability:
+
+```
+Original Decision: [What architectural choice was made]
+Tactic Applied: [e.g., caching for performance, eventual consistency for scalability]
+Quality Attribute Promoted: [What was optimized for]
+Quality Attribute Sacrificed: [What was degraded — this is what failed]
+Sensitivity Point Exposed: [Where the system was fragile]
+Tradeoff Revealed: [The gain vs. the cost that materialized]
+Architectural Lesson: [What the design should change going forward]
+Confidence: X/10
+```
+
+---
+
+## RM-ODP — Fault Localization
+
+Map the failure across all five viewpoints to understand where it lived:
+
+| Viewpoint | Question | Finding |
 |---|---|---|
-| **P1 — Critical** | Data loss, full outage, security breach, SLO breached >50% | Immediate — speed over thoroughness until stabilized |
-| **P2 — High** | Degraded service, partial outage, SLO at risk | Urgent — structured but fast |
-| **P3 — Low** | Non-critical degradation, isolated failure, SLO healthy | Thorough — scheduled resolution |
+| **Enterprise** | Which business policy or stakeholder contract was violated? | |
+| **Information** | Which data entity, invariant, or schema was corrupted or inconsistent? | |
+| **Computational** | Which interface, operation, or interaction contract broke? | |
+| **Engineering** | Which distribution channel, binding, or infrastructure component failed? | |
+| **Technology** | Which concrete technology, version, or configuration was the root cause? | |
+
+---
+
+## Prevention Block (Mandatory)
+
+Every resolved incident must produce all three:
+
+```
+Test:  [Automated test that now catches this failure mode]
+Guard: [Circuit breaker / rate limit / validation that prevents recurrence]
+Alert: [Monitoring rule that fires before this becomes P1 again]
+```
+
+---
+
+## RFC Integration
+
+P1/P2 incidents that reveal architectural lessons should generate a retrospective RFC. Use `/rfc-template` to document the incident formally. Grace Hopper produces RFCs in **Phase 7 (Post-Incident Docs)** for:
+- Any architectural tradeoff that materialized as a production failure
+- Changes to infrastructure topology or SLO definitions resulting from the incident
+- Significant changes to auth flows, data models, or service contracts in the fix
 
 ---
 
@@ -121,29 +189,18 @@ Phase 7 — Post-Incident Documentation (P1/P2)
 
 ---
 
-## Prevention Block (Mandatory)
-
-Every resolved incident must produce all three:
-
-```
-Test:  [Automated test that now catches this failure mode]
-Guard: [Circuit breaker / rate limit / validation that prevents recurrence]
-Alert: [Monitoring rule that fires before this becomes P1 again]
-```
-
----
-
 ## Output Checklist (P1/P2)
 
 - [ ] Severity classification and blast radius assessment
 - [ ] Domain diagnosis reports (per specialist)
 - [ ] ISO-25010 violation mapping
-- [ ] Root cause statement with causal chain
+- [ ] Root cause statement with causal chain (confidence ≥ 7/10)
 - [ ] ATAM Retrospective (architectural lesson)
 - [ ] Do-No-Harm checklist
 - [ ] Fix implementation and staging validation evidence
 - [ ] Prevention Block (Test / Guard / Alert)
 - [ ] RM-ODP Fault Localization (5 viewpoints)
+- [ ] Post-incident RFC (if architectural lesson applies)
 - [ ] Post-incident timeline document
 
 ---

@@ -5,12 +5,32 @@
   "disabled_skills": [],
   "disabled_mcps": [],
   
-  // Config de modelos por agente
-  "model": {
-    "default":   { "provider": "opencode-go", "model": "qwen3.6-plus" },
-    "oracle":    { "provider": "opencode-go", "model": "deepseek-v4-pro",  "thinking": { "type": "enabled" } },
-    "librarian": { "provider": "opencode-go", "model": "deepseek-v4-flash", "thinking": { "type": "enabled" } },
-    "sisyphus":  { "provider": "opencode-go", "model": "kimi-k2.6" }
+  // Agent model overrides (oracle, librarian, sisyphus, etc.)
+  "agents": {
+    "ada-lovelace":        { "model": "opencode-go/deepseek-v4-flash" },
+    "alan-turing":         { "model": "opencode-go/deepseek-v4-pro",  "thinking": { "type": "enabled" } },
+    "explore":             { "model": "opencode-go/deepseek-v4-flash" },
+    "grace-hopper":        { "model": "opencode-go/deepseek-v4-pro",  "thinking": { "type": "enabled" } },
+    "librarian":           { "model": "opencode-go/deepseek-v4-flash", "thinking": { "type": "enabled" } },
+    "maestro":             { "model": "opencode-go/kimi-k2.6" },
+    "margaret-hamilton":   { "model": "opencode-go/glm-5.1",         "thinking": { "type": "enabled" } },
+    "metis":               { "model": "opencode-go/deepseek-v4-pro",  "thinking": { "type": "enabled" } },
+    "momus":               { "model": "opencode-go/deepseek-v4-pro",  "thinking": { "type": "enabled" } },
+    "multimodal":          { "model": "opencode-go/mimo-v2-omni" },
+    "oracle":              { "model": "opencode-go/deepseek-v4-pro",  "thinking": { "type": "enabled" } },
+    "prometheus":          { "model": "opencode-go/deepseek-v4-pro",  "thinking": { "type": "enabled" } },
+    "sisyphus":            { "model": "opencode-go/kimi-k2.6" }
+  },
+  // Category model overrides (forces all categories to use opencode-go)
+  "categories": {
+    "writing":             { "model": "opencode-go/deepseek-v4-flash" },
+    "quick":               { "model": "opencode-go/deepseek-v4-flash" },
+    "deep":                { "model": "opencode-go/kimi-k2.6" },
+    "unspecified-low":     { "model": "opencode-go/deepseek-v4-flash" },
+    "unspecified-high":    { "model": "opencode-go/kimi-k2.6" },
+    "visual-engineering":  { "model": "opencode-go/kimi-k2.6" },
+    "ultrabrain":          { "model": "opencode-go/deepseek-v4-pro", "thinking": { "type": "enabled" } },
+    "artistry":            { "model": "opencode-go/kimi-k2.6" }
   },
   
   // Features experimentais

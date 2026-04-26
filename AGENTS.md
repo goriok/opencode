@@ -273,7 +273,8 @@ ISO-25010, ATAM, and RM-ODP. They reference subagents from the agency-agents col
 |---|---|---|
 | **Alan Turing** | `agents/alan-turing.md` | SDLC orchestrator — requirements through monitoring |
 | **Grace Hopper** | `agents/grace-hopper.md` | Troubleshooting orchestrator — detection through prevention |
-| **Ada Lovelace** | `agents/ada-lovelace.md` | Analysis orchestrator — scope through validation, ATAM-driven |
+| **Margaret Hamilton** | `agents/margaret-hamilton.md` | Deep analysis orchestrator — full ATAM, ISO-25010 |
+| **Ada Lovelace** | `agents/ada-lovelace.md` | Exploratory analysis — fast, lightweight |
 | **Maestro** | `agents/maestro.md` | Legacy orchestrator — superseded by Alan Turing |
 
 ### Integrated Frameworks
@@ -292,6 +293,7 @@ Each primary agent has a companion skill for direct invocation:
 |---|---|---|
 | `alan-turing` | `skills/alan-turing/SKILL.md` | `/alan-turing` (opencode) / Skill tool (Claude Code) |
 | `grace-hopper` | `skills/grace-hopper/SKILL.md` | `/grace-hopper` (opencode) / Skill tool (Claude Code) |
+| `margaret-hamilton` | `skills/margaret-hamilton/SKILL.md` | `/margaret-hamilton` (opencode) / Skill tool |
 | `ada-lovelace` | `skills/ada-lovelace/SKILL.md` | `/ada-lovelace` (opencode) / Skill tool (Claude Code) |
 
 ### Subagent References

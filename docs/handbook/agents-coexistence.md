@@ -13,8 +13,11 @@ Entrada do usuário
     ├─→ "Algo quebrou" / "Erro" / "Debug"
     │       Grace Hopper (troubleshooting)
     │
-    ├─→ "Revise/analise isso" / "Audite"
-    │       Ada Lovelace (análise) → /review (workspace)
+    ├─→ "Revise/analise isso formalmente" / "Audite" / "RFC"
+    │       Margaret Hamilton (deep ATAM)
+    │
+    ├─→ "De uma olhada rápida" / "O que vê em X?"
+    │       Ada Lovelace (exploratória)
     │
     ├─→ "Quick fix" / "Rapidinho"
     │       oh-my-opencode (ultrawork)
@@ -31,14 +34,16 @@ Entrada do usuário
 |-------------|-----------|----------------|
 | **Alan Turing** | SDLC: Requirements → Monitoring | Feature completo, novo projeto |
 | **Grace Hopper** | Incident: Detection → Prevention | Problemas, bugs, falhas |
-| **Ada Lovelace** | ATAM: Scope → Validation | Análise profunda, arquitetura |
+| **Margaret Hamilton** | Deep ATAM: Full analysis | RFCs, auditorias formais, tradeoff matrix |
+| **Ada Lovelace** | Exploratory: Quick probe | Insights rápidos, pattern discovery |
 
 ### Setup dos Orquestrados
 
 ```
-/alan-turing   → Skill: alan-turing
-/grace-hopper → Skill: grace-hopper  
-/ada-lovelace → Skill: ada-lovelace
+/alan-turing     → Skill: alan-turing
+/grace-hopper   → Skill: grace-hopper  
+/margaret-hamilton → Skill: margaret-hamilton
+/ada-lovelace   → Skill: ada-lovelace
 ```
 
 ---

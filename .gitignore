@@ -17,3 +17,5 @@ dcp.jsonc
 
 # Cursor config (created by agency-agents install)
 .cursor/
+token-dashboard.html
+token-baselines/

@@ -120,12 +120,13 @@ GROUP BY agent ORDER BY total_tokens DESC"
 
 SQL_MODELS="
 SELECT json_extract(m.data, '$.modelID') as model,
+       json_extract(m.data, '$.providerID') as provider,
        COUNT(*) as msgs,
        SUM(json_extract(m.data, '$.tokens.total')) as total_tokens,
        SUM(json_extract(m.data, '$.tokens.input')) as input_tokens,
        SUM(json_extract(m.data, '$.tokens.output')) as output_tokens,
        COALESCE(SUM(json_extract(m.data, '$.tokens.cache.read')), 0) as cache_read,
-       SUM(json_extract(m.data, '$.cost')) as total_cost
+       SUM(json_extract(m.data, '$.cost')) as tracked_cost
 FROM message m
 WHERE ${DATE_FILTER}
 GROUP BY model ORDER BY total_tokens DESC"
@@ -144,15 +145,44 @@ SESSION_DATA=$(run_query "$SQL_SESSIONS")
 AGENT_DATA=$(run_query "$SQL_AGENTS")
 MODEL_DATA=$(run_query "$SQL_MODELS")
 
+# ── Estimated API Cost ──────────────────────────────────────────────────────
+# The "cost" field in OpenCode's DB is what providers report, which is misleading:
+# - opencode-go models: report per-token cost, but subscription is flat $5-10/mo
+# - anthropic/github-copilot/opencode: report cost=0, but you pay subscription
+# We calculate what these tokens WOULD cost at published API rates.
+EST_API_COST=$(echo "$MODEL_DATA" | python3 -c "
+import json, sys
+pricing = {
+    'claude-sonnet-4-6':  (3.00/1e6, 15.00/1e6, 0.30/1e6),
+    'claude-sonnet-4.6':  (3.00/1e6, 15.00/1e6, 0.30/1e6),
+    'claude-opus-4-6':    (15.00/1e6, 75.00/1e6, 1.50/1e6),
+    'claude-opus-4.6':    (15.00/1e6, 75.00/1e6, 1.50/1e6),
+    'claude-haiku-4-5':   (0.80/1e6, 4.00/1e6, 0.08/1e6),
+    'glm-5.1':            (0, 0, 0),
+    'deepseek-v4-flash':  (0, 0, 0),
+    'deepseek-v4-pro':    (0, 0, 0),
+    'minimax-m2.7':       (0, 0, 0),
+    'big-pickle':         (0, 0, 0),
+}
+data = json.load(sys.stdin)
+total = 0
+for m in data:
+    p = pricing.get(m.get('model',''), (0,0,0))
+    total += m.get('input_tokens',0) * p[0]
+    total += m.get('output_tokens',0) * p[1]
+    total += m.get('cache_read',0) * p[2]
+print(round(total, 2))
+" 2>/dev/null || echo "0")
+
 # ── Compute Summary Stats ───────────────────────────────────────────────────
 SUMMARY=$(echo "$DAILY_DATA" | python3 -c "
 import json, sys
 data = json.load(sys.stdin)
 if not data:
-    print(json.dumps({'total_tokens': 0, 'total_cost': 0, 'total_msgs': 0, 'days': 0, 'avg_tokens_day': 0, 'avg_cost_day': 0, 'cache_hit_rate': 0, 'output_ratio': 0, 'cost_per_output_token': 0}))
+    print(json.dumps({'total_tokens': 0, 'tracked_cost': 0, 'est_api_cost': 0, 'total_msgs': 0, 'days': 0, 'avg_tokens_day': 0, 'avg_tracked_cost_day': 0, 'avg_est_cost_day': 0, 'cache_hit_rate': 0, 'output_ratio': 0, 'tracked_cost_per_output': 0, 'est_cost_per_output': 0}))
     sys.exit(0)
 total_tokens = sum(r.get('total_tokens', 0) or 0 for r in data)
-total_cost = sum(r.get('total_cost', 0) or 0 for r in data)
+tracked_cost = sum(r.get('total_cost', 0) or 0 for r in data)
 total_msgs = sum(r.get('msgs', 0) for r in data)
 total_input = sum(r.get('input_tokens', 0) or 0 for r in data)
 total_output = sum(r.get('output_tokens', 0) or 0 for r in data)
@@ -160,18 +190,31 @@ total_cache_read = sum(r.get('cache_read', 0) or 0 for r in data)
 days = len(data)
 cache_hit_rate = (total_cache_read / total_tokens * 100) if total_tokens > 0 else 0
 output_ratio = (total_output / total_tokens * 100) if total_tokens > 0 else 0
-cost_per_output = (total_cost / total_output) if total_output > 0 else 0
+tracked_per_output = (tracked_cost / total_output) if total_output > 0 else 0
 print(json.dumps({
     'total_tokens': total_tokens,
-    'total_cost': round(total_cost, 4),
+    'total_output': total_output,
+    'tracked_cost': round(tracked_cost, 4),
+    'est_api_cost': 0,
     'total_msgs': total_msgs,
     'days': days,
     'avg_tokens_day': round(total_tokens / days) if days > 0 else 0,
-    'avg_cost_day': round(total_cost / days, 4) if days > 0 else 0,
+    'avg_tracked_cost_day': round(tracked_cost / days, 4) if days > 0 else 0,
+    'avg_est_cost_day': 0,
     'cache_hit_rate': round(cache_hit_rate, 1),
     'output_ratio': round(output_ratio, 1),
-    'cost_per_output_token': round(cost_per_output, 8)
+    'tracked_cost_per_output': round(tracked_per_output, 8),
+    'est_cost_per_output': 0
 }))
+" 2>/dev/null)
+
+SUMMARY=$(python3 -c "
+import json
+s = json.loads('''${SUMMARY}''')
+s['est_api_cost'] = float('''${EST_API_COST}''' or '0')
+s['avg_est_cost_day'] = round(s['est_api_cost'] / s['days'], 2) if s['days'] > 0 else 0
+s['est_cost_per_output'] = round(s['est_api_cost'] / s['total_output'], 8) if s.get('total_output', 0) > 0 else 0
+print(json.dumps(s))
 " 2>/dev/null)
 
 # ── Baseline Handling ────────────────────────────────────────────────────────
@@ -247,16 +290,19 @@ if [[ "$DRY_RUN" == true ]]; then
   echo "$SUMMARY" | python3 -c "
 import json, sys
 s = json.load(sys.stdin)
-print(f'  Period:        Last ${DAYS} days')
-print(f'  Total Tokens:  {s[\"total_tokens\"]:>,}')
-print(f'  Total Cost:    \${s[\"total_cost\"]}')
-print(f'  Messages:      {s[\"total_msgs\"]:>,}')
-print(f'  Active Days:   {s[\"days\"]}')
-print(f'  Avg Tokens/Day:{s[\"avg_tokens_day\"]:>,}')
-print(f'  Avg Cost/Day:  \${s[\"avg_cost_day\"]}')
-print(f'  Cache Hit Rate: {s[\"cache_hit_rate\"]}%')
-print(f'  Output Ratio:  {s[\"output_ratio\"]}%')
-print(f'  Cost/Output Tk: \${s[\"cost_per_output_token\"]:.6f}')
+print(f'  Period:            Last ${DAYS} days')
+print(f'  Total Tokens:      {s[\"total_tokens\"]:>,}')
+print(f'  Tracked Cost:     \${s[\"tracked_cost\"]}')
+print(f'  Est. API Cost:     \${s[\"est_api_cost\"]}')
+print(f'  Messages:          {s[\"total_msgs\"]:>,}')
+print(f'  Active Days:       {s[\"days\"]}')
+print(f'  Avg Tokens/Day:    {s[\"avg_tokens_day\"]:>,}')
+print(f'  Avg Tracked/Day:   \${s[\"avg_tracked_cost_day\"]}')
+print(f'  Avg Est.API/Day:   \${s[\"avg_est_cost_day\"]}')
+print(f'  Cache Hit Rate:    {s[\"cache_hit_rate\"]}%')
+print(f'  Output Ratio:      {s[\"output_ratio\"]}%')
+print(f'  Tracked/Output Tk: \${s[\"tracked_cost_per_output\"]:.6f}')
+print(f'  Est.API/Output Tk: \${s[\"est_cost_per_output\"]:.6f}')
 " 2>/dev/null
   printf "\n${CYAN}── Agents ──${NC}\n"
   echo "$AGENT_DATA" | python3 -c "
@@ -422,6 +468,9 @@ cat > "$OUTPUT_PATH" << 'HEREDOC_START'
 
 <h1>⚡ OpenCode Token Dashboard</h1>
 <p class="subtitle" id="subtitle"></p>
+<p id="cost-warning" style="background:rgba(210,153,34,0.15);border:1px solid #d29922;border-radius:6px;padding:8px 12px;margin-bottom:16px;font-size:0.8rem;color:#d29922;">
+⚠️ <strong>Tracked Cost</strong> = what providers report (opencode-go only, $0 for Anthropic/Copilot). <strong>Est. API Cost</strong> = what these tokens would cost at published API rates. Your real cost is the flat subscription.
+</p>
 
 <!-- KPI Cards -->
 <div class="kpi-grid" id="kpi-grid"></div>
@@ -531,13 +580,15 @@ const pct = (n) => (n === null || n === undefined) ? '—' : n.toFixed(1) + '%';
 // ── KPI Cards ──────────────────────────────────────────────────────────────
 const kpis = [
   { label: 'Total Tokens', value: fmt(SUMMARY.total_tokens), delta: DELTA?.total_tokens },
-  { label: 'Total Cost', value: fmt$(SUMMARY.total_cost), delta: DELTA?.total_cost },
+  { label: 'Tracked Cost', value: fmt$(SUMMARY.tracked_cost), delta: DELTA?.tracked_cost },
+  { label: 'Est. API Cost', value: fmt$(SUMMARY.est_api_cost), delta: DELTA?.est_api_cost },
   { label: 'Messages', value: SUMMARY.total_msgs.toLocaleString(), delta: null },
   { label: 'Active Days', value: SUMMARY.days, delta: null },
   { label: 'Cache Hit Rate', value: pct(SUMMARY.cache_hit_rate), delta: DELTA?.cache_hit_rate },
   { label: 'Output Ratio', value: pct(SUMMARY.output_ratio), delta: DELTA?.output_ratio },
   { label: 'Avg Tokens/Day', value: fmt(SUMMARY.avg_tokens_day), delta: DELTA?.avg_tokens_day },
-  { label: 'Avg Cost/Day', value: fmt$(SUMMARY.avg_cost_day), delta: DELTA?.avg_cost_day },
+  { label: 'Avg Tracked/Day', value: fmt$(SUMMARY.avg_tracked_cost_day), delta: DELTA?.avg_tracked_cost_day },
+  { label: 'Avg Est.API/Day', value: fmt$(SUMMARY.avg_est_cost_day), delta: DELTA?.avg_est_cost_day },
 ];
 
 document.getElementById('subtitle').textContent =

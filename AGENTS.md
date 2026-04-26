@@ -220,7 +220,7 @@ Agents follow a consistent section order using emoji headers:
 
 ---
 
-## opencode Configuration (`opencode.json`)
+## opencode Configuration (`opencode.jsonc`)
 
 ```json
 {
@@ -234,15 +234,33 @@ Agents follow a consistent section order using emoji headers:
     "memory": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
-      "enabled": true
+      "enabled": false
     }
-  }
+  },
+  "plugin": [
+    "@tarquinen/opencode-dcp@latest",
+    "opencode-mem",
+    "oh-my-opencode",
+    "opencode-workspace",
+    "micode"
+  ]
 }
 ```
 
 - `permission.edit` and `permission.bash` are both `"ask"` — agents must prompt before editing files
   or running shell commands
-- The `memory` MCP server is always enabled; use it to persist context across sessions
+- **Note**: The `memory` MCP is **disabled** to avoid conflict with `opencode-mem` plugin
+- The `opencode-mem` plugin manages persistent memory via its own MCP server
+
+### Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `opencode.jsonc` | Main configuration |
+| `dcp.jsonc` | Dynamic Context Pruning |
+| `opencode-mem.jsonc` | Persistent memory (web UI: port 4747) |
+| `oh-my-opencode.jsonc` | Model configs, hooks |
+| `micode.jsonc` | Workflow + TDD settings |
 
 ---
 
@@ -297,6 +315,45 @@ install them. Key subagents used:
 `performance-benchmarker`, `api-tester`, `evidence-collector`, `reality-checker`,
 `infrastructure-maintainer`, `sre`, `devops-automator`, `accessibility-auditor`,
 `compliance-auditor`, `analytics-reporter`, `technical-writer`, `product-manager`
+
+---
+
+## Installed Plugins & Coexistence
+
+This workspace uses a multi-plugin setup with harmonic agent coexistence:
+
+### Plugins
+
+| Plugin | Purpose | Config File |
+|--------|---------|------------|
+| `opencode-mem` | Persistent memory, vector DB | `opencode-mem.jsonc` |
+| `oh-my-opencode` | Full Arsenal, hooks, ultrawork | `oh-my-opencode.jsonc` |
+| `opencode-workspace` | Multi-agent bundle | `opencode-workspace.jsonc` |
+| `micode` | Workflow + TDD | `micode.jsonc` |
+| `@tarquinen/opencode-dcp` | Context pruning | `dcp.jsonc` |
+
+### Agent Layers
+
+The system uses delegating layers:
+
+| Layer | Agent | Purpose |
+|------|-------|---------|
+| **Strategy** | Alan Turing, Grace Hopper, Ada Lovelace | High-level decisions |
+| **Execution** | micode (commander, planner) | Structured workflow |
+| **Research** | workspace (researcher) | External search |
+| **Review** | workspace (reviewer) | Code review |
+| **Quick** | oh-my-opencode (Sisyphus, Oracle) | Fast execution |
+
+### Decision Tree
+
+```
+→ Feature complete  → Alan Turing → micode
+→ Bug/incident  → Grace Hopper
+→ Analysis     → Ada Lovelace
+→ Quick fix    → oh-my-opencode
+→ Remember    → opencode-mem
+→ Large context → dcp compress
+```
 
 ---
 

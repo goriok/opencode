@@ -1,0 +1,34 @@
+{
+  "$schema": "https://github.com/tickernelz/opencode-mem/raw/main/schemas/opencode-mem.config.schema.json",
+  
+  // Caminho para armazenamento de memórias
+  "storagePath": "~/.opencode-mem/data",
+  
+  // Web UI para visualizar memórias
+  "webServerEnabled": true,
+  "webServerPort": 4747,
+  
+  // Auto-capture de memórias durante sessões
+  "autoCaptureEnabled": true,
+  "autoCaptureLanguage": "auto",
+  
+  // Limite de memórias injetadas por chat
+  "maxMemories": 10,
+  
+  "chatMessage": {
+    "enabled": true,
+    "maxMemories": 5,
+    "excludeCurrentSession": true,
+    "injectOn": "first"
+  },
+  
+  "compaction": {
+    "enabled": true,
+    "memoryLimit": 10
+  },
+  
+  "userProfileAnalysisInterval": 10,
+  "showAutoCaptureToasts": true,
+  "showUserProfileToasts": true,
+  "showErrorToasts": true
+}

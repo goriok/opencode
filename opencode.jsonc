@@ -6,16 +6,18 @@
     "bash": "ask"
   },
   "mcp": {
+    // opencode-mem plugin gerencia memória via MCP próprio
+    // Este MCP memory é desabilitado para evitar duplicação
     "memory": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
-      "enabled": true
+      "enabled": false
     }
   },
   "plugin": [
     "@tarquinen/opencode-dcp@latest",
     "opencode-mem",
-    "oh-my-openagent",
+    "oh-my-opencode",
     "opencode-workspace",
     "micode"
   ]

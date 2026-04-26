@@ -1,0 +1,27 @@
+{
+  // Plugins/hooks a desabilitar se necessário
+  "disabled_hooks": [],
+  "disabled_agents": [],
+  "disabled_skills": [],
+  "disabled_mcps": [],
+  
+  // Config de modelos por agente
+  "model": {
+    "default": { "provider": "anthropic", "model": "claude-sonnet-4-20250514" },
+    "oracle": { "provider": "anthropic", "model": "claude-opus-4-5-20250514" },
+    "librarian": { "provider": "anthropic", "model": "claude-haiku-4-5-20251001" },
+    "sisyphus": { "provider": "anthropic", "model": "claude-sonnet-4-20250514" }
+  },
+  
+  // Features experimentais
+  "experimental": {
+    "aggressive_truncation": false,
+    "auto_resume": false
+  },
+  
+  // Hooks específicos
+  "hooks": {
+    "thinking_block_validator": { "enabled": true },
+    "context_window_monitor": { "enabled": true }
+  }
+}

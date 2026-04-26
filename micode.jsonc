@@ -1,0 +1,37 @@
+{
+  // Threshold para decidir quick mode vs full workflow
+  "decision_tree": {
+    "trivial_threshold_minutes": 2,
+    "small_threshold_files": 1
+  },
+  
+  // Config de paralelização
+  "parallelism": {
+    "max_concurrent_tasks": 10,
+    "fire_and_check": true
+  },
+  
+  // Git worktree config
+  "worktree": {
+    "default_base": "main",
+    "auto_cleanup": false
+  },
+  
+  // TDD config
+  "tdd": {
+    "enabled": true,
+    "test_extension": ".test.ts"
+  },
+  
+  // Session continuity via ledgers
+  "ledger": {
+    "trigger_at_context_percent": 70,
+    "path": "thoughts/ledgers"
+  },
+  
+  // mindmodel enforcement
+  "mindmodel": {
+    "required_before_code": true,
+    "patterns": ["naming", "error-handling", "testing"]
+  }
+}

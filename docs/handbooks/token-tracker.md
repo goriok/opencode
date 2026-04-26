@@ -145,3 +145,63 @@ bash token-tracker.sh --compare "pre-new-model" --days 30 --open
 - `python3` — Processamento de JSON e formatação
 - `bash` — Orquestração
 - Browser com JavaScript — Visualização (Chart.js via CDN)
+
+## Prometheus Exporter
+
+O `token_tracker` pode exportar métricas para Prometheus como um endpoint HTTP:
+
+```bash
+# Iniciar o exporter (porta 9090 por padrão)
+python3 -m token_tracker servemetrics
+
+# Porta e host customizados
+python3 -m token_tracker servemetrics --port 9099 --host localhost --days 7
+```
+
+### Métricas Exportadas
+
+| Métrica | Labels | Descrição |
+|---------|--------|-----------|
+| `opencode_tokens_total` | source, model | Total de tokens por source e modelo |
+| `opencode_cost_tracked_total` | source, model | Custo trackeado por source e modelo |
+| `opencode_cost_estimated_total` | source, model | Custo estimado (API) por source e modelo |
+| `opencode_messages_total` | source | Total de mensagens por source |
+
+### Configuração do Prometheus
+
+Adicione ao `prometheus.yml`:
+
+```yaml
+scrape_configs:
+  - job_name: 'opencode-tokens'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 1h
+```
+
+### Verificação
+
+```bash
+curl http://localhost:9090/metrics | grep opencode_
+```
+
+### Grafana
+
+Os dados podem ser visualizados em qualquer dashboard Grafana conectado à mesma fonte Prometheus. Use queries como:
+
+```promql
+# Tokens por modelo
+opencode_tokens_total{source="opencode"}
+
+# Custo total estimado
+sum(opencode_cost_estimated_total)
+
+# Mensagens por source
+opencode_messages_total
+```
+
+### Limitações
+
+- **Coleta única**: Os dados são coletados uma vez no startup. Para atualizar, reinicie o processo.
+- **Porta 9090**: Pode conflitar com instâncias locais do Prometheus. Use `--port` para evitar conflitos.
+- **Dependência**: Requer `prometheus-client` instalado (`pip install prometheus-client`).

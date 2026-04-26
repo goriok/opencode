@@ -10,6 +10,7 @@
 | [0002](./0002-primary-agent-orchestration.md) | Primary agent orchestration | Accepted |
 | [0003](./0003-plugin-coexistence-strategy.md) | Plugin coexistence strategy | Accepted |
 | [0004](./0004-self-contained-html-dashboard.md) | Self-contained HTML dashboard for analytics | Accepted |
+| [0005](./0005-prometheus-exporter-token-metrics.md) | Prometheus exporter for token metrics | Proposed |
 
 ## Formato
 

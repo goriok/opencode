@@ -11,5 +11,8 @@
       "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
       "enabled": true
     }
-  }
+  },
+  "plugin": [
+    "@tarquinen/opencode-dcp@latest"
+  ]
 }

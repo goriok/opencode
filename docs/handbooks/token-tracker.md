@@ -35,7 +35,8 @@ opencode.db (SQLite) → token-tracker.sh → token-dashboard.html
 | Métrica | Fórmula | Significado |
 |---------|---------|-------------|
 | **Tokens/dia** | `SUM(tokens.total) / dias_ativos` | Volume total de processamento |
-| **Cost/dia** | `SUM(cost) / dias_ativos` | Gasto diário em USD |
+| **Tracked Cost/dia** | `SUM(cost) / dias_ativos` | Custo reportado pelos providers |
+| **Est. API Cost/dia** | Custo calculado via pricing tables | O que custaria se fosse pay-per-token |
 | **Sessões/dia** | `COUNT(DISTINCT session) / dias_ativos` | Atividade |
 
 ### Derivadas (eficiência)
@@ -44,7 +45,24 @@ opencode.db (SQLite) → token-tracker.sh → token-dashboard.html
 |---------|---------|-------------|
 | **Cache Hit Rate** | `cache.read / tokens.total` | Quanto contexto é servido do cache vs reprocessado |
 | **Output Ratio** | `tokens.output / tokens.total` | Quanto vira código útil vs overhead de contexto |
-| **Cost/Output Token** | `cost / tokens.output` | Custo real por token de output |
+| **Tracked Cost/Output Token** | `tracked_cost / tokens.output` | Custo reportado por token de output |
+| **Est. API Cost/Output Token** | `est_api_cost / tokens.output` | Custo estimado por token de output |
+
+### ⚠️ Importante: Tracked Cost vs Est. API Cost
+
+O campo `cost` no banco vem direto dos providers e é **enganoso**:
+
+| Provider | O que reporta | Custo real |
+|----------|---------------|------------|
+| **opencode-go** (glm-5.1, deepseek, minimax) | Custo por token (~$0.05/1K output) | **Flat $5-10/mês** — você não paga por token |
+| **anthropic** (claude-sonnet-4-6, opus, haiku) | `cost: 0` | Você paga assinatura Anthropic |
+| **github-copilot** (claude-sonnet-4.6, opus-4.6) | `cost: 0` | Incluído no Copilot subscription |
+| **opencode** (big-pickle) | `cost: 0` | Modelo interno, sem custo associado |
+
+- **Tracked Cost** = o que o provider reporta (incompleto, 92% dos tokens têm cost=0)
+- **Est. API Cost** = o que esses tokens custariam se você pagasse por API (calculado com pricing tables publicadas)
+
+O custo real que você paga é a **assinatura flat**, não nenhum dos dois números acima.
 
 ### Comparativas (estratégia)
 

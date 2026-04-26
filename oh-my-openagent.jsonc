@@ -1,0 +1,27 @@
+{
+  // Plugins/hooks a desabilitar se necessário
+  "disabled_hooks": [],
+  "disabled_agents": [],
+  "disabled_skills": [],
+  "disabled_mcps": [],
+  
+  // Config de modelos por agente
+  "model": {
+    "default":   { "provider": "opencode-go", "model": "qwen3.6-plus" },
+    "oracle":    { "provider": "anthropic",   "model": "claude-opus-4-5-20250514" },
+    "librarian": { "provider": "opencode-go", "model": "deepseek-v4-flash" },
+    "sisyphus":  { "provider": "opencode-go", "model": "kimi-k2.6" }
+  },
+  
+  // Features experimentais
+  "experimental": {
+    "aggressive_truncation": false,
+    "auto_resume": false
+  },
+  
+  // Hooks específicos
+  "hooks": {
+    "thinking_block_validator": { "enabled": true },
+    "context_window_monitor": { "enabled": true }
+  }
+}

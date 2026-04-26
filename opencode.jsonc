@@ -17,7 +17,7 @@
   "plugin": [
     "@tarquinen/opencode-dcp@latest",
     "opencode-mem",
-    "oh-my-opencode",
+    "oh-my-openagent",
     "opencode-workspace",
     "micode"
   ]

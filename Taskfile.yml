@@ -1,0 +1,130 @@
+version: '3'
+
+silent: true
+
+dotenv:
+  - .env
+
+vars:
+  OPENCODE_DIR: '{{.ROOT_DIR}}'
+  AGENTS_DIR: '{{.HOME}}/.config/opencode/agents'
+  CLAUDE_AGENTS_DIR: '{{.HOME}}/.claude/agents'
+  TOKEN_OUTPUT: '{{.OPENCODE_DIR}}/token-dashboard.html'
+
+tasks:
+  default:
+    desc: List all available tasks
+    cmds:
+      - task --list-all
+
+  setup:
+    desc: 'Full machine setup: clone agency-agents, install, sync to Claude Code'
+    cmds:
+      - bash {{.OPENCODE_DIR}}/setup.sh
+
+  agents:install:
+    desc: 'Install agents into a project directory (default: current dir)'
+    vars:
+      TARGET_DIR:
+        sh: 'echo "${1:-$PWD}"'
+    cmds:
+      - bash {{.OPENCODE_DIR}}/install-agents.sh {{.TARGET_DIR}}
+
+  agents:sync:
+    desc: 'Sync primary agents to ~/.claude/agents/'
+    cmds:
+      - bash {{.OPENCODE_DIR}}/sync-primary-agents.sh
+
+  agents:count:
+    desc: 'Show count of installed agent files'
+    cmds:
+      - |
+        COUNT=$(ls {{.AGENTS_DIR}}/*.md 2>/dev/null | wc -l | tr -d ' ')
+        echo "[opencode] $COUNT agents installed in {{.AGENTS_DIR}}"
+
+  agents:update:
+    desc: 'Re-clone agency-agents and reinstall (full refresh)'
+    cmds:
+      - bash {{.OPENCODE_DIR}}/setup.sh
+
+  shortcuts:
+    desc: 'Install shell aliases (oc, ocw, ocwserve)'
+    vars:
+      SHELL_TYPE:
+        sh: |
+          if [ -n "${ZSH_VERSION:-}" ]; then echo "zsh"
+          elif [ -n "${BASH_VERSION:-}" ]; then echo "bash"
+          elif command -v fish &>/dev/null; then echo "fish"
+          else echo "zsh"
+          fi
+    cmds:
+      - bash {{.OPENCODE_DIR}}/install-opencode-shortcuts.sh --shell {{.SHELL_TYPE}}
+
+  token:
+    desc: 'Generate token usage dashboard (default: last 30 days)'
+    vars:
+      DAYS: "30"
+    cmds:
+      - python3 -m token_tracker --days {{.DAYS}} --output {{.TOKEN_OUTPUT}} {{.CLI_ARGS}}
+
+  token:open:
+    desc: 'Generate token dashboard and open in browser'
+    vars:
+      DAYS: "30"
+    cmds:
+      - python3 -m token_tracker --days {{.DAYS}} --output {{.TOKEN_OUTPUT}} --open {{.CLI_ARGS}}
+
+  token:dry-run:
+    desc: 'Print token stats to terminal (no HTML generation)'
+    vars:
+      DAYS: "7"
+    cmds:
+      - python3 -m token_tracker --dry-run --days {{.DAYS}} {{.CLI_ARGS}}
+
+  token:baseline:
+    desc: 'Save a baseline snapshot for later comparison'
+    vars:
+      LABEL:
+        sh: 'echo "${1:-manual}"'
+    cmds:
+      - python3 -m token_tracker --baseline {{.LABEL}} --output {{.TOKEN_OUTPUT}}
+
+  token:compare:
+    desc: 'Compare current usage against a saved baseline'
+    vars:
+      LABEL:
+        sh: 'echo "${1:-manual}"'
+    cmds:
+      - python3 -m token_tracker --compare {{.LABEL}} --open
+
+  token:validate:
+    desc: 'Validate existing baseline files'
+    cmds:
+      - python3 -m token_tracker --validate
+
+  configs:check:
+    desc: 'List all opencode config files and their status'
+    cmds:
+      - |
+        echo "[opencode] Configuration files:"
+        for f in opencode.jsonc oh-my-opencode.jsonc opencode-mem.jsonc micode.jsonc dcp.jsonc; do
+          if [[ -f "{{.OPENCODE_DIR}}/$f" ]]; then
+            echo "  ✅ $f"
+          else
+            echo "  ❌ $f (missing)"
+          fi
+        done
+
+  git:status:
+    desc: 'Show git status of the opencode config repo'
+    cmds:
+      - |
+        cd {{.OPENCODE_DIR}}
+        echo "[opencode] Git status:"
+        git status --short
+        echo ""
+        echo "Tracked primary agents:"
+        git ls-files agents/*.md 2>/dev/null || echo "  (none tracked)"
+        echo ""
+        echo "Modified tracked files:"
+        git diff --name-only HEAD 2>/dev/null || echo "  (clean)"

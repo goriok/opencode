@@ -96,15 +96,15 @@ bash token-tracker.sh --compare "pre-new-model" --days 30 --open
 
 | Seção | Descrição |
 |-------|-----------|
-| **KPI Cards** | 8 métricas principais com deltas vs baseline |
+| **KPI Cards** | 10 métricas principais com deltas vs baseline |
 | **Daily Timeline** | Gráfico de linhas: total, input, output, cache |
 | **Cost Chart** | Barras de custo diário |
 | **Cache Hit Rate** | Linha temporal de eficiência de cache |
 | **Agent Breakdown** | Doughnut chart + tabela de eficiência |
 | **Model Comparison** | Barras horizontais por modelo |
-| **Agent Table** | Tabela sortable: msgs, tokens, output ratio, cache hit, cost |
-| **Model Table** | Tabela sortable: msgs, tokens, cache hit, cost, $/1K output |
-| **Session Table** | Tabela sortable: sessões recentes com métricas |
+| **Agent Table** | Tabela sortable: msgs, tokens, output ratio, cache hit, tracked cost |
+| **Model Table** | Tabela sortable: msgs, tokens, cache hit, tracked cost, est. API cost, $/1K output |
+| **Session Table** | Tabela sortable: sessões recentes com métricas e tracked cost |
 
 ## Banco de Dados
 

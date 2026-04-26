@@ -150,8 +150,8 @@ MODEL_DATA=$(run_query "$SQL_MODELS")
 # - opencode-go models: report per-token cost, but subscription is flat $5-10/mo
 # - anthropic/github-copilot/opencode: report cost=0, but you pay subscription
 # We calculate what these tokens WOULD cost at published API rates.
-EST_API_COST=$(echo "$MODEL_DATA" | python3 -c "
-import json, sys
+PRICING_TABLE=$(python3 -c "
+import json
 pricing = {
     'claude-sonnet-4-6':  (3.00/1e6, 15.00/1e6, 0.30/1e6),
     'claude-sonnet-4.6':  (3.00/1e6, 15.00/1e6, 0.30/1e6),
@@ -164,6 +164,12 @@ pricing = {
     'minimax-m2.7':       (0, 0, 0),
     'big-pickle':         (0, 0, 0),
 }
+print(json.dumps(pricing))
+" 2>/dev/null || echo '{}')
+
+EST_API_COST=$(echo "$MODEL_DATA" | python3 -c "
+import json, sys
+pricing = json.loads('''${PRICING_TABLE}''')
 data = json.load(sys.stdin)
 total = 0
 for m in data:
@@ -173,6 +179,20 @@ for m in data:
     total += m.get('cache_read',0) * p[2]
 print(round(total, 2))
 " 2>/dev/null || echo "0")
+
+# Inject per-model est_api_cost into MODEL_DATA
+MODEL_DATA=$(echo "$MODEL_DATA" | python3 -c "
+import json, sys
+pricing = json.loads('''${PRICING_TABLE}''')
+data = json.load(sys.stdin)
+for m in data:
+    p = pricing.get(m.get('model',''), (0,0,0))
+    m['est_api_cost'] = round(
+        m.get('input_tokens',0) * p[0] +
+        m.get('output_tokens',0) * p[1] +
+        m.get('cache_read',0) * p[2], 4)
+print(json.dumps(data))
+" 2>/dev/null || echo '[]')
 
 # ── Compute Summary Stats ───────────────────────────────────────────────────
 SUMMARY=$(echo "$DAILY_DATA" | python3 -c "
@@ -234,12 +254,13 @@ def pct(curr, prev_val):
     return f'{((curr - prev_val) / prev_val * 100):+.1f}%'
 print(json.dumps({
     'total_tokens': pct(current['total_tokens'], prev['total_tokens']),
-    'total_cost': pct(current['total_cost'], prev['total_cost']),
+    'tracked_cost': pct(current['tracked_cost'], prev.get('tracked_cost', current['tracked_cost'])),
+    'est_api_cost': pct(current['est_api_cost'], prev.get('est_api_cost', 0) or current['est_api_cost']),
     'cache_hit_rate': pct(current['cache_hit_rate'], prev['cache_hit_rate']),
     'output_ratio': pct(current['output_ratio'], prev['output_ratio']),
-    'cost_per_output_token': pct(current['cost_per_output_token'], prev['cost_per_output_token']),
     'avg_tokens_day': pct(current['avg_tokens_day'], prev['avg_tokens_day']),
-    'avg_cost_day': pct(current['avg_cost_day'], prev['avg_cost_day'])
+    'avg_tracked_cost_day': pct(current['avg_tracked_cost_day'], prev.get('avg_tracked_cost_day', current['avg_tracked_cost_day'])),
+    'avg_est_cost_day': pct(current['avg_est_cost_day'], prev.get('avg_est_cost_day', current['avg_est_cost_day']))
 }))
 " 2>/dev/null)
   else
@@ -314,7 +335,9 @@ for a in json.load(sys.stdin):
   echo "$MODEL_DATA" | python3 -c "
 import json, sys
 for m in json.load(sys.stdin):
-    print(f'  {m[\"model\"]:30s}  {m[\"total_tokens\"]:>12,} tkns  {m[\"msgs\"]:>5} msgs  \${m[\"total_cost\"]:.4f}')
+    est = m.get('est_api_cost', 0)
+    tc = m.get('tracked_cost', 0)
+    print(f'  {m[\"model\"]:30s}  {m[\"total_tokens\"]:>12,} tkns  {m[\"msgs\"]:>5} msgs  \${tc:.4f} tracked  \${est:.4f} est.api')
 " 2>/dev/null
   exit 0
 fi
@@ -482,7 +505,7 @@ cat > "$OUTPUT_PATH" << 'HEREDOC_START'
     <canvas id="tokensChart"></canvas>
   </div>
   <div class="chart-card">
-    <div class="chart-title">Daily Cost</div>
+    <div class="chart-title">Daily Tracked Cost</div>
     <canvas id="costChart"></canvas>
   </div>
   <div class="chart-card">
@@ -514,7 +537,7 @@ cat > "$OUTPUT_PATH" << 'HEREDOC_START'
       <th class="num" onclick="sortTable('agentTable',3)">Output Tokens</th>
       <th class="num" onclick="sortTable('agentTable',4)">Output Ratio</th>
       <th class="num" onclick="sortTable('agentTable',5)">Cache Hit</th>
-      <th class="num" onclick="sortTable('agentTable',6)">Cost</th>
+      <th class="num" onclick="sortTable('agentTable',6)">Tracked $</th>
     </tr></thead>
     <tbody></tbody>
   </table>
@@ -530,8 +553,9 @@ cat > "$OUTPUT_PATH" << 'HEREDOC_START'
       <th class="num" onclick="sortTable('modelTable',2)">Total Tokens</th>
       <th class="num" onclick="sortTable('modelTable',3)">Output Tokens</th>
       <th class="num" onclick="sortTable('modelTable',4)">Cache Hit</th>
-      <th class="num" onclick="sortTable('modelTable',5)">Cost</th>
-      <th class="num" onclick="sortTable('modelTable',6)">$/1K Output</th>
+      <th class="num" onclick="sortTable('modelTable',5)">Tracked $</th>
+      <th class="num" onclick="sortTable('modelTable',6)">Est.API $</th>
+      <th class="num" onclick="sortTable('modelTable',7)">$/1K Out</th>
     </tr></thead>
     <tbody></tbody>
   </table>
@@ -548,7 +572,7 @@ cat > "$OUTPUT_PATH" << 'HEREDOC_START'
       <th class="num" onclick="sortTable('sessionTable',3)">Total Tokens</th>
       <th class="num" onclick="sortTable('sessionTable',4)">Output Tokens</th>
       <th class="num" onclick="sortTable('sessionTable',5)">Cache Hit</th>
-      <th class="num" onclick="sortTable('sessionTable',6)">Cost</th>
+      <th class="num" onclick="sortTable('sessionTable',6)">Tracked $</th>
     </tr></thead>
     <tbody></tbody>
   </table>
@@ -739,15 +763,17 @@ AGENTS.forEach(a => {
 const modelTbody = document.querySelector('#modelTable tbody');
 MODELS.forEach(m => {
   const cacheHit = m.total_tokens > 0 ? (m.cache_read / m.total_tokens * 100).toFixed(1) : '0';
-  const costPerK = m.output_tokens > 0 ? (m.total_cost / m.output_tokens * 1000).toFixed(4) : '0';
+  const trackedPerK = m.output_tokens > 0 ? (m.tracked_cost / m.output_tokens * 1000).toFixed(4) : '0';
+  const estApiPerK = m.output_tokens > 0 ? (m.est_api_cost / m.output_tokens * 1000).toFixed(4) : '0';
   modelTbody.innerHTML += `<tr>
     <td><span class="badge badge-model">${m.model}</span></td>
     <td class="num">${m.msgs.toLocaleString()}</td>
     <td class="num">${fmt(m.total_tokens)}</td>
     <td class="num">${fmt(m.output_tokens)}</td>
     <td class="num">${cacheHit}%</td>
-    <td class="num">${fmt$(m.total_cost)}</td>
-    <td class="num">$${costPerK}</td>
+    <td class="num">${fmt$(m.tracked_cost)}</td>
+    <td class="num">${fmt$(m.est_api_cost)}</td>
+    <td class="num">${estApiPerK}</td>
   </tr>`;
 });
 

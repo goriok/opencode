@@ -43,10 +43,17 @@ No dashboard, os **KPI cards** mostram deltas (↑↓) vs baseline:
 | Métrica | ↑ bom? | Significado |
 |---------|--------|-------------|
 | **Total Tokens** | Depende | Mais tokens = mais trabalho, mas pode ser desperdício |
-| **Total Cost** | ❌ | Custo subiu = ruim |
+| **Tracked Cost** | ❌ | Custo reportado pelos providers subiu = ruim (mas pode ser enganoso — veja abaixo) |
+| **Est. API Cost** | ❌ | Custo estimado por API pricing subiu = ruim |
 | **Cache Hit Rate** | ✅ | Mais cache = mais eficiência |
 | **Output Ratio** | ✅ | Mais output vs input = mais eficiência |
-| **Cost/Output Token** | ❌ | Custo por token útil subiu = ruim |
+
+### ⚠️ Entendendo Tracked Cost vs Est. API Cost
+
+- **Tracked Cost** = o que os providers reportam (enganoso: Anthropic/Copilot reportam $0, opencode-go reporta por token mas assinatura é flat)
+- **Est. API Cost** = o que esses tokens custariam se você pagasse por API (calculado com pricing tables publicadas)
+- **O custo real que você paga é a assinatura flat**, não nenhum dos dois números acima
+- Para comparação de estratégia, **Est. API Cost** é mais útil porque normaliza entre providers
 
 ### 5. Salvar novo baseline (opcional)
 

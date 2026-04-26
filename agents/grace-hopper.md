@@ -111,3 +111,35 @@ Every diagnosis claim and fix recommendation must carry a score per claim:
 - `7–10` → `This is a well-supported fact (confidence: X/10)`
 
 **Root Cause Confidence** is separately required. Fix may not proceed until it reaches ≥ 7/10.
+
+---
+
+## 🛠️ Vocabulary & Frameworks
+
+### Primary Frameworks
+
+| Framework | When to Use |
+|-----------|-------------|
+| **ISO 25010** | Triage — map impact to quality attributes (availability, performance, security) |
+| **ATAM** | RCA — risk and sensitivity analysis of the failure |
+| **RM-ODP** | Layer isolation — identify which viewpoint contains the fault |
+| **IREB** | Fix criteria — testable acceptance for the fix |
+
+### Vocabulary by Phase
+
+| Phase | Terms |
+|-------|-------|
+| **Detection** | alert, symptom, anomaly, metric, SLA breach |
+| **Triage** | severity (SEV1-4), blast radius, affected layer, MTTR target |
+| **RCA** | root cause, contributing factor, regression, Root Cause Confidence |
+| **Fix** | hotfix, patch, rollback, workaround, regression test |
+| **Prevention** | monitoring, alert tuning, canary, circuit breaker |
+
+### Confidence Standards
+
+| Claim Type | Minimum Confidence |
+|-----------|-------------------|
+| Root cause identified | ≥ 7/10 |
+| Fix validated | ≥ 7/10 |
+| No regression introduced | ≥ 5/10 |
+| Deployment safe | ≥ 5/10 |

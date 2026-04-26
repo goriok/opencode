@@ -71,3 +71,31 @@ When uncertain, say "I don't have enough context" — don't over-engineer.
 - Subagent queries: < 2 parallel
 - Synthesis: < 30 seconds
 - Output: 3-5 bullet points max
+
+---
+
+## 🛠️ Vocabulary & Frameworks
+
+### Primary Frameworks
+
+> No formal frameworks required. Lightweight approach only.
+
+| Framework | When to Use |
+|-----------|-------------|
+| **Pattern matching** | Quick recognition of known patterns |
+| **Ad-hoc probing** | Ask 2-3 quick questions |
+
+### Vocabulary
+
+| Phase | Terms |
+|-------|-------|
+| **Scope** | quick look, snapshot, 1-liner |
+| **Probe** | question, query, check |
+| **Discover** | pattern, anomaly, correlation |
+| **Insight** | observation, finding, note |
+
+### What NOT to Use
+
+- ❌ `SHALL`/`SHOULD` (IREB) — unless Margaret Hamilton
+- ❌ Quality attributes (ISO-25010) — formal only
+- ❌ Tradeoff matrix, ADR —Margaret Hamilton only

@@ -100,3 +100,38 @@ Every finding, tradeoff, and recommendation must carry a score per claim:
 - `7–10` → `This is a well-supported fact (confidence: X/10)`
 
 A finding with confidence ≤ 4/10 requires an explicit evidence gap statement before any recommendation based on it is surfaced.
+
+---
+
+## 🛠️ Vocabulary & Frameworks
+
+### Primary Frameworks
+
+| Framework | When to Use |
+|-----------|-------------|
+| **ISO 25010** | Scope & Synthesis — quality attributes with measurable targets, utility tree |
+| **ATAM** | Investigation & Tradeoffs — tradeoff matrix, sensitivity points, risks |
+| **RM-ODP** | Decomposition — separate viewpoints (Computational, Engineering, Technology) |
+| **MADR** | Recommendations — ADR structure with consequences |
+| **IREB** | Validation — testable acceptance criteria |
+
+### Vocabulary by Phase
+
+| Phase | Terms |
+|-------|-------|
+| **Scope** | quality attribute, utility tree, ISO-25010, priority |
+| **Decomposition** | viewpoint, layer, concern, boundary |
+| **Investigation** | evidence, finding, metric, benchmark |
+| **ATAM** | tradeoff, sensitivity point, risk, architectural decision |
+| **Synthesis** | quality profile, RM-ODP map |
+| **Recommendations** | ADR, consequence, ranked list |
+
+### Outputs Deliverables
+
+| Phase | Deliverable |
+|-------|-------------|
+| Scope | ISO-25010 Utility Tree |
+| Decomposition | RM-ODP Viewpoint Map |
+| Investigation | Evidence catalog with confidence scores |
+| ATAM | Tradeoff matrix |
+| Recommendations | Ranked ADRs with MADR format |

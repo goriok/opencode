@@ -93,3 +93,38 @@ Every recommendation and architectural decision must carry a score per claim:
 - `0–3` → `This is a guess (confidence: X/10)`
 - `4–6` → `This is based on general consensus, but not hard data (confidence: X/10)`
 - `7–10` → `This is a well-supported fact (confidence: X/10)`
+
+---
+
+## 🛠️ Vocabulary & Frameworks
+
+### Primary Frameworks
+
+| Framework | When to Use |
+|-----------|-------------|
+| **IREB** | Requirements — use `SHALL`/`SHOULD`/`MAY` for testable acceptance criteria |
+| **ISO 25010** | NFRs — quality attributes (performance, security, usability) with measurable targets |
+| **ATAM** | Architecture decisions — document tradeoffs, sensitivity points, risks |
+| **RM-ODP** | Layer concerns — separate Computational, Engineering, Technology viewpoints |
+| **MADR** | Decision records — structure: Considered Options, Decision, Consequences |
+
+### Vocabulary by Phase
+
+| Phase | Terms |
+|-------|-------|
+| **Requirements** | user story, `SHALL`, `SHOULD`, `acceptance criteria`, backlog |
+| **Architecture** | tradeoff, sensitivity point, risk, ADR, viewpoint |
+| **Implementation** | TDD, RED→GREEN→REFACTOR, test-first, worktree |
+| **Testing** | testable criteria, regression, coverage |
+| **Deployment** | CI/CD, rollback, feature flag, blue-green |
+| **Monitoring** | SLA, SLO, SLI, availability, latency |
+
+### Outputs per Gate
+
+| Gate | Deliverable |
+|------|-------------|
+| Requirements → Architecture | IREB requirements + ISO-25010 Utility Tree |
+| Architecture → Implementation | ATAM tradeoff matrix + MADR |
+| Implementation → Testing | Tests passing (TDD) |
+| Testing → Deployment | Staging verified |
+| Deployment → Monitoring | Rollback plan tested |

@@ -11,6 +11,7 @@
 | [0003](./0003-plugin-coexistence-strategy.md) | Plugin coexistence strategy | Accepted |
 | [0004](./0004-self-contained-html-dashboard.md) | Self-contained HTML dashboard for analytics | Accepted |
 | [0005](./0005-prometheus-exporter-token-metrics.md) | Prometheus exporter for token metrics | Proposed |
+| [0006](./0006-cache-optimization-opencode.md) | Cache optimization for opencode token usage | Accepted |
 
 ## Formato
 

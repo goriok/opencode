@@ -35,7 +35,7 @@
   
   // Features experimentais
   "experimental": {
-    "aggressive_truncation": false,
+    "aggressive_truncation": true,  // was false — more aggressive context pruning saves tokens but may lose old context
     "auto_resume": false
   },
   

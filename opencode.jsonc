@@ -5,6 +5,18 @@
     "edit": "ask",
     "bash": "ask"
   },
+  // Cache optimization flags (MADR 0006)
+  // mcp_lazy: lazy load MCP tools — saves 32k+ tokens per session by deferring tool schema loading
+  // cache_stabilization: freeze date/cache instructions for better prefix cache hit rate
+  // cache_1h_ttl: extend cache TTL from 5min to 1h (costs 2x base input price, avoids re-creation)
+  // NOTE: token-efficient-tools beta header NOT supported (opencode-go provider uses OpenAI SDK)
+  // NOTE: defer_loading (Anthropic native) NOT yet in opencode (issue #23298)
+  // NOTE: cache_control body params already auto-injected by opencode's applyCaching()
+  "experimental": {
+    "mcp_lazy": true,
+    "cache_stabilization": true,
+    "cache_1h_ttl": true
+  },
   "mcp": {
     // opencode-mem plugin gerencia memória via MCP próprio
     // Este MCP memory é desabilitado para evitar duplicação

@@ -41,7 +41,7 @@ repassado pelo Claude Code.
 | Arquivo | Função |
 |---------|--------|
 | `litellm/docker-compose.yml` | LiteLLM + Postgres 16, resource limits, healthchecks |
-| `litellm/config.yaml` | 15 modelos: Anthropic (3) + opencode-go (8) + z.ai (4) |
+| `litellm/config.yaml` | 15 modelos ativos: Anthropic (3) + opencode-go (8) + z.ai (4). Copilot (18) comentado. |
 | `litellm/.env` | API keys reais (não versionado) |
 | `litellm/.env.example` | Template documentado |
 | `litellm/setup-litellm.sh` | Script de setup para nova máquina |
@@ -76,6 +76,19 @@ Ref: https://github.com/BerriAI/litellm/issues/25479
 
 **Caveat**: z.ai docs dizem que a subscription é "strictly limited to use within officially supported
 tools". LiteLLM proxy é tecnicamente um intermediário third-party.
+
+### GitHub Copilot — desabilitado (OAuth bloqueia startup)
+
+O provider `github_copilot/` do LiteLLM autentica via OAuth device flow na inicialização do proxy.
+Sem tokens pré-existentes, o Docker não consegue completar o fluxo e crasha o container inteiro.
+
+**Modelos preparados** (comentados no `config.yaml`): OpenAI (gpt-4.1, gpt-5-mini/5.2/5.4/5.4-mini/5.5),
+Codex responses API (gpt-5.2-codex, gpt-5.3-codex), Claude (haiku-4.5, sonnet-4.5/4.6, opus-4.5/4.6/4.7),
+Gemini (2.0-flash, 2.5-pro), Reasoning (o3, o4-mini).
+
+**Para ativar**: autentique localmente primeiro (`pip install litellm` + uma completion com `github_copilot/gpt-4.1`),
+copie os tokens de `~/.config/litellm/github_copilot/`, descomente os modelos, adicione o bind mount no
+docker-compose.yml e reinicie. Instruções completas no `config.yaml`.
 
 ### Correção de 429s
 

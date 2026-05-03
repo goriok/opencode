@@ -100,6 +100,78 @@ model_list:
       api_base: https://api.z.ai/api/coding/paas/v4
       api_key: os.environ/ZAI_API_KEY
 
+  # ─── GitHub Copilot (OAuth device flow — sem API key) ─────────────────────
+  # BLOQUEIO: O LiteLLM tenta autenticar na inicialização do proxy, o que dispara
+  # o OAuth device flow e crasha o container quando não há tokens.
+  # Para ativar: autentique localmente primeiro, depois descomente.
+  # Ref: https://docs.litellm.ai/docs/providers/github_copilot
+  # Auth: pip install litellm && python3 -c "import litellm; litellm.completion(model='github_copilot/gpt-4.1', messages=[{'role':'user','content':'ping'}])"
+  # Tokens: ~/.config/litellm/github_copilot/{access-token,api-key.json}
+
+  # # --- OpenAI ---
+  # - model_name: copilot/gpt-4.1
+  #   litellm_params:
+  #     model: github_copilot/gpt-4.1
+  # - model_name: copilot/gpt-5-mini
+  #   litellm_params:
+  #     model: github_copilot/gpt-5-mini
+  # - model_name: copilot/gpt-5.2
+  #   litellm_params:
+  #     model: github_copilot/gpt-5.2
+  # - model_name: copilot/gpt-5.4
+  #   litellm_params:
+  #     model: github_copilot/gpt-5.4
+  # - model_name: copilot/gpt-5.4-mini
+  #   litellm_params:
+  #     model: github_copilot/gpt-5.4-mini
+  # - model_name: copilot/gpt-5.5
+  #   litellm_params:
+  #     model: github_copilot/gpt-5.5
+  # # --- OpenAI Codex (responses API) ---
+  # - model_name: copilot/gpt-5.2-codex
+  #   model_info:
+  #     mode: responses
+  #   litellm_params:
+  #     model: github_copilot/gpt-5.2-codex
+  # - model_name: copilot/gpt-5.3-codex
+  #   model_info:
+  #     mode: responses
+  #   litellm_params:
+  #     model: github_copilot/gpt-5.3-codex
+  # # --- Anthropic Claude ---
+  # - model_name: copilot/claude-haiku-4.5
+  #   litellm_params:
+  #     model: github_copilot/claude-haiku-4.5
+  # - model_name: copilot/claude-sonnet-4.5
+  #   litellm_params:
+  #     model: github_copilot/claude-sonnet-4.5
+  # - model_name: copilot/claude-sonnet-4.6
+  #   litellm_params:
+  #     model: github_copilot/claude-sonnet-4.6
+  # - model_name: copilot/claude-opus-4.5
+  #   litellm_params:
+  #     model: github_copilot/claude-opus-4.5
+  # - model_name: copilot/claude-opus-4.6
+  #   litellm_params:
+  #     model: github_copilot/claude-opus-4.6
+  # - model_name: copilot/claude-opus-4.7
+  #   litellm_params:
+  #     model: github_copilot/claude-opus-4.7
+  # # --- Google Gemini ---
+  # - model_name: copilot/gemini-2.0-flash
+  #   litellm_params:
+  #     model: github_copilot/gemini-2.0-flash
+  # - model_name: copilot/gemini-2.5-pro
+  #   litellm_params:
+  #     model: github_copilot/gemini-2.5-pro
+  # # --- OpenAI Reasoning ---
+  # - model_name: copilot/o3
+  #   litellm_params:
+  #     model: github_copilot/o3
+  # - model_name: copilot/o4-mini
+  #   litellm_params:
+  #     model: github_copilot/o4-mini
+
 litellm_settings:
   drop_params:
     - reasoningSummary

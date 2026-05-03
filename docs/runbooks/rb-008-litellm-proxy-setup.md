@@ -14,6 +14,9 @@ opencode     ──► LiteLLM :4000 ──► z.ai Coding Plan (glm-5.1, glm-5-
 
 **UI de monitoramento**: `http://localhost:4000/ui` (login: valor de `LITELLM_MASTER_KEY`)
 
+**GitHub Copilot**: 18 modelos preparados no `config.yaml` (OpenAI, Claude, Gemini, Codex) mas
+comentados — OAuth device flow crasha o proxy na inicialização. Para ativar, veja instruções no `config.yaml`.
+
 ---
 
 ## Setup automático (nova máquina)

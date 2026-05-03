@@ -280,8 +280,6 @@ LiteLLM proxy is technically a third-party intermediary. Monitor for potential r
 
 ## 6. Supported Coding Tools
 
-The subscription works with these officially supported clients:
-
 | Tool | Type | Notes |
 |------|------|-------|
 | Claude Code | CLI / IDE | Full support, slot mapping |

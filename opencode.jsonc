@@ -41,10 +41,11 @@
         "opencode-go/kimi-k2.5":         { "name": "Kimi K2.5" },
         "opencode-go/qwen3.5-plus":      { "name": "Qwen3.5 Plus" },
         "opencode-go/mimo-v2-omni":      { "name": "MiMo V2 Omni" },
-        // z.ai via proxy
-        "zai/glm-5.1":    { "name": "GLM 5.1 (z.ai)" },
-        "zai/glm-4.7":    { "name": "GLM 4.7 (z.ai)" },
-        "zai/glm-4.5-air":{ "name": "GLM 4.5 Air (z.ai)" }
+        // z.ai via proxy (MADR: quota 1× off-peak promo until June, peak 14:00-18:00 UTC+8)
+        "zai/glm-5.1":     { "name": "GLM 5.1 (z.ai)" },
+        "zai/glm-5-turbo": { "name": "GLM 5 Turbo (z.ai)" },
+        "zai/glm-4.7":     { "name": "GLM 4.7 (z.ai)" },
+        "zai/glm-4.5-air": { "name": "GLM 4.5 Air (z.ai)" }
       }
     }
   },

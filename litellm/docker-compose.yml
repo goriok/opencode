@@ -9,10 +9,14 @@ services:
       - .env
     environment:
       DATABASE_URL: postgresql://litellm:litellm@db:5432/litellm
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     restart: unless-stopped
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4000/health/liveliness"]
@@ -46,5 +50,25 @@ services:
           cpus: "0.5"
           memory: 512m
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - litellm_redis:/data
+    command: redis-server --appendonly yes --maxmemory 128mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256m
+
 volumes:
   litellm_db:
+  litellm_redis:

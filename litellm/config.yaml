@@ -173,6 +173,22 @@ model_list:
   #     model: github_copilot/o4-mini
 
 litellm_settings:
+  # ─── Redis Cache ──────────────────────────────────────────────────────────
+  # Cache LLM responses para reduzir latency e custo em requests repetidos.
+  # Redis roda no container na porta interna 6379 (host:6380).
+  # Debug: curl http://localhost:4000/cache/ping -H "Authorization: Bearer $LITELLM_MASTER_KEY"
+  cache: true
+  cache_params:
+    type: redis
+    host: os.environ/REDIS_HOST
+    port: 6379
+    namespace: "litellm.cache"
+    ttl: 600                          # 10 min default TTL
+    max_connections: 50
+  # Virtual key auth cache — compartilha o mesmo Redis entre workers
+  enable_redis_auth_cache: true
+
+  # ─── General ──────────────────────────────────────────────────────────────
   drop_params:
     - reasoningSummary
   request_timeout: 120

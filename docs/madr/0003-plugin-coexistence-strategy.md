@@ -5,7 +5,7 @@
 
 ## Contexto
 
-O setup OpenCode usa múltiplos plugins com funcionalidades sobrepostas: opencode-mem (memória), oh-my-opencode (hooks + agents), opencode-workspace (multi-agent), micode (workflow TDD), e DCP (context pruning). Precisávamos de uma estratégia para que funcionem em harmonia sem conflitos.
+O setup OpenCode usa múltiplos plugins com funcionalidades sobrepostas: opencode-mem (memória), oh-my-opencode (hooks + agents), opencode-workspace (multi-agent), e DCP (context pruning). Precisávamos de uma estratégia para que funcionem em harmonia sem conflitos.
 
 ## Decisão
 
@@ -15,7 +15,6 @@ Adotar uma estratégia de **camadas harmônicas** onde cada plugin tem domínio 
 |--------|--------|-----------------|
 | Memória | opencode-mem | Persistência vetorial |
 | Contexto | DCP | Pruning automático |
-| Execução | micode | Workflow estruturado |
 | Arsenal | oh-my-opencode | Hooks + agents rápidos |
 | Orquestração | workspace | Multi-agent bundle |
 
@@ -35,6 +34,6 @@ Conflitos resolvidos por **prioridade de camada**: quando dois plugins tentam ag
 - Decision tree clara para o usuário
 
 **Negativas:**
-- 5 plugins = 5 fontes de configuração
+- 4 plugins = 4 fontes de configuração
 - Debugar interações entre plugins é complexo
 - Atualização de um plugin pode quebrar harmonia

@@ -84,21 +84,29 @@ Exemplo: `opencode-go/deepseek-v4-pro`, `opencode-go/kimi-k2.6`
 
 Com base na sua configuração atual em `oh-my-openagent.jsonc`:
 
-| Agente | Modelo Atual (Anthropic) | Alternativa Go Sugerida |
+| Agente | Modelo | Por quê? |
 |---|---|---|
-| **oracle** (code review, análise) | `claude-opus-4-5` | `deepseek-v4-pro` — melhor tool-use, protocolo Anthropic |
-| **default / sisyphus** (daily) | `claude-sonnet-4` | `kimi-k2.6` ou `qwen3.6-plus` — balanceados |
-| **librarian** (pesquisa, lookup) | `claude-haiku-4-5` | `deepseek-v4-flash` — rápido + tool-use Anthropic |
+| **alan-turing** (SDLC) | `deepseek-v4-pro` + thinking | Orquestração pesada, precisa de raciocínio profundo |
+| **grace-hopper** (troubleshoot) | `deepseek-v4-pro` + thinking | Diagnóstico complexo com thinking |
+| **margaret-hamilton** (análise) | `deepseek-v4-pro` + thinking | ATAM/ISO-25010 requer thinking profundo |
+| **ada-lovelace** (exploração) | `deepseek-v4-flash` | Investigação rápida, alto volume |
+| **maestro** (meta-orchestrator) | `glm-5.1` | Classificação de intenção, capacidade sólida |
+| **oracle** (code review) | `deepseek-v4-pro` + thinking | Análise profunda de código |
+| **sisyphus** (daily driver) | `kimi-k2.5` | Alto volume + boa qualidade (9.2K req/mês) |
+| **explore** (busca) | `qwen3.5-plus` | Máximo volume para exploração (50.5K req/mês) |
 
 ### Exemplo de config
 
 ```jsonc
 // oh-my-openagent.jsonc
-"model": {
-  "default":    { "provider": "opencode-go", "model": "kimi-k2.6" },
-  "oracle":     { "provider": "opencode-go", "model": "deepseek-v4-pro" },
-  "librarian":  { "provider": "opencode-go", "model": "deepseek-v4-flash" },
-  "sisyphus":   { "provider": "opencode-go", "model": "kimi-k2.6" }
+"agents": {
+  "alan-turing":       { "model": "opencode-go/deepseek-v4-pro", "thinking": { "type": "enabled" } },
+  "grace-hopper":      { "model": "opencode-go/deepseek-v4-pro", "thinking": { "type": "enabled" } },
+  "margaret-hamilton": { "model": "opencode-go/deepseek-v4-pro", "thinking": { "type": "enabled" } },
+  "ada-lovelace":      { "model": "opencode-go/deepseek-v4-flash" },
+  "maestro":           { "model": "opencode-go/glm-5.1" },
+  "sisyphus":          { "model": "opencode-go/kimi-k2.5" },
+  "explore":           { "model": "opencode-go/qwen3.5-plus" }
 }
 ```
 

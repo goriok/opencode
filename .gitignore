@@ -30,3 +30,6 @@ dcp.jsonc
 .cursor/
 token-dashboard.html
 token-baselines/
+
+# LiteLLM proxy secrets
+litellm/.env

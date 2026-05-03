@@ -33,7 +33,7 @@
 
 ## Configuration
 
-Crie `~/.config/opencode/oh-my-opencode.jsonc`:
+Crie `~/.config/opencode/oh-my-openagent.jsonc`:
 
 ```json
 {
@@ -43,9 +43,9 @@ Crie `~/.config/opencode/oh-my-opencode.jsonc`:
   "disabled_mcps": [],
   
   "model": {
-    "default": { "provider": "anthropic", "model": "claude-sonnet-4-20250514" },
-    "oracle": { "provider": "anthropic", "model": "claude-opus-4-5-20250514" },
-    "librarian": { "provider": "anthropic", "model": "claude-haiku-4-5-20251001" }
+    "default": { "provider": "opencode-go", "model": "glm-5.1" },
+    "oracle": { "provider": "opencode-go", "model": "deepseek-v4-pro" },
+    "librarian": { "provider": "opencode-go", "model": "deepseek-v4-flash" }
   },
   
   "experimental": {
@@ -61,14 +61,14 @@ Crie `~/.config/opencode/oh-my-opencode.jsonc`:
 
 ### Model Provider Configuration
 
-Configure modelos por agente:
+Configure modelos por agente (todos via `opencode-go` provider):
 
 ```json
 {
   "model": {
-    "default": { "provider": "openai", "model": "gpt-4o" },
-    "oracle": { "provider": "anthropic", "model": "claude-opus-4" },
-    "sisyphus": { "provider": "anthropic", "model": "claude-sonnet-4" }
+    "default": { "provider": "opencode-go", "model": "glm-5.1" },
+    "oracle": { "provider": "opencode-go", "model": "deepseek-v4-pro" },
+    "sisyphus": { "provider": "opencode-go", "model": "glm-5.1" }
   }
 }
 ```
@@ -77,12 +77,12 @@ Configure modelos por agente:
 
 | Agente | Propósito | Modelo |
 |--------|----------|--------|
-| **Sisyphus** | Agente principal de orchestração | Sonnet |
-| **Prometheus** | Planner de implementação | Haiku |
-| **Oracle** | Arquitetura/debugging, Q&A | Opus |
-| **Librarian** | Docs/code search | Haiku |
-| **Explore** | Fast codebase grep | Haiku |
-| **Multimodal** | Análise de mídia/imagens | Sonnet |
+| **Sisyphus** | Agente principal de orchestração | glm-5.1 |
+| **Prometheus** | Planner de implementação | deepseek-v4-pro (thinking) |
+| **Oracle** | Arquitetura/debugging, Q&A | deepseek-v4-pro (thinking) |
+| **Librarian** | Docs/code search | deepseek-v4-flash |
+| **Explore** | Fast codebase grep | deepseek-v4-flash |
+| **Multimodal** | Análise de mídia/imagens | mimo-v2-omni |
 
 ### Delegation por Domínio
 

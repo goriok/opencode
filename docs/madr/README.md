@@ -12,6 +12,7 @@
 | [0004](./0004-self-contained-html-dashboard.md) | Self-contained HTML dashboard for analytics | Accepted |
 | [0005](./0005-prometheus-exporter-token-metrics.md) | Prometheus exporter for token metrics | Proposed |
 | [0006](./0006-cache-optimization-opencode.md) | Cache optimization for opencode token usage | Accepted |
+| [0007](./0007-opencode-go-model-strategy.md) | Opencode Go model routing strategy (4→7 models) | Accepted |
 
 ## Formato
 

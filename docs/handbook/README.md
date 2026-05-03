@@ -7,9 +7,9 @@
 | Plugin | Arquivo | Descrição |
 |--------|--------|-----------|
 | `opencode-mem` | [opencode-mem.md](./opencode-mem.md) | Memória persistente com vector database |
-| `oh-my-opencode` | [oh-my-opencode.md](./oh-my-opencode.md) | Battery included - Steroids |
+| `oh-my-openagent` | [oh-my-openagent.md](./oh-my-openagent.md) | Arsenal completo + hooks + ultrawork |
 | `opencode-workspace` | [opencode-workspace.md](./opencode-workspace.md) | Multi-agent bundle (16 componentes) |
-| `micode` | [micode.md](./micode.md) | Workflow Brainstorm → Plan → Implement |
+| **Conceitos** | [agent-sdk-conceitual.md](./agent-sdk-conceitual.md) | Agent SDK independente, deep research, multi-agent patterns |
 | **Seus orquestradores** | [agents-coexistence.md](./agents-coexistence.md) | Alan Turing, Grace Hopper, Ada Lovelace |
 
 ## Agentes Orquestradores
@@ -29,9 +29,8 @@ Local: `~/.config/opencode/opencode.jsonc`
   "plugin": [
     "@tarquinen/opencode-dcp@latest",
     "opencode-mem",
-    "oh-my-opencode",
-    "opencode-workspace",
-    "micode"
+    "oh-my-openagent",
+    "opencode-workspace"
   ],
   "mcp": {
     "memory": { "enabled": false }
@@ -46,8 +45,7 @@ Local: `~/.config/opencode/opencode.jsonc`
 | `opencode.jsonc` | Config principal |
 | `dcp.jsonc` | Dynamic Context Pruning |
 | `opencode-mem.jsonc` | Memória persistente |
-| `oh-my-opencode.jsonc` | Model configs |
-| `micode.jsonc` | Workflow + TDD |
+| `oh-my-openagent.jsonc` | Model configs, hooks, ultrawork |
 
 ## Quick Reference
 
@@ -58,10 +56,10 @@ Local: `~/.config/opencode/opencode.jsonc`
 - **Config**: `~/.config/opencode/opencode-mem.jsonc`
 - **Skill**: `/mem` command
 
-### oh-my-opencode
+### oh-my-openagent
 - **Funcionalidade**: Arsenal completo
 - **Features**: 20+ hooks, agents, MCPs, Ultrawork
-- **Config**: `~/.config/opencode/oh-my-opencode.jsonc`
+- **Config**: `~/.config/opencode/oh-my-openagent.jsonc`
 - **Commands**: `/ultrawork`, `/ralph`, `/review`
 
 ### opencode-workspace
@@ -70,33 +68,25 @@ Local: `~/.config/opencode/opencode.jsonc`
 - **Config**: `~/.config/opencode/opencode-workspace.jsonc`
 - **Agents**: researcher, coder, scribe, reviewer
 
-### micode
-- **Funcionalidade**: Workflow estruturado
-- **Features**: 3-stage lifecycle, TDD, worktrees
-- **Config**: `~/.config/opencode/micode.jsonc`
-- **Agents**: commander, planner, executor
-
 ## Comparativo
 
-| Característica | opencode-mem | oh-my-opencode | workspace | micode |
-|----------------|--------------|----------------|-----------|--------|
-| **Memory** | ✅ Vector DB | ❌ | ❌ | ✅ Ledger |
-| **Agents** | ❌ | ✅ 6+ | ✅ 4 | ✅ 12 |
-| **MCPs** | ❌ | ✅ 3 built-in | ✅ 3 | ❌ |
-| **Hooks** | ❌ | ✅ 20+ | ❌ | ❌ |
-| **Worktree** | ❌ | ❌ | ✅ | ✅ |
-| **TDD** | ❌ | ❌ | ❌ | ✅ |
-| **Web UI** | ✅ | ❌ | ❌ | ❌ |
+| Característica | opencode-mem | oh-my-openagent | workspace |
+|----------------|--------------|-----------------|-----------|
+| **Memory** | ✅ Vector DB | ❌ | ❌ |
+| **Agents** | ❌ | ✅ 6+ | ✅ 4 |
+| **MCPs** | ❌ | ✅ 3 built-in | ✅ 3 |
+| **Hooks** | ❌ | ✅ 20+ | ❌ |
+| **Worktree** | ❌ | ❌ | ✅ |
+| **Web UI** | ✅ | ❌ | ❌ |
 
 ## Recomendação de Uso
 
 | Cenário | Plugin/Agente Recomendado |
 |---------|-------------------|
 | Lembrar de sessões anteriores | `opencode-mem` |
-| Workflow completo | `oh-my-opencode` |
+| Workflow completo | `oh-my-openagent` |
 | Multi-agent orchestration | `opencode-workspace` |
-| TDD + estrutura | `micode` |
-| Feature completo ( Requirements → Deploy) | **Alan Turing** → micode |
+| Feature completo (Requirements → Deploy) | **Alan Turing** |
 | Bug / incidente | **Grace Hopper** |
 | Análise / arquitetura | **Ada Lovelace** |
 | **Tudo junto** | Use todos em harmonia! |
@@ -104,18 +94,17 @@ Local: `~/.config/opencode/opencode.jsonc`
 ## Decision Tree
 
 ```
-→ Novo feature?     → Alan Turing + micode
+→ Novo feature?     → Alan Turing
 → Bug/incidente?   → Grace Hopper  
 → Análise/review?  → Ada Lovelace
-→ Quick fix?       → oh-my-opencode
+→ Quick fix?       → oh-my-openagent
 → Lembrar contexto? → opencode-mem
 ```
 
 ## Roadmap
 
 - [ ] Configurar todos os plugins
-- [ ] Explorar MCPs do oh-my-opencode
-- [ ] Testar micode workflow
+- [ ] Explorar MCPs do oh-my-openagent
 - [ ] Verificar opencode-workspace agents
 
 ---

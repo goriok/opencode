@@ -2,7 +2,7 @@
 
 > Global configuration, agent personas, plugins, and operational tooling for the [opencode](https://opencode.ai) CLI.
 
-This repository manages the shared AI agent ecosystem for OpenCode — **191 subagents**, **5 primary orchestrators**, **12 skills**, **5 plugins**, and a **token tracking dashboard** — all coordinated through layered orchestration with ISO-25010, ATAM, and RM-ODP frameworks.
+This repository manages the shared AI agent ecosystem for OpenCode — **191 subagents**, **5 primary orchestrators**, **12 skills**, **4 plugins**, and a **token tracking dashboard** — all coordinated through layered orchestration with ISO-25010, ATAM, and RM-ODP frameworks.
 
 ---
 
@@ -61,8 +61,7 @@ After setup, OpenCode will have all 191 agents installed and the primary orchest
 │   ├── handbook/                # Reference documentation (how things work)
 │   │   ├── README.md            #   Plugins overview & decision tree
 │   │   ├── dcp.md               #   Dynamic Context Pruning
-│   │   ├── micode.md            #   Brainstorm → Plan → Implement workflow
-│   │   ├── oh-my-opencode.md    #   Arsenal + hooks + ultrawork
+│   │   ├── oh-my-openagent.md   #   Arsenal + hooks + ultrawork
 │   │   ├── opencode-mem.md      #   Persistent memory with vector DB
 │   │   ├── opencode-workspace.md #   Multi-agent bundle
 │   │   └── agent-vocabulary.md  #   Vocabulary & frameworks for agents
@@ -84,7 +83,7 @@ After setup, OpenCode will have all 191 agents installed and the primary orchest
 │       ├── rb-005-*.md          #   Updating agency-agents
 │       └── rb-006-*.md          #   Baseline strategy comparison
 │
-├── thoughts/                    # Design docs & plans (micode workflow)
+├── thoughts/                    # Design docs & plans
 │   └── shared/
 │       ├── designs/             #   Validated design documents
 │       └── plans/               #   Implementation plans
@@ -127,14 +126,13 @@ Each primary agent delegates to a squad of 15-19 specialist subagents from the a
 
 ## 🔌 Plugin Ecosystem
 
-Five plugins work in harmonic layers:
+Four plugins work in harmonic layers:
 
 | Plugin | Purpose | Config | Key Feature |
 |--------|---------|--------|-------------|
 | **opencode-mem** | Persistent memory | `opencode-mem.jsonc` | Vector DB, Web UI (port 4747) |
 | **oh-my-openagent** | Arsenal + hooks | `oh-my-openagent.jsonc` | Sisyphus, Oracle, ultrawork mode |
 | **opencode-workspace** | Multi-agent bundle | *(plugin config)* | Researcher, coder, scribe, reviewer |
-| **micode** | Structured workflow | `micode.jsonc` | Brainstorm → Plan → Implement, TDD |
 | **@tarquinen/opencode-dcp** | Context pruning | `dcp.jsonc` | Auto-compress when context fills |
 
 ### Layer Architecture
@@ -144,10 +142,6 @@ Five plugins work in harmonic layers:
 │  Strategy Layer                         │
 │  Alan Turing / Grace Hopper / Ada L.    │
 │  High-level orchestration & delegation  │
-├─────────────────────────────────────────┤
-│  Execution Layer                        │
-│  micode (commander → planner → exec)   │
-│  Structured workflow with TDD           │
 ├─────────────────────────────────────────┤
 │  Specialist Layer                       │
 │  workspace researcher/reviewer          │
@@ -199,7 +193,7 @@ This repo uses three distinct documentation formats, each answering a different 
 | Type | Question | Location | Example |
 |------|----------|----------|---------|
 | **MADR** | *Why* did we decide X? | `docs/madr/` | "Why Bash+SQLite for token tracking?" |
-| **Handbook** | *How* does Y work? | `docs/handbook/` + `docs/handbooks/` | "How does micode workflow work?" |
+| **Handbook** | *How* does Y work? | `docs/handbook/` + `docs/handbooks/` | "How does DCP pruning work?" |
 | **Runbook** | *What to do when* Z happens? | `docs/runbooks/` | "Dashboard is empty — follow these steps" |
 
 ### When to use which
@@ -231,7 +225,6 @@ All scripts follow the [Shell Script Style Guide](./AGENTS.md#shell-script-style
 | `opencode.jsonc` | Main OpenCode config (plugins, permissions, MCP) | ✅ |
 | `oh-my-openagent.jsonc` | Model configs, agent assignments, hooks | ✅ |
 | `opencode-mem.jsonc` | Persistent memory config | ✅ |
-| `micode.jsonc` | Workflow + TDD settings | ✅ |
 | `dcp.jsonc` | Dynamic Context Pruning config | ❌ (generated) |
 | `agents/*.md` | 191 agent definitions | ❌ (installed) |
 | `agents/alan-turing.md` etc. | 5 primary orchestrators | ✅ (tracked exceptions) |
@@ -334,8 +327,8 @@ The following are **gitignored** and must never be manually added:
           │            │              │
           ▼            ▼              ▼
    ┌──────────────────────────────────────────┐
-   │           PLUGIN LAYER                     │
-   │  opencode-mem │ DCP │ micode │ workspace  │
+    │           PLUGIN LAYER                     │
+    │  opencode-mem │ DCP │ workspace             │
    └──────────────────────────────────────────┘
           │
           ▼

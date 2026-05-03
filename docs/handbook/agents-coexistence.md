@@ -8,7 +8,7 @@
 Entrada do usuário
     │
     ├─→ "Preciso criar algo novo" / "Implementar feature"
-    │       Alan Turing (SDLC) → micode (executor)
+    │       Alan Turing (SDLC)
     │
     ├─→ "Algo quebrou" / "Erro" / "Debug"
     │       Grace Hopper (troubleshooting)
@@ -69,14 +69,6 @@ Entrada do usuário
 | **coder** | Implementação | Tasks isoladas |
 | **scribe** | Documentação | WRITE sem shell |
 
-### micode (Estrutura + TDD)
-
-| Agente | Propósito | Melhor Uso |
-|--------|----------|----------|
-| **commander** | Orquestrador micode | Workflow completo |
-| **executor** | Execução micode | Implementação TDD |
-| **planner** | Planning | Tasks detalhadas |
-
 ---
 
 ## Integração por Tipo de Task
@@ -85,10 +77,8 @@ Entrada do usuário
 
 ```
 1. Alan Turing (SDLC) 
-   → Cria escopo + requisitos
-2. micode (commander)
-   → Brainstorm → Plan → Implement
-3. oh-my-opencode (ultrawork se necessário)
+   → Cria escopo + requisitos + implementação
+2. oh-my-opencode (ultrawork se necessário)
    → Paralelização extrema
 ```
 
@@ -150,7 +140,7 @@ Entrada do usuário
 
 | Situação | Solução |
 |---------|--------|
-| Turing + micode duelando | Turing = escopo, micode = execução |
+| Turing + Workspace duelando | Turing = escopo, Workspace = execução |
 | Hopper + Oh-My-Opencode | Hopper = diagnóstico, Oh-My-Opencode = fix |
 | Lovelace + Workspace | Lovelace = análise, Workspace = research |
 | Todos querendo usar agente próprio | Use a decision treeabove |
@@ -179,7 +169,6 @@ Se perder contexto entre sessões:
 | Plugin | Ferramenta |
 |--------|------------|
 | opencode-mem | `/mem search <topic>` |
-| micode | `thoughts/ledgers/` |
 | DCP | `/dcp compress` → pode /dcp decompress |
 
 ---

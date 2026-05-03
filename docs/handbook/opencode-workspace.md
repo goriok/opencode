@@ -77,10 +77,10 @@ Crie `~/.config/opencode/opencode-workspace.jsonc`:
   },
   
   "agents": {
-    "researcher": { "model": "claude-haiku" },
-    "coder": { "model": "claude-sonnet" },
-    "scribe": { "model": "claude-haiku" },
-    "reviewer": { "model": "claude-opus" }
+    "researcher": { "model": "opencode-go/deepseek-v4-flash" },           // fast search, high volume
+    "coder": { "model": "opencode-go/deepseek-v4-pro" },                 // balanced implementation
+    "scribe": { "model": "opencode-go/deepseek-v4-flash" },               // documentation generation
+    "reviewer": { "model": "opencode-go/deepseek-v4-pro", "thinking": { "type": "enabled" } }  // deep code review
   },
   
   "mcp": {
@@ -110,7 +110,7 @@ Crie `~/.config/opencode/opencode-worktree.jsonc`:
 Pesquisa externa usando MCPs:
 
 - **Ferramentas**: websearch, context7, grep_app (Apenas Leitura)
-- **Modelo**: Haiku (rápido)
+- **Modelo**: deepseek-v4-flash (rápido) — via `oh-my-openagent.jsonc`
 - **Permissões**: webfetch, mcp
 
 ### 💻 Coder
@@ -118,7 +118,7 @@ Pesquisa externa usando MCPs:
 Agente de implementação:
 
 - **Ferramentas**: arquivo completo + bash
-- **Modelo**: Sonnet (balanceado)
+- **Modelo**: deepseek-v4-pro (balanceado) — via `oh-my-openagent.jsonc`
 - **Permissões**: edit, bash, read
 
 ### ✍️ Scribe
@@ -126,7 +126,7 @@ Agente de implementação:
 Documentação:
 
 - **Ferramentas**: write (não bash)
-- **Modelo**: Haiku
+- **Modelo**: deepseek-v4-flash (rápido) — via `oh-my-openagent.jsonc`
 - **Permissões**: write (read-only para bash)
 
 ### 👀 Reviewer
@@ -134,7 +134,7 @@ Documentação:
 Code review:
 
 - **Ferramentas**: read-only + git
-- **Modelo**: Opus (mais capaz)
+- **Modelo**: deepseek-v4-pro com thinking (profundo) — via `oh-my-openagent.jsonc`
 - **Permissões**: read, git
 
 ## Skills Incluídas

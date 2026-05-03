@@ -1,0 +1,122 @@
+model_list:
+  # ─── Anthropic (Claude Code Max subscription) ────────────────────────────
+  # Sem api_key — auth via OAuth token repassado pelo forward_client_headers_to_llm_api
+  - model_name: claude-sonnet-4-6
+    litellm_params:
+      model: anthropic/claude-sonnet-4-6
+      max_retries: 0
+
+  - model_name: claude-opus-4-7
+    litellm_params:
+      model: anthropic/claude-opus-4-7
+      max_retries: 0
+
+  - model_name: claude-haiku-4-5-20251001
+    litellm_params:
+      model: anthropic/claude-haiku-4-5-20251001
+      max_retries: 0
+
+  # ─── opencode-go (OpenAI-compat, except MiniMax → Anthropic-compat) ───────
+  # Base: https://opencode.ai/zen/go/v1/chat/completions
+  # MiniMax: https://opencode.ai/zen/go/v1/messages
+
+  - model_name: opencode-go/deepseek-v4-pro
+    litellm_params:
+      model: openai/deepseek-v4-pro
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+
+  - model_name: opencode-go/deepseek-v4-flash
+    litellm_params:
+      model: openai/deepseek-v4-flash
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+
+  - model_name: opencode-go/glm-5.1
+    litellm_params:
+      model: openai/glm-5.1
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+
+  - model_name: opencode-go/kimi-k2.5
+    litellm_params:
+      model: openai/kimi-k2.5
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+
+  - model_name: opencode-go/qwen3.5-plus
+    litellm_params:
+      model: openai/qwen3.5-plus
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+
+  - model_name: opencode-go/mimo-v2-omni
+    litellm_params:
+      model: openai/mimo-v2-omni
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+
+  # MiniMax usa endpoint Anthropic-compat
+  - model_name: opencode-go/minimax-m2.5
+    litellm_params:
+      model: anthropic/minimax-m2.5
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+
+  - model_name: opencode-go/minimax-m2.7
+    litellm_params:
+      model: anthropic/minimax-m2.7
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+
+  # ─── z.ai / GLM Coding Plan ──────────────────────────────────────────────
+  # Coding Plan endpoint: https://api.z.ai/api/coding/paas/v4
+  # Usa openai/ prefix + api_base manual porque o provider nativo zai/ manda
+  # pro endpoint geral (/api/paas/v4) e toma 429 com Coding Plan.
+  # Ref: https://github.com/BerriAI/litellm/issues/25479
+  # Ref: https://docs.z.ai/devpack/quick-start
+
+  - model_name: zai/glm-5.1
+    litellm_params:
+      model: openai/glm-5.1
+      api_base: https://api.z.ai/api/coding/paas/v4
+      api_key: os.environ/ZAI_API_KEY
+
+  - model_name: zai/glm-4.7
+    litellm_params:
+      model: openai/glm-4.7
+      api_base: https://api.z.ai/api/coding/paas/v4
+      api_key: os.environ/ZAI_API_KEY
+
+  - model_name: zai/glm-5-turbo
+    litellm_params:
+      model: openai/glm-5-turbo
+      api_base: https://api.z.ai/api/coding/paas/v4
+      api_key: os.environ/ZAI_API_KEY
+
+  - model_name: zai/glm-4.5-air
+    litellm_params:
+      model: openai/glm-4.5-air
+      api_base: https://api.z.ai/api/coding/paas/v4
+      api_key: os.environ/ZAI_API_KEY
+
+litellm_settings:
+  drop_params:
+    - reasoningSummary
+  request_timeout: 120
+  # Zero retries global — evita multiplicar 429s do Claude Max OAuth
+  # (opencode-go tem limites altos e não precisa de retry agressivo)
+  num_retries: 0
+
+router_settings:
+  routing_strategy: simple-shuffle
+  # Cooldown: após 3 falhas seguidas, pausa o deployment por 5s antes de tentar novamente
+  allowed_fails: 3
+  cooldown_time: 5
+  timeout: 120
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  store_model_in_db: true
+  # Repassa o OAuth token do Claude Max subscription direto para a Anthropic API
+  forward_client_headers_to_llm_api: true

@@ -87,7 +87,7 @@ Permite que o plugin trunque contexto antigo de forma mais agressiva quando o co
 | Cache Write | 18.1M tokens |
 | Cache Hit Rate | ~88% |
 | MCP Servers | memory (disabled) |
-| Plugins | 5 ativos (dcp, mem, oh-my-openagent, workspace, micode) |
+| Plugins | 4 ativos (dcp, mem, oh-my-openagent, workspace) |
 
 ## Referências
 

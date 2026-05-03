@@ -17,6 +17,37 @@
     "cache_stabilization": true,
     "cache_1h_ttl": true
   },
+  // LiteLLM proxy local (MADR 0008)
+  // Unifica Claude Code e opencode num endpoint único em localhost:4000
+  // Para ativar: task litellm:up && export LITELLM_MASTER_KEY=sk-litellm-local
+  // Modelos disponíveis: curl http://localhost:4000/v1/models -H "Authorization: Bearer $LITELLM_MASTER_KEY"
+  "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM Local Proxy",
+      "options": {
+        "baseURL": "http://localhost:4000/v1",
+        "apiKey": "sk-litellm-local"
+      },
+      "models": {
+        // Anthropic via proxy
+        "claude-sonnet-4-6":       { "name": "Claude Sonnet 4.6" },
+        "claude-opus-4-7":         { "name": "Claude Opus 4.7" },
+        "claude-haiku-4-5-20251001": { "name": "Claude Haiku 4.5" },
+        // opencode-go via proxy
+        "opencode-go/deepseek-v4-pro":   { "name": "DeepSeek V4 Pro" },
+        "opencode-go/deepseek-v4-flash": { "name": "DeepSeek V4 Flash" },
+        "opencode-go/glm-5.1":           { "name": "GLM 5.1" },
+        "opencode-go/kimi-k2.5":         { "name": "Kimi K2.5" },
+        "opencode-go/qwen3.5-plus":      { "name": "Qwen3.5 Plus" },
+        "opencode-go/mimo-v2-omni":      { "name": "MiMo V2 Omni" },
+        // z.ai via proxy
+        "zai/glm-5.1":    { "name": "GLM 5.1 (z.ai)" },
+        "zai/glm-4.7":    { "name": "GLM 4.7 (z.ai)" },
+        "zai/glm-4.5-air":{ "name": "GLM 4.5 Air (z.ai)" }
+      }
+    }
+  },
   "mcp": {
     // opencode-mem plugin gerencia memória via MCP próprio
     // Este MCP memory é desabilitado para evitar duplicação
@@ -30,7 +61,6 @@
     "@tarquinen/opencode-dcp@latest",
     "opencode-mem",
     "oh-my-openagent",
-    "opencode-workspace",
-    "micode"
+    "opencode-workspace"
   ]
 }

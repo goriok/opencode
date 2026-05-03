@@ -240,9 +240,8 @@ Agents follow a consistent section order using emoji headers:
   "plugin": [
     "@tarquinen/opencode-dcp@latest",
     "opencode-mem",
-    "oh-my-opencode",
-    "opencode-workspace",
-    "micode"
+    "oh-my-openagent",
+    "opencode-workspace"
   ]
 }
 ```
@@ -259,8 +258,7 @@ Agents follow a consistent section order using emoji headers:
 | `opencode.jsonc` | Main configuration |
 | `dcp.jsonc` | Dynamic Context Pruning |
 | `opencode-mem.jsonc` | Persistent memory (web UI: port 4747) |
-| `oh-my-opencode.jsonc` | Model configs, hooks |
-| `micode.jsonc` | Workflow + TDD settings |
+| `oh-my-openagent.jsonc` | Model configs, hooks, agent assignments |
 
 ---
 
@@ -275,7 +273,7 @@ ISO-25010, ATAM, and RM-ODP. They reference subagents from the agency-agents col
 | **Grace Hopper** | `agents/grace-hopper.md` | Troubleshooting orchestrator — detection through prevention |
 | **Margaret Hamilton** | `agents/margaret-hamilton.md` | Deep analysis orchestrator — full ATAM, ISO-25010 |
 | **Ada Lovelace** | `agents/ada-lovelace.md` | Exploratory analysis — fast, lightweight |
-| **Maestro** | `agents/maestro.md` | Legacy orchestrator — superseded by Alan Turing |
+| **Maestro** | `agents/maestro.md` | Legacy orchestrator — superseded by Alan Turing *(file missing from disk)* |
 
 ### Integrated Frameworks
 
@@ -329,9 +327,8 @@ This workspace uses a multi-plugin setup with harmonic agent coexistence:
 | Plugin | Purpose | Config File |
 |--------|---------|------------|
 | `opencode-mem` | Persistent memory, vector DB | `opencode-mem.jsonc` |
-| `oh-my-opencode` | Full Arsenal, hooks, ultrawork | `oh-my-opencode.jsonc` |
+| `oh-my-openagent` | Full Arsenal, hooks, ultrawork | `oh-my-openagent.jsonc` |
 | `opencode-workspace` | Multi-agent bundle | `opencode-workspace.jsonc` |
-| `micode` | Workflow + TDD | `micode.jsonc` |
 | `@tarquinen/opencode-dcp` | Context pruning | `dcp.jsonc` |
 
 ### Agent Layers
@@ -341,18 +338,16 @@ The system uses delegating layers:
 | Layer | Agent | Purpose |
 |------|-------|---------|
 | **Strategy** | Alan Turing, Grace Hopper, Ada Lovelace | High-level decisions |
-| **Execution** | micode (commander, planner) | Structured workflow |
-| **Research** | workspace (researcher) | External search |
-| **Review** | workspace (reviewer) | Code review |
-| **Quick** | oh-my-opencode (Sisyphus, Oracle) | Fast execution |
+| **Specialist** | workspace (researcher, reviewer) | Research & review |
+| **Quick** | oh-my-openagent (Sisyphus, Oracle) | Fast execution |
 
 ### Decision Tree
 
 ```
-→ Feature complete  → Alan Turing → micode
+→ Feature complete  → Alan Turing
 → Bug/incident  → Grace Hopper
 → Analysis     → Ada Lovelace
-→ Quick fix    → oh-my-opencode
+→ Quick fix    → oh-my-openagent
 → Remember    → opencode-mem
 → Large context → dcp compress
 ```

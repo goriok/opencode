@@ -115,6 +115,51 @@ tasks:
           fi
         done
 
+  litellm:up:
+    desc: 'Inicia LiteLLM proxy em localhost:4000'
+    dir: '{{.OPENCODE_DIR}}/litellm'
+    cmds:
+      - docker compose up -d
+      - echo "[litellm] Proxy rodando em http://localhost:4000"
+
+  litellm:down:
+    desc: 'Para o LiteLLM proxy'
+    dir: '{{.OPENCODE_DIR}}/litellm'
+    cmds:
+      - docker compose down
+
+  litellm:logs:
+    desc: 'Tail dos logs do LiteLLM proxy'
+    dir: '{{.OPENCODE_DIR}}/litellm'
+    cmds:
+      - docker compose logs -f litellm
+
+  litellm:status:
+    desc: 'Health check do LiteLLM proxy'
+    cmds:
+      - curl -sf http://localhost:4000/health/liveliness || echo "[litellm] Proxy offline"
+
+  litellm:models:
+    desc: 'Lista modelos disponíveis no proxy'
+    cmds:
+      - |
+        curl -sf http://localhost:4000/v1/models \
+          -H "Authorization: Bearer ${LITELLM_MASTER_KEY:-sk-litellm-local}" \
+          | python3 -c "import json,sys; d=json.load(sys.stdin); [print(' -', m['id']) for m in d.get('data',[])]" \
+          || echo "[litellm] Proxy offline ou LITELLM_MASTER_KEY não definido"
+
+  litellm:setup:
+    desc: 'Cria .env local a partir do .env.example (se não existir)'
+    dir: '{{.OPENCODE_DIR}}/litellm'
+    cmds:
+      - |
+        if [[ -f .env ]]; then
+          echo "[litellm] .env já existe — nenhuma ação necessária"
+        else
+          cp .env.example .env
+          echo "[litellm] .env criado — edite o arquivo e adicione suas API keys"
+        fi
+
   git:status:
     desc: 'Show git status of the opencode config repo'
     cmds:

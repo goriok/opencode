@@ -88,12 +88,6 @@ model_list:
       api_base: https://api.z.ai/api/coding/paas/v4
       api_key: os.environ/ZAI_API_KEY
 
-  - model_name: zai/glm-5-turbo
-    litellm_params:
-      model: openai/glm-5-turbo
-      api_base: https://api.z.ai/api/coding/paas/v4
-      api_key: os.environ/ZAI_API_KEY
-
   - model_name: zai/glm-4.5-air
     litellm_params:
       model: openai/glm-4.5-air
@@ -203,6 +197,10 @@ model_list:
   #     tpm: 80000
 
 litellm_settings:
+  # ─── Metrics & Monitoring ──────────────────────────────────────────────────
+  callbacks:
+    - prometheus
+
   # ─── Redis Cache ──────────────────────────────────────────────────────────
   # Cache LLM responses para reduzir latency e custo em requests repetidos.
   # Redis roda no container na porta interna 6379 (host:6380).

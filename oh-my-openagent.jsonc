@@ -10,26 +10,26 @@
     // Primary orchestrators — z.ai models via LiteLLM proxy
     // Tier strategy: glm-5.1 (heavy/thinking) → glm-5-turbo (balanced/flagship-fast) → glm-4.7 (standard 1×) → glm-4.5-air (fast)
     // Peak hours (3× quota): 14:00-18:00 UTC+8 | Off-peak promo 1× until end of June
-    "ada-lovelace":        { "model": "zai/glm-5-turbo" },                          // Fast flagship — exploratory analysis
+    "ada-lovelace":        { "model": "zai/glm-4.7" },                              // Standard — exploratory analysis
     "alan-turing":         { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
     "grace-hopper":        { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
     "maestro":             { "model": "zai/glm-4.7" },                              // 1× always — legacy orchestrator
     "margaret-hamilton":   { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
+<<<<<<< HEAD
     "tony-hoare":          { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },  // Fix Engineer — Hoare Logic contracts
-    
     // oh-my-openagent agents
     "explore":             { "model": "zai/glm-4.7" },                              // 1× always — high-volume grep
     "librarian":           { "model": "zai/glm-4.7",  "thinking": { "type": "enabled" } },
     "metis":               { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
     "momus":               { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "multimodal":          { "model": "zai/glm-5-turbo" },                          // Fast flagship with vision
+    "multimodal":          { "model": "zai/glm-4.7" },                              // Standard with vision
     "oracle":              { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
     "prometheus":          { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "sisyphus":            { "model": "zai/glm-5-turbo" },                          // Fast flagship — main session agent
-    
+    "sisyphus":            { "model": "zai/glm-4.7" },                              // Standard — main session agent
+
     // opencode-workspace agents
     "researcher":          { "model": "zai/glm-4.7" },                              // 1× always — fast search
-    "coder":               { "model": "zai/glm-5-turbo" },                          // Fast flagship — implementation
+    "coder":               { "model": "zai/glm-4.7" },                              // Standard — implementation
     "scribe":              { "model": "zai/glm-4.7" },                              // 1× always — docs
     "reviewer":            { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },  // Deep review
     
@@ -39,12 +39,12 @@
   "categories": {
     "writing":             { "model": "zai/glm-4.7" },                              // 1× always
     "quick":               { "model": "zai/glm-4.7" },                              // 1× always
-    "deep":                { "model": "zai/glm-5-turbo" },                          // Fast flagship
+    "deep":                { "model": "zai/glm-4.7" },                              // Standard
     "unspecified-low":     { "model": "zai/glm-4.7" },                              // 1× always
-    "unspecified-high":    { "model": "zai/glm-5-turbo" },                          // Fast flagship
-    "visual-engineering":  { "model": "zai/glm-5-turbo" },                          // Fast flagship (vision)
+    "unspecified-high":    { "model": "zai/glm-4.7" },                              // Standard
+    "visual-engineering":  { "model": "zai/glm-4.7" },                              // Standard (vision)
     "ultrabrain":          { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "artistry":            { "model": "zai/glm-5-turbo" }                           // Fast flagship
+    "artistry":            { "model": "zai/glm-4.7" }                               // Standard
   },
   
   // Features experimentais

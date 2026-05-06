@@ -15,6 +15,7 @@
     "grace-hopper":        { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
     "maestro":             { "model": "zai/glm-4.7" },                              // 1× always — legacy orchestrator
     "margaret-hamilton":   { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
+    "tony-hoare":          { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },  // Fix Engineer — Hoare Logic contracts
     
     // oh-my-openagent agents
     "explore":             { "model": "zai/glm-4.7" },                              // 1× always — high-volume grep

@@ -100,77 +100,107 @@ model_list:
       api_base: https://api.z.ai/api/coding/paas/v4
       api_key: os.environ/ZAI_API_KEY
 
-  # ─── GitHub Copilot (OAuth device flow — sem API key) ─────────────────────
-  # BLOQUEIO: O LiteLLM tenta autenticar na inicialização do proxy, o que dispara
-  # o OAuth device flow e crasha o container quando não há tokens.
-  # Para ativar: autentique localmente primeiro, depois descomente.
-  # Ref: https://docs.litellm.ai/docs/providers/github_copilot
+  # ─── DeepSeek (direct) ────────────────────────────────────────────────────
+  # API: https://api.deepseek.com/v1 (OpenAI-compatible)
+  # key: DS_API_KEY — adicionar no .env para ativar, depois descomentar
+  # Modelos disponíveis: GET /v1/models com api key
+
+  # - model_name: deepseek-v4-pro
+  #   litellm_params:
+  #     model: openai/deepseek-v4-pro
+  #     api_base: https://api.deepseek.com/v1
+  #     api_key: os.environ/DS_API_KEY
+  #     rpm: 10
+  #     tpm: 50000
+  # - model_name: deepseek-v4-flash
+  #   litellm_params:
+  #     model: openai/deepseek-v4-flash
+  #     api_base: https://api.deepseek.com/v1
+  #     api_key: os.environ/DS_API_KEY
+  #     rpm: 20
+  #     tpm: 100000
+
+  # ─── GitHub Copilot ──────────────────────────────────────────────────────────
+  # Token: ~/.config/litellm/github_copilot/access-token (OAuth token do apps.json)
+  # Montar volume no docker-compose: ${HOME}/.config/litellm/github_copilot:/root/.config/litellm/github_copilot
+  # ATENÇÃO: LiteLLM autentica na inicialização — crash se não houver token.
   # Auth: pip install litellm && python3 -c "import litellm; litellm.completion(model='github_copilot/gpt-4.1', messages=[{'role':'user','content':'ping'}])"
   # Tokens: ~/.config/litellm/github_copilot/{access-token,api-key.json}
+  # Ref: https://docs.litellm.ai/docs/providers/github_copilot
+  # Sufixo rpm indica multiplicador de premium requests do Copilot Individual/Business
 
-  # # --- OpenAI ---
+  # --- OpenAI (multiplier: 0 — incluído no plano) ---
   # - model_name: copilot/gpt-4.1
   #   litellm_params:
   #     model: github_copilot/gpt-4.1
+  #     rpm: 60
+  # - model_name: copilot/gpt-4o
+  #   litellm_params:
+  #     model: github_copilot/gpt-4o
+  #     rpm: 60
   # - model_name: copilot/gpt-5-mini
   #   litellm_params:
   #     model: github_copilot/gpt-5-mini
+  #     rpm: 60
+  # # --- OpenAI premium (multiplier: 1) ---
   # - model_name: copilot/gpt-5.2
   #   litellm_params:
   #     model: github_copilot/gpt-5.2
+  #     rpm: 15
+  #     tpm: 100000
   # - model_name: copilot/gpt-5.4
   #   litellm_params:
   #     model: github_copilot/gpt-5.4
-  # - model_name: copilot/gpt-5.4-mini
-  #   litellm_params:
-  #     model: github_copilot/gpt-5.4-mini
-  # - model_name: copilot/gpt-5.5
-  #   litellm_params:
-  #     model: github_copilot/gpt-5.5
-  # # --- OpenAI Codex (responses API) ---
+  #     rpm: 10    # multiplier: ~3-5x
+  #     tpm: 80000
+  # # --- OpenAI Codex (responses API) (multiplier: 1) ---
   # - model_name: copilot/gpt-5.2-codex
   #   model_info:
   #     mode: responses
   #   litellm_params:
   #     model: github_copilot/gpt-5.2-codex
+  #     rpm: 10
+  #     tpm: 80000
   # - model_name: copilot/gpt-5.3-codex
   #   model_info:
   #     mode: responses
   #   litellm_params:
   #     model: github_copilot/gpt-5.3-codex
-  # # --- Anthropic Claude ---
-  # - model_name: copilot/claude-haiku-4.5
-  #   litellm_params:
-  #     model: github_copilot/claude-haiku-4.5
-  # - model_name: copilot/claude-sonnet-4.5
-  #   litellm_params:
-  #     model: github_copilot/claude-sonnet-4.5
+  #     rpm: 10
+  #     tpm: 80000
+  # # --- Anthropic Claude via Copilot ---
   # - model_name: copilot/claude-sonnet-4.6
   #   litellm_params:
   #     model: github_copilot/claude-sonnet-4.6
-  # - model_name: copilot/claude-opus-4.5
-  #   litellm_params:
-  #     model: github_copilot/claude-opus-4.5
-  # - model_name: copilot/claude-opus-4.6
-  #   litellm_params:
-  #     model: github_copilot/claude-opus-4.6
+  #     rpm: 15    # multiplier: 1
+  #     tpm: 100000
   # - model_name: copilot/claude-opus-4.7
   #   litellm_params:
   #     model: github_copilot/claude-opus-4.7
+  #     rpm: 5     # multiplier: ~5-10x
+  #     tpm: 30000
   # # --- Google Gemini ---
-  # - model_name: copilot/gemini-2.0-flash
-  #   litellm_params:
-  #     model: github_copilot/gemini-2.0-flash
   # - model_name: copilot/gemini-2.5-pro
   #   litellm_params:
   #     model: github_copilot/gemini-2.5-pro
-  # # --- OpenAI Reasoning ---
-  # - model_name: copilot/o3
+  #     rpm: 15    # multiplier: 1
+  #     tpm: 100000
+  # - model_name: copilot/gemini-3-flash
   #   litellm_params:
-  #     model: github_copilot/o3
-  # - model_name: copilot/o4-mini
+  #     model: github_copilot/gemini-3-flash-preview
+  #     rpm: 30    # multiplier: 0.33 — mais permissivo por ser barato
+  #     tpm: 120000
+  # - model_name: copilot/gemini-3.1-pro
   #   litellm_params:
-  #     model: github_copilot/o4-mini
+  #     model: github_copilot/gemini-3.1-pro-preview
+  #     rpm: 10    # multiplier: ~3-5x
+  #     tpm: 80000
+  # # --- xAI Grok ---
+  # - model_name: copilot/grok-code-fast
+  #   litellm_params:
+  #     model: github_copilot/grok-code-fast-1
+  #     rpm: 25    # multiplier: 0.25 — muito barato, mais permissivo
+  #     tpm: 80000
 
 litellm_settings:
   # ─── Redis Cache ──────────────────────────────────────────────────────────

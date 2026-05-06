@@ -45,10 +45,37 @@
         "zai/glm-5.1":     { "name": "GLM 5.1 (z.ai)" },
         "zai/glm-5-turbo": { "name": "GLM 5 Turbo (z.ai)" },
         "zai/glm-4.7":     { "name": "GLM 4.7 (z.ai)" },
-        "zai/glm-4.5-air": { "name": "GLM 4.5 Air (z.ai)" }
+        "zai/glm-4.5-air": { "name": "GLM 4.5 Air (z.ai)" },
+        // GitHub Copilot via proxy — sufixo indica multiplicador de premium requests
+        // Para ativar: autenticar primeiro (ver litellm/config.yaml), descomentar seção Copilot no config.yaml
+        // "copilot/gpt-4.1":           { "name": "GPT-4.1 (Copilot) [free]" },
+        // "copilot/gpt-4o":            { "name": "GPT-4o (Copilot) [free]" },
+        // "copilot/gpt-5-mini":        { "name": "GPT-5 Mini (Copilot) [free]" },
+        // "copilot/gpt-5.2":           { "name": "GPT-5.2 (Copilot) [1x]" },
+        // "copilot/gpt-5.4":           { "name": "GPT-5.4 (Copilot) [1x]" },
+        // "copilot/claude-sonnet-4.6": { "name": "Claude Sonnet 4.6 (Copilot) [1x]" },
+        // "copilot/claude-opus-4.7":   { "name": "Claude Opus 4.7 (Copilot) [5x]" },
+        // "copilot/gemini-2.5-pro":    { "name": "Gemini 2.5 Pro (Copilot) [1x]" },
+        // "copilot/gemini-3-flash":    { "name": "Gemini 3 Flash (Copilot) [0.33x]" },
+        // "copilot/gpt-5.2-codex":     { "name": "GPT-5.2 Codex (Copilot) [1x]" }
       }
-    }
+    },
+    // DeepSeek direct — descomentar se tiver DS_API_KEY no .env
+    // "deepseek": {
+    //   "npm": "@ai-sdk/openai-compatible",
+    //   "name": "DeepSeek Direct",
+    //   "options": {
+    //     "baseURL": "http://localhost:4000/v1",
+    //     "apiKey": "{env:LITELLM_KEY_DEEPSEEK}"
+    //   },
+    //   "models": {
+    //     "deepseek-v4-pro":   { "name": "DeepSeek V4 Pro" },
+    //     "deepseek-v4-flash": { "name": "DeepSeek V4 Flash" }
+    //   }
+    // }
   },
+  // Modelo padrão quando não há override por agent/categoria (oh-my-openagent.jsonc)
+  // "model": "litellm/opencode-go/deepseek-v4-pro",
   "mcp": {
     // opencode-mem plugin gerencia memória via MCP próprio
     // Este MCP memory é desabilitado para evitar duplicação

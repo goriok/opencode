@@ -42,5 +42,4 @@ info "Done! $COUNT agents installed to $AGENTS_DIR"
 info "Syncing primary agents to Claude Code..."
 bash "$HOME/.config/opencode/sync-primary-agents.sh"
 
-info "Making scripts executable..."
 chmod +x "$HOME/.config/opencode/litellm/setup-litellm.sh"

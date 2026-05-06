@@ -10,8 +10,8 @@
 #   2. Strips opencode-specific frontmatter fields (mode, permission)
 #   3. Copies adapted files to ~/.claude/agents/
 #
-# Source of truth: ~/.config/opencode/agents/{alan-turing,grace-hopper,ada-lovelace,maestro}.md
-# Claude Code target: ~/.claude/agents/{alan-turing,grace-hopper,ada-lovelace,maestro}.md
+# Source of truth: ~/.config/opencode/agents/{alan-turing,grace-hopper,tony-hoare,ada-lovelace,margaret-hamilton,agents-orchestrator}.md
+# Claude Code target: ~/.claude/agents/{alan-turing,grace-hopper,tony-hoare,ada-lovelace,margaret-hamilton,agents-orchestrator}.md
 
 set -euo pipefail
 
@@ -31,8 +31,10 @@ TARGET_DIR="$HOME/.claude/agents"
 PRIMARY_AGENTS=(
   "alan-turing.md"
   "grace-hopper.md"
+  "tony-hoare.md"
   "ada-lovelace.md"
-  "maestro.md"
+  "margaret-hamilton.md"
+  "agents-orchestrator.md"
 )
 
 mkdir -p "$TARGET_DIR"
@@ -63,7 +65,7 @@ for agent in "${PRIMARY_AGENTS[@]}"; do
   ' "$src" > "$dst"
 
   info "Synced: $agent → $dst"
-  ((synced++))
+  synced=$((synced + 1))
 done
 
 info "Done — $synced primary agent(s) synced to $TARGET_DIR"

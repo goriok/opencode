@@ -1,6 +1,6 @@
 ---
 name: gitlab-mr-review
-description: Orquestra code review em MRs do GitLab — busca o diff via MCP, aplica a skill code-review sobre ele, e publica os findings como inline threads e overview note usando draft notes. Invocar com a URL do MR.
+description: Faz code review em MRs do GitLab — busca o diff, aplica a skill code-review, e publica os findings como inline threads e overview note usando draft notes. Para implementar correções e responder comentários, usar a skill gitlab-mr-fixes. Invocar com a URL do MR.
 disable-model-invocation: true
 argument-hint: <gitlab-mr-url>
 ---
@@ -10,9 +10,19 @@ argument-hint: <gitlab-mr-url>
 Skill orquestradora que une o processo de code review com a publicação dos resultados
 diretamente no GitLab MR como comentários inline (aba **Changes**) e nota geral (aba **Overview**).
 
+> **Escopo desta skill:** apenas review e publicação de findings.
+> Para implementar correções, responder threads de reviewer e validar RED→GREEN, usar a skill **`gitlab-mr-fixes`**.
+>
+> | Skill              | Faz                                                         |
+> | ------------------ | ----------------------------------------------------------- |
+> | `gitlab-mr-review` | Lê diff → review → publica findings como draft notes        |
+> | `gitlab-mr-fixes`  | Implementa correções → responde comentários → valida testes |
+
 ## Quando Ativar
 
-Ativar quando o usuário fornecer uma URL de GitLab MR e pedir para revisar ou comentar o MR.
+Ativar quando o usuário fornecer uma URL de GitLab MR e pedir para **revisar** ou **comentar** o MR.
+Para pedidos de "corrigir", "aplicar sugestão", "responder comentário" → usar `gitlab-mr-fixes`.
+
 Exemplos de URLs aceitas:
 
 ```
@@ -27,6 +37,7 @@ https://gitlab.empresa.com/grupo/subgrupo/projeto/-/merge_requests/7
 **1.1 Parsear a URL do MR**
 
 A partir da URL fornecida em `$ARGUMENTS`:
+
 - `project_id` = tudo entre o host e `/-/merge_requests/`, ex: `grupo/projeto` ou `grupo/subgrupo/projeto`
   - Passar o path string como está — **NÃO double-encode** (a tool faz o encoding internamente)
 - `mr_iid` = o número inteiro no final da URL
@@ -39,6 +50,7 @@ gitlab_get_merge_request(project_id, merge_request_iid: mr_iid)
 ```
 
 Extrair e guardar:
+
 - `diff_refs.base_sha`
 - `diff_refs.head_sha`
 - `diff_refs.start_sha`
@@ -54,6 +66,7 @@ gitlab_get_merge_request_diffs(project_id, merge_request_iid: mr_iid)
 ```
 
 Retorna array de objetos por arquivo:
+
 ```json
 {
   "old_path": "app/models/user.rb",
@@ -227,20 +240,21 @@ Use `render json: @user, serializer: UserSerializer`.
 
 > Branch: `{source_branch}`
 
-| Severidade     | Qtd |
-|----------------|-----|
-| 🔴 BLOCKER     |  N  |
-| 🟡 WARNING     |  N  |
-| 🟢 SUGGESTION  |  N  |
-| ℹ️  INFO        |  N  |
+| Severidade    | Qtd |
+| ------------- | --- |
+| 🔴 BLOCKER    | N   |
+| 🟡 WARNING    | N   |
+| 🟢 SUGGESTION | N   |
+| ℹ️ INFO       | N   |
 
 {Se houver findings sem localização precisa no diff:}
+
 ### Findings sem localização no diff
 
 - 🟡 **[WARNING]** `app/services/user_service.rb`: descrição do finding
 
-{Sumário final}
----
+## {Sumário final}
+
 **Veredicto:** {ready to merge | necessita correções antes do merge}
 ```
 
@@ -276,3 +290,46 @@ Use `render json: @user, serializer: UserSerializer`.
 - ❌ Criar uma nova thread por finding de overview — um único `gitlab_create_draft_note` sem position para o sumário inteiro
 - ❌ Ler apenas o diff sem buscar o arquivo completo quando o contexto for insuficiente para o review
 - ❌ Usar `line_range` no position sem ter o `line_code` SHA correto — omitir `line_range` para comentários de linha única
+
+---
+
+## Documentation Standards
+
+Se um relatório de review for salvo localmente (além de publicado no GitLab), DEVE seguir estas regras:
+
+**Formato & Localização**
+
+- Formato: `.md` (Markdown apenas)
+- Caminho: `docs/reviews/` relativo à raiz do projeto
+- Convenção de nome: `docs/reviews/YYYY-MM-DD-mr-{iid}-slug.md`
+
+**Frontmatter (obrigatório)**
+
+```yaml
+---
+title: "MR Review: !{iid} — {título do MR}"
+date: YYYY-MM-DD
+type: review
+status: draft | published
+authors: []
+tags: []
+---
+```
+
+- `tags` — incluir nome do projeto, branch, veredicto (approved/needs-fixes)
+- Ao buscar reviews anteriores, filtrar por `type: review` e `tags` primeiro
+
+**Diagramas**
+
+Se necessário ilustrar um finding com diagrama, usar Mermaid em modo strict:
+
+````markdown
+```mermaid
+%%{init: {"theme": "default"}}%%
+%% strict mode — no implicit node creation %%
+flowchart LR
+    A --> B
+```
+````
+
+Sem ASCII art, sem PlantUML.

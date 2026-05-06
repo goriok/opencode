@@ -24,13 +24,20 @@ globs: ["**/*"]
 
 ## Formato RFC
 
+O arquivo RFC deve ser salvo em `docs/rfcs/` com o seguinte frontmatter obrigatório no topo:
+
+```yaml
+---
+title: "RFC: [Título da Mudança]"
+date: YYYY-MM-DD
+type: rfc
+status: draft | in-review | approved | rejected | superseded
+authors: []
+tags: []
+---
 ```
-RFC: [Título da Mudança]
-Status: Draft | In Review | Approved | Rejected | Superseded
-Data: DD/MM/AAAA
-Autores: [Nome/Time]
-Tags: #[Domínio] #[Tecnologia] #[Característica-ISO-25010]
-```
+
+> O corpo da RFC começa imediatamente após o frontmatter — não repita os campos acima como cabeçalho Markdown.
 
 ---
 
@@ -117,12 +124,15 @@ Descreva a decisão arquitetural central e por que ela foi escolhida sobre as al
 
 ### Exemplo: Graceful Shutdown (Resiliência de Scale-Down)
 
-```
-RFC: Implementação de Graceful Shutdown
-Status: Approved
-Data: 06/04/2026
-Autores: Time de Plataforma
-Tags: #Resiliência #Kubernetes #ScaleDown #Performance
+```yaml
+---
+title: "RFC: Implementação de Graceful Shutdown"
+date: 2026-04-06
+type: rfc
+status: approved
+authors: ["Time de Plataforma"]
+tags: ["resiliência", "kubernetes", "scale-down", "performance"]
+---
 ```
 
 **Enterprise View:** Retomar autoscaling para reduzir OPEX sem causar indisponibilidade. A mitigação atual de manter pods sobressalentes é financeiramente insustentável após Black Friday.
@@ -168,3 +178,41 @@ Tags: #Resiliência #Kubernetes #ScaleDown #Performance
 | **Grace Hopper** | Lições arquiteturais de incidentes P1/P2 | Phase 7 — Post-Incident Docs |
 
 Para gerar uma RFC, invoque `/rfc-template` ou peça ao orquestrador ativo para produzir a RFC usando este template.
+
+---
+
+## Documentation Standards
+
+All RFC documents produced using this template MUST follow these rules:
+
+**Format & Location**
+- File format: `.md` (Markdown only)
+- Save path: `docs/rfcs/` relative to the project root
+- Filename convention: `docs/rfcs/YYYY-MM-DD-titulo-kebab-case.md`
+
+**Frontmatter (mandatory)**
+
+Every RFC must open with the YAML frontmatter block defined in the Formato RFC section above. Fields reference:
+
+- `type: rfc` — always fixed for RFC documents
+- `status` — update as the RFC evolves: `draft` → `in-review` → `approved` / `rejected` / `superseded`
+- `tags` — lowercase kebab-case; use consistent vocabulary: service names, ISO-25010 characteristics, domain (auth/infra/data/api), severity (p1/p2/p3)
+- When searching for existing RFCs, grep `type: rfc` and `tags` fields first before scanning body content
+
+**Diagrams**
+
+All diagrams MUST be written in Mermaid using strict mode:
+
+````markdown
+```mermaid
+%%{init: {"theme": "default"}}%%
+%% strict mode — no implicit node creation %%
+flowchart LR
+    A --> B
+```
+````
+
+- `flowchart LR` for architecture and data flow diagrams
+- `sequenceDiagram` for service interactions and auth flows
+- `erDiagram` for data model changes
+- No ASCII art diagrams, no PlantUML

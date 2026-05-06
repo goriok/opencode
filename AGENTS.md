@@ -8,24 +8,24 @@ This file provides guidance for AI coding agents operating in this repository.
 
 This is the **global opencode configuration directory** (`~/.config/opencode`), not an application codebase.
 Its purpose is to define and distribute AI sub-agent personas for the [opencode](https://opencode.ai) CLI,
-and to mirror those agents to `.cursor/rules/` for Cursor IDE compatibility.
+and to mirror those agents to `~/.claude/agents/` for Claude Code compatibility.
 
 **Tracked files** (only these are in git):
-- `opencode.json` — global opencode config
+- `opencode.jsonc` — global opencode config (note: `.jsonc`, not `.json`)
 - `setup.sh` — one-time machine setup script
 - `install-agents.sh` — per-project agent installer
+- `sync-primary-agents.sh` — mirrors primary agents to Claude Code
 - `AGENTS.md` — this file
-- `agents/alan-turing.md` — primary agent: SDLC orchestrator (tracked exception)
-- `agents/grace-hopper.md` — primary agent: troubleshooting orchestrator (tracked exception)
-- `agents/ada-lovelace.md` — primary agent: analysis orchestrator (tracked exception)
-- `agents/maestro.md` — primary agent: legacy orchestrator (tracked exception, superseded by Alan Turing)
+- `agents/` — all 165 agent `.md` files are tracked (all committed, not gitignored)
 - `skills/` — team-shareable skill definitions (all tracked)
 
-**Gitignored** (generated at runtime, do not commit):
-- `agents/` — 191 installed opencode agent `.md` files from agency-agents (exception: primary agents above)
+**Gitignored** (do not commit):
 - `.opencode/` — runtime opencode directory
-- `.cursor/` — Cursor IDE rule files (`.mdc`)
+- `.cursor/` — Cursor IDE rule files
 - `node_modules/`, `package.json`, `bun.lock`
+
+> **Common mistake:** `AGENTS.md` and the README previously described `agents/` as gitignored. It is NOT.
+> All 165 agent files are tracked in git. The `.gitignore` only excludes `.opencode/`, `.cursor/`, and `node_modules/`.
 
 ---
 
@@ -37,8 +37,10 @@ and to mirror those agents to `.cursor/rules/` for Cursor IDE compatibility.
 bash ~/.config/opencode/setup.sh
 ```
 
-Clones [agency-agents](https://github.com/msitarzewski/agency-agents), converts, and installs agent
-definitions to `~/.config/opencode/agents/`. Also runs `sync-primary-agents.sh` automatically.
+Clones [agency-agents](https://github.com/msitarzewski/agency-agents), converts agents to opencode
+format, copies them to `~/.config/opencode/agents/`, then calls `sync-primary-agents.sh` automatically.
+
+Note: `setup.sh` runs `convert.sh` **without** the `--tool opencode` flag (the flag is only used in `install-agents.sh`).
 
 ### Sync primary agents to Claude Code
 
@@ -46,12 +48,14 @@ definitions to `~/.config/opencode/agents/`. Also runs `sync-primary-agents.sh` 
 bash ~/.config/opencode/sync-primary-agents.sh
 ```
 
-Copies `alan-turing.md`, `grace-hopper.md`, and `maestro.md` from `~/.config/opencode/agents/` to
-`~/.claude/agents/`, stripping opencode-specific fields (`mode`, `permission`) that Claude Code does
-not support. Run this after editing any primary agent file.
+Strips `mode` and `permission` frontmatter fields (not supported by Claude Code) and copies these files
+to `~/.claude/agents/`:
+- `alan-turing.md`, `grace-hopper.md`, `tony-hoare.md`, `ada-lovelace.md`, `agents-orchestrator.md`
 
 **Source of truth:** `~/.config/opencode/agents/*.md`
-**Claude Code mirror:** `~/.claude/agents/*.md` (generated — do not edit directly)
+**Claude Code mirror:** `~/.claude/agents/*.md` — do not edit directly
+
+Run after editing any primary agent file.
 
 ### Per-project Agent Installation
 
@@ -63,116 +67,120 @@ bash ~/.config/opencode/install-agents.sh
 bash ~/.config/opencode/install-agents.sh /path/to/project
 ```
 
-Installs agents to `<target>/.opencode/agents/`.
-
-### Tests
-
-**There are no tests.** This is a configuration/agent-definition repository with no application logic
-to test. Do not add a test runner without explicit instruction.
-
-### Lint / Format
-
-**There is no linter or formatter configured.** Shell scripts follow consistent style conventions
-(see below). Do not add linting tooling without explicit instruction.
+Installs agents to `<target>/.opencode/agents/`. Exits with a warning if the directory already exists.
 
 ### Package Manager
 
-**Bun** is the package manager (`bun.lock` present). If you need to install dependencies:
+**npm** is the package manager (`package-lock.json` present). The `opencode.jsonc` references
+`@opencode-ai/plugin` via `package.json` (managed by opencode itself — do not modify manually):
 
 ```bash
-bun install
+npm install
 ```
+
+### Tests / Lint
+
+**None configured.** Do not add a test runner or linter without explicit instruction.
+
+---
+
+## opencode Configuration (`opencode.jsonc`)
+
+- `permission.edit` and `permission.bash` are both `"ask"` — agents must prompt before editing or running commands
+- `model: github-copilot/claude-opus-4-6` — provedor padrão neste ambiente é GitHub Copilot
+- MCP `memory` persists context across sessions via `@modelcontextprotocol/server-memory` (disabled aqui — `opencode-mem` plugin substitui)
+- MCP `idpa-api` integra com a API IDPA local
+- MCP `kanban-force` integra com o Kanban Force corporativo
+- MCP `gitlab` connects to `https://gitlab.luizalabs.com` using `$GITLAB_PERSONAL_ACCESS_TOKEN` env var; TLS verification is disabled (`NODE_TLS_REJECT_UNAUTHORIZED=0`)
+- MCP `mcp-atlassian` integra com Confluence corporativo
+
+### Plugin Ecosystem
+
+Cinco plugins trabalham em camadas:
+
+| Plugin                       | Purpose              | Config                  | Key Feature                              |
+| ---------------------------- | -------------------- | ----------------------- | ---------------------------------------- |
+| **opencode-mem**             | Memória persistente  | `opencode-mem.jsonc`    | Vector DB, Web UI (port 4747)            |
+| **oh-my-openagent**          | Arsenal + hooks      | `oh-my-openagent.jsonc` | Hooks (thinking-block, context-monitor)  |
+| **opencode-workspace**       | Multi-agent bundle   | *(plugin config)*       | Researcher, coder, scribe, reviewer      |
+| **@tarquinen/opencode-dcp**  | Context pruning      | `dcp.jsonc` (gerado)    | Auto-compress quando o contexto enche    |
+
+> **Nota sobre `oh-my-openagent.jsonc`**: os blocos `agents` e `categories` mapeiam agents para modelos z.ai via LiteLLM proxy. Para que o roteamento funcione, o proxy deve estar rodando: `task litellm:up`.
+
+---
+
+## Primary Agents (Orchestrators)
+
+These five agents are the only custom ones defined here. All other agents come from [agency-agents](https://github.com/msitarzewski/agency-agents).
+
+| Agent | File | Purpose |
+|---|---|---|
+| **Alan Turing** | `agents/alan-turing.md` | SDLC orchestrator — requirements through monitoring |
+| **Grace Hopper** | `agents/grace-hopper.md` | Troubleshooting orchestrator — detection through prevention |
+| **Tony Hoare** | `agents/tony-hoare.md` | Fix orchestrator — contract verification through regression defense (activates after RCA ≥ 7/10) |
+| **Ada Lovelace** | `agents/ada-lovelace.md` | Analysis orchestrator — scope through validation, ATAM-driven |
+| **Agents Orchestrator** | `agents/agents-orchestrator.md` | General orchestrator (legacy `maestro.md` does not exist) |
+
+### Agent Invocation
+
+**In opencode:** Primary agents are invoked directly as `@alan-turing`, `@grace-hopper`, `@tony-hoare`, `@ada-lovelace`, `@margaret-hamilton`
+
+**In Claude Code:** Primary agents have companion skills available via the Skill tool (maintained in `~/.claude/skills/`)
+
+### Specialized Skills (opencode only)
+
+| Skill | File | Purpose |
+|---|---|---|
+| `agents-feature-builder` | `skills/agents-feature-builder/SKILL.md` | Orchestrates feature implementation squad |
+| `agents-troubleshooter` | `skills/agents-troubleshooter/SKILL.md` | Orchestrates troubleshooting squad |
+| `bug-fix` | `skills/bug-fix/SKILL.md` | Guidelines for bug diagnosis and fixing |
+| `code-review` | `skills/code-review/SKILL.md` | Guidelines for code review process |
+| `conventional-commits` | `skills/conventional-commits/SKILL.md` | Commit message formatting rules |
+| `gitlab-mr-create` | `skills/gitlab-mr-create/SKILL.md` | GitLab MR creation with auto-generated description |
+| `gitlab-mr-review` | `skills/gitlab-mr-review/SKILL.md` | GitLab MR review orchestration |
+| `rfc-template` | `skills/rfc-template/SKILL.md` | RFC template for technical decisions |
+| `tdd` | `skills/tdd/SKILL.md` | Test-driven development guidelines |
+| `kanban-force-card` | `skills/kanban-force-card/SKILL.md` | Cria, atualiza, move e comenta cards no Kanban Force via MCP |
+| `kanban-force-planner` | `skills/kanban-force-planner/SKILL.md` | Planejamento e organização de demandas no Kanban Force |
+| `gitlab-mr-fixes` | `skills/gitlab-mr-fixes/SKILL.md` | Aplicação de fixes em MRs do GitLab |
+| `change-request-create` | `skills/change-request-create/SKILL.md` | Criação de change request |
+| `changelog-update` | `skills/changelog-update/SKILL.md` | Atualização de changelog |
+| `cve-impact-analysis` | `skills/cve-impact-analysis/SKILL.md` | Análise de impacto de CVE |
+
+### Companion Skills (orchestrators primários)
+
+Skills que carregam o framework completo de cada primary agent:
+
+| Skill | Companion para | Invocação |
+|---|---|---|
+| `alan-turing` | `agents/alan-turing.md` | `/alan-turing` (opencode) |
+| `grace-hopper` | `agents/grace-hopper.md` | `/grace-hopper` (opencode) |
+| `ada-lovelace` | `agents/ada-lovelace.md` | `/ada-lovelace` (opencode) |
+| `margaret-hamilton` | `agents/margaret-hamilton.md` | `/margaret-hamilton` (opencode) |
 
 ---
 
 ## Shell Script Style Guide
 
-All Bash scripts in this repo (`setup.sh`, `install-agents.sh`) follow these conventions:
+All Bash scripts (`setup.sh`, `install-agents.sh`, `sync-primary-agents.sh`) follow these conventions:
 
-### Header
-
-Every script starts with:
-```bash
-#!/usr/bin/env bash
-#
-# script-name.sh — one-line description
-#
-# Usage:
-#   bash <invocation>
-#
-# What it does:
-#   1. Step one
-#   2. Step two
-```
-
-### Safety flags
-
-Always use at the top of every script, immediately after the header comment:
-```bash
-set -euo pipefail
-```
-
-### Logging helpers
-
-Define and use colored logging helpers — never use raw `echo` for user-facing output:
-```bash
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m'
-
-info()  { printf "${GREEN}[opencode]${NC} %s\n" "$*"; }
-warn()  { printf "${YELLOW}[opencode]${NC} %s\n" "$*"; }
-error() { printf "${RED}[opencode]${NC} %s\n" "$*" >&2; exit 1; }
-```
-
-- `info` — normal progress messages (green)
-- `warn` — non-fatal warnings (yellow), script continues
-- `error` — fatal errors (red), prints to stderr and exits
-
-### Temp directories
-
-Always use `mktemp -d` and clean up with a `trap`:
-```bash
-TMP=$(mktemp -d)
-trap 'rm -rf "$TMP"' EXIT
-```
-
-### Variables
-
-- Use `UPPER_SNAKE_CASE` for all variables
-- Quote all variable expansions: `"$VAR"`, `"${VAR:-default}"`
-- Use `${1:-$PWD}` pattern for optional positional arguments with defaults
-
-### Conditionals
-
-Use `[[ ... ]]` (not `[ ... ]`) for all conditionals:
-```bash
-if [[ -d "$AGENTS_DIR" ]]; then
-  warn "Already installed at $AGENTS_DIR"
-  exit 0
-fi
-```
-
-### Subshells for directory changes
-
-Use a subshell instead of `cd && command` to avoid side effects:
-```bash
-(cd "$TARGET_DIR" && bash some-script.sh)
-```
-
-### Counting files
-
-```bash
-COUNT=$(ls "$DIR"/*.md 2>/dev/null | wc -l | tr -d ' ')
-```
+- **Safety flags** immediately after header: `set -euo pipefail`
+- **Logging helpers** — never raw `echo`:
+  ```bash
+  info()  { printf "${GREEN}[opencode]${NC} %s\n" "$*"; }
+  warn()  { printf "${YELLOW}[opencode]${NC} %s\n" "$*"; }
+  error() { printf "${RED}[opencode]${NC} %s\n" "$*" >&2; exit 1; }
+  ```
+- **Temp dirs** with trap cleanup: `TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT`
+- **Variables**: `UPPER_SNAKE_CASE`, always quoted (`"$VAR"`, `"${VAR:-default}"`)
+- **Conditionals**: `[[ ... ]]` not `[ ... ]`
+- **Directory changes**: subshell `(cd "$DIR" && cmd)` not `cd && cmd`
 
 ---
 
 ## Agent Definition File Style Guide
 
-Agent definitions are Markdown files with YAML frontmatter. They live in `agents/*.md` (gitignored,
-installed by `setup.sh`).
+Agent definitions are Markdown files with YAML frontmatter in `agents/*.md`.
 
 ### Frontmatter (opencode format)
 
@@ -185,24 +193,13 @@ color: '#hexcolor'
 ---
 ```
 
-### Frontmatter (Cursor MDC format)
-
-```yaml
----
-description: One-line description.
-globs: ""
-alwaysApply: false
----
-```
+`mode: primary` is used only for the four orchestrators above. Claude Code does not support `mode` or `permission` — `sync-primary-agents.sh` strips them automatically.
 
 ### File naming
 
-- `kebab-case.md` / `kebab-case.mdc`
-- Name should match the agent's specialty, e.g. `senior-developer.md`, `code-reviewer.md`
+`kebab-case.md` matching the agent's specialty (e.g. `senior-developer.md`).
 
 ### Body structure
-
-Agents follow a consistent section order using emoji headers:
 
 ```markdown
 ## 🧠 Your Identity & Memory
@@ -213,153 +210,17 @@ Agents follow a consistent section order using emoji headers:
 ```
 
 - Open with a bold persona declaration: `**AgentName**`
-- Use `🔴` for blockers, `🟡` for suggestions, `💭` for nits (especially in review agents)
-- Include fenced code blocks with explicit language tags for all examples
-- Use tables for comparison matrices and decision grids
-- Close with an `**Instructions Reference**` line pointing to the canonical source
-
----
-
-## opencode Configuration (`opencode.jsonc`)
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "autoupdate": true,
-  "permission": {
-    "edit": "ask",
-    "bash": "ask"
-  },
-  "mcp": {
-    "memory": {
-      "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
-      "enabled": false
-    }
-  },
-  "plugin": [
-    "@tarquinen/opencode-dcp@latest",
-    "opencode-mem",
-    "oh-my-openagent",
-    "opencode-workspace"
-  ]
-}
-```
-
-- `permission.edit` and `permission.bash` are both `"ask"` — agents must prompt before editing files
-  or running shell commands
-- **Note**: The `memory` MCP is **disabled** to avoid conflict with `opencode-mem` plugin
-- The `opencode-mem` plugin manages persistent memory via its own MCP server
-
-### Configuration Files
-
-| File | Purpose |
-|------|---------|
-| `opencode.jsonc` | Main configuration |
-| `dcp.jsonc` | Dynamic Context Pruning |
-| `opencode-mem.jsonc` | Persistent memory (web UI: port 4747) |
-| `oh-my-openagent.jsonc` | Model configs, hooks, agent assignments |
-
----
-
-## Primary Agents (Orchestrators)
-
-These are tracked custom agents that orchestrate specialist squads under the AI Fluency Framework 4Ds,
-ISO-25010, ATAM, and RM-ODP. They reference subagents from the agency-agents collection by name.
-
-| Agent | File | Purpose |
-|---|---|---|
-| **Alan Turing** | `agents/alan-turing.md` | SDLC orchestrator — requirements through monitoring |
-| **Grace Hopper** | `agents/grace-hopper.md` | Troubleshooting orchestrator — detection through prevention |
-| **Margaret Hamilton** | `agents/margaret-hamilton.md` | Deep analysis orchestrator — full ATAM, ISO-25010 |
-| **Ada Lovelace** | `agents/ada-lovelace.md` | Exploratory analysis — fast, lightweight |
-| **Maestro** | `agents/maestro.md` | Legacy orchestrator — superseded by Alan Turing *(file missing from disk)* |
-
-### Integrated Frameworks
-
-All primary agents apply:
-- **AI Fluency 4Ds**: Delegation, Description, Discernment, Diligence
-- **ISO-25010**: Quality attribute evaluation at Requirements and Testing phases
-- **ATAM**: Architectural tradeoff analysis at Architecture phase; retrospective at RCA
-- **RM-ODP**: Five-viewpoint summary at Documentation phase; fault localization in post-mortem
-
-### Companion Skills
-
-Each primary agent has a companion skill for direct invocation:
-
-| Skill | File | Invocation |
-|---|---|---|
-| `alan-turing` | `skills/alan-turing/SKILL.md` | `/alan-turing` (opencode) / Skill tool (Claude Code) |
-| `grace-hopper` | `skills/grace-hopper/SKILL.md` | `/grace-hopper` (opencode) / Skill tool (Claude Code) |
-| `margaret-hamilton` | `skills/margaret-hamilton/SKILL.md` | `/margaret-hamilton` (opencode) / Skill tool |
-| `ada-lovelace` | `skills/ada-lovelace/SKILL.md` | `/ada-lovelace` (opencode) / Skill tool (Claude Code) |
-
-### Subagent References
-
-Primary agents reference agency-agents subagents by their installed slug names. Run `setup.sh` to
-install them. Key subagents used:
-
-**Alan Turing squad:** `product-manager`, `software-architect`, `backend-architect`,
-`security-engineer`, `senior-developer`, `frontend-developer`, `database-optimizer`,
-`code-reviewer`, `api-tester`, `performance-benchmarker`, `evidence-collector`,
-`reality-checker`, `accessibility-auditor`, `devops-automator`, `sre`,
-`git-workflow-master`, `incident-response-commander`, `technical-writer`, `compliance-auditor`
-
-**Grace Hopper squad:** `incident-response-commander`, `sre`, `infrastructure-maintainer`,
-`backend-architect`, `security-engineer`, `database-optimizer`, `devops-automator`,
-`code-reviewer`, `software-architect`, `senior-developer`, `api-tester`,
-`performance-benchmarker`, `compliance-auditor`, `test-results-analyzer`, `technical-writer`
-
-**Ada Lovelace squad:** `software-architect`, `backend-architect`, `security-engineer`,
-`code-reviewer`, `senior-developer`, `database-optimizer`, `data-engineer`,
-`performance-benchmarker`, `api-tester`, `evidence-collector`, `reality-checker`,
-`infrastructure-maintainer`, `sre`, `devops-automator`, `accessibility-auditor`,
-`compliance-auditor`, `analytics-reporter`, `technical-writer`, `product-manager`
-
----
-
-## Installed Plugins & Coexistence
-
-This workspace uses a multi-plugin setup with harmonic agent coexistence:
-
-### Plugins
-
-| Plugin | Purpose | Config File |
-|--------|---------|------------|
-| `opencode-mem` | Persistent memory, vector DB | `opencode-mem.jsonc` |
-| `oh-my-openagent` | Full Arsenal, hooks, ultrawork | `oh-my-openagent.jsonc` |
-| `opencode-workspace` | Multi-agent bundle | `opencode-workspace.jsonc` |
-| `@tarquinen/opencode-dcp` | Context pruning | `dcp.jsonc` |
-
-### Agent Layers
-
-The system uses delegating layers:
-
-| Layer | Agent | Purpose |
-|------|-------|---------|
-| **Strategy** | Alan Turing, Grace Hopper, Ada Lovelace | High-level decisions |
-| **Specialist** | workspace (researcher, reviewer) | Research & review |
-| **Quick** | oh-my-openagent (Sisyphus, Oracle) | Fast execution |
-
-### Decision Tree
-
-```
-→ Feature complete  → Alan Turing
-→ Bug/incident  → Grace Hopper
-→ Analysis     → Ada Lovelace
-→ Quick fix    → oh-my-openagent
-→ Remember    → opencode-mem
-→ Large context → dcp compress
-```
+- Use `🔴` blockers, `🟡` suggestions, `💭` nits (review agents)
+- Fenced code blocks with explicit language tags on all examples
+- Close with `**Instructions Reference**` pointing to canonical source
 
 ---
 
 ## Important Notes for Agents
 
-- **Do not commit** `agents/` (except tracked primary agents above), `.opencode/`, `.cursor/`, `node_modules/`, `package.json`, or `bun.lock`
-- **Do not create** application source files, test files, or build configs unless explicitly asked
-- **Do not modify** `opencode.json` permission gates without explicit user approval
-- The `.cursor/rules/*.mdc` files are auto-generated mirrors of `agents/*.md`; edit the source `.md`
-  files, not the `.mdc` files directly
-- When adding a new agent, follow the YAML frontmatter and body structure above exactly
-- Primary agents (`mode: primary`) are tracked in git; subagents (`mode: subagent`) are gitignored
+- **Do not commit** `.opencode/`, `.cursor/`, `node_modules/`, `package.json`, `bun.lock`
+- **`agents/` IS tracked** — all 165 files are in git; do not treat them as gitignored
+- **Do not edit** `~/.claude/agents/*.md` directly — they are mirrors generated by `sync-primary-agents.sh`
+- **Do not modify** `opencode.jsonc` permission gates without explicit user approval
+- **`maestro.md` does not exist** — the legacy orchestrator reference in older docs is stale; use `agents-orchestrator.md`
+- The config file is `opencode.jsonc` (with `.jsonc` extension), not `opencode.json`

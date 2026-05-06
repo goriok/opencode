@@ -71,3 +71,44 @@ After every fix, verify:
 - ❌ Changing function signatures or interfaces to "work around" a bug
 - ❌ Adding `print` / `console.log` debug statements and leaving them in
 - ❌ Fixing a symptom without understanding the cause
+
+---
+
+## Documentation Standards
+
+If a bug report or post-fix summary document is produced, it MUST follow these rules:
+
+**Format & Location**
+- File format: `.md` (Markdown only)
+- Save path: `docs/bug-reports/` relative to the project root
+
+**Frontmatter (mandatory)**
+
+```yaml
+---
+title: "Bug Report: [short description]"
+date: YYYY-MM-DD
+type: bug-report
+status: draft | resolved
+authors: []
+tags: []
+---
+```
+
+- `tags` — include affected file/module, language, and error category
+- When searching for prior bug reports, grep `type: bug-report` and `tags` first
+
+**Diagrams**
+
+If a diagram is needed to explain the execution path or root cause, use Mermaid strict mode:
+
+````markdown
+```mermaid
+%%{init: {"theme": "default"}}%%
+%% strict mode — no implicit node creation %%
+flowchart LR
+    A --> B
+```
+````
+
+No ASCII art diagrams.

@@ -218,3 +218,52 @@ Before proceeding, the following questions must be resolved:
 ```
 
 Keep questions **specific and actionable** — not generic. Each question should unblock a concrete next step.
+
+---
+
+## Documentation Standards
+
+All documents produced by this skill or delegated sub-agents MUST follow these rules:
+
+**Format & Location**
+- File format: `.md` (Markdown only — no `.txt`, `.rst`, `.adoc`)
+- Save path: `docs/**` relative to the project root
+  - Post-incident reports → `docs/post-incidents/`
+  - RFCs from architectural lessons → `docs/rfcs/`
+  - Prevention and regression runbooks → `docs/runbooks/`
+
+**Frontmatter (mandatory)**
+
+Every `.md` document must open with a YAML frontmatter block:
+
+```yaml
+---
+title: "Human-readable title"
+date: YYYY-MM-DD
+type: post-incident | rfc | runbook
+status: draft | in-review | approved | archived
+authors: []
+tags: []
+---
+```
+
+- `type` enables category-based lookup — agents searching prior incidents MUST filter by `type: post-incident` first
+- `tags` enables domain/component lookup — tag with affected services, severity (p1/p2/p3), and root cause domain
+- When searching for existing documents, grep frontmatter fields (`title`, `type`, `tags`) before scanning body content
+
+**Diagrams**
+
+All diagrams MUST be written in Mermaid using strict mode:
+
+````markdown
+```mermaid
+%%{init: {"theme": "default"}}%%
+%% strict mode — no implicit node creation %%
+sequenceDiagram
+    A->>B: request
+```
+````
+
+- `sequenceDiagram` for incident timelines and service interaction traces
+- `flowchart LR` for blast radius and affected system flow diagrams
+- No ASCII art diagrams, no PlantUML

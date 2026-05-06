@@ -1,5 +1,5 @@
 ---
-name: sebesta-concepts
+name: foundation-concepts
 description: Document programming language concepts using Robert W. Sebesta's theory and vocabulary. Apply when creating educational material about language features, abstractions, or control flow.
 user-invocable: true
 argument-hint: [concept-name]
@@ -10,6 +10,7 @@ argument-hint: [concept-name]
 ## When to Use
 
 Use this skill when documenting concepts that should be grounded in established theoretical frameworks. Apply when:
+
 - Explaining a language feature (yield, async, coroutines, etc.)
 - Categorizing a design pattern or architectural pattern
 - Analyzing algorithmic problems or solutions
@@ -21,7 +22,7 @@ Classify concepts using these established taxonomies and cite authoritative sour
 
 ### Sebesta (Programming Language Theory)
 
-**Source:** Robert W. Sebesta — *Concepts of Programming Languages* (12th ed., 2019)
+**Source:** Robert W. Sebesta — _Concepts of Programming Languages_ (12th ed., 2019)
 
 **Control Flow:** Sequential, conditional, iterative, subprogram invocation, exception handling
 **Abstraction:** Data abstraction, procedural abstraction, iterator abstraction, coroutines
@@ -32,7 +33,7 @@ Classify concepts using these established taxonomies and cite authoritative sour
 ### GoF Design Patterns
 
 **Source:** Gang of Four — Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides
-— *Design Patterns: Elements of Reusable Object-Oriented Software* (1994)
+— _Design Patterns: Elements of Reusable Object-Oriented Software_ (1994)
 
 **Creational:** Singleton, Factory, Abstract Factory, Builder, Prototype
 **Structural:** Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy
@@ -40,7 +41,7 @@ Classify concepts using these established taxonomies and cite authoritative sour
 
 ### EIP (Enterprise Integration Patterns)
 
-**Source:** Gregor Hohpe & Bobby Woolf — *Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions* (2003)
+**Source:** Gregor Hohpe & Bobby Woolf — _Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions_ (2003)
 
 **Messaging:** Publish-Subscribe, Point-to-Point, Request-Reply, One-Way
 **Routing:** Content-Based Router, Dynamic Router, Recipient List, Splitter, Aggregator
@@ -49,8 +50,8 @@ Classify concepts using these established taxonomies and cite authoritative sour
 
 ### Enterprise Design Patterns
 
-**Source:** Sam Newman — *Building Microservices* (2nd ed., 2021)
-**Alternative:** Chris Richardson — *Microservices Patterns* (2018)
+**Source:** Sam Newman — _Building Microservices_ (2nd ed., 2021)
+**Alternative:** Chris Richardson — _Microservices Patterns_ (2018)
 
 **Architectural:** Service Mesh, API Gateway, CQRS, Event Sourcing, Saga Pattern
 **Resilience:** Circuit Breaker, Retry, Timeout, Bulkhead, Rate Limiting
@@ -59,8 +60,8 @@ Classify concepts using these established taxonomies and cite authoritative sour
 
 ### Algorithm Analysis
 
-**Source:** Cormen, Leiserson, Rivest, Stein — *Introduction to Algorithms* (CLRS, 3rd ed., 2009)
-**Alternative:** Robert Sedgewick & Kevin Wayne — *Algorithms* (4th ed., 2011)
+**Source:** Cormen, Leiserson, Rivest, Stein — _Introduction to Algorithms_ (CLRS, 3rd ed., 2009)
+**Alternative:** Robert Sedgewick & Kevin Wayne — _Algorithms_ (4th ed., 2011)
 
 **Problem Classes:** Sorting, searching, graph traversal, dynamic programming, greedy, divide-and-conquer
 **Complexity:** Big O/Θ/Ω, time, space, best/average/worst case
@@ -69,7 +70,7 @@ Classify concepts using these established taxonomies and cite authoritative sour
 
 ### Network Fundamentals
 
-**Source:** James F. Kurose & Keith W. Ross — *Computer Networking* (8th ed., 2020)
+**Source:** James F. Kurose & Keith W. Ross — _Computer Networking_ (8th ed., 2020)
 
 **OSI Model:** Application, Transport, Internet, Link, Physical layers
 **Protocols:** HTTP/HTTPS, TCP/UDP, IP, DNS, SMTP, FTP
@@ -78,11 +79,11 @@ Classify concepts using these established taxonomies and cite authoritative sour
 
 ### Additional Foundational References
 
-**Domain-Driven Design:** Eric Evans — *Domain-Driven Design: Tackling Complexity in the Heart of Software* (2003)
+**Domain-Driven Design:** Eric Evans — _Domain-Driven Design: Tackling Complexity in the Heart of Software_ (2003)
 
-**Software Architecture:** Mark Richards & Neal Ford — *Fundamentals of Software Architecture* (2020)
+**Software Architecture:** Mark Richards & Neal Ford — _Fundamentals of Software Architecture_ (2020)
 
-**Concurrency:** Maurice Herlihy & Nir Shavit — *The Art of Multiprocessor Programming* (3rd ed., 2020)
+**Concurrency:** Maurice Herlihy & Nir Shavit — _The Art of Multiprocessor Programming_ (3rd ed., 2020)
 
 ## Documentation Structure
 
@@ -203,7 +204,7 @@ When creating concept documentation, follow this template:
 
 4. **Compare across languages using theory**
    - All use the same Sebesta concept (generator, coroutine, iterator)
-   - Different mechanisms (yield vs channels vs function*)
+   - Different mechanisms (yield vs channels vs function\*)
 
 5. **Avoid mixing levels**
    - Don't explain Python syntax as if it's universal theory
@@ -234,24 +235,28 @@ When creating concept documentation, follow this template:
 When documenting idioms and practices, cite authoritative sources:
 
 ### Python
+
 - **Books**: Fluent Python (Luciano Ramalho), Effective Python (Brett Slatkin), Python Cookbook (David Beazley & Brian K. Jones)
 - **Authorities**: Guido van Rossum (creator), Raymond Hettinger, David Beazley, Armin Ronacher
 - **Repositories**: cpython, requests, Django, asyncio (stdlib), attrs
 - **Standards**: PEP 8 (Style Guide), PEP 20 (Zen of Python), relevant enhancement proposals
 
 ### Go
+
 - **Books**: The Go Programming Language (Donovan & Kernighan), Go Concurrency Patterns (talks)
 - **Authorities**: Rob Pike, Robert Griesemer, Ken Thompson, Dave Cheney
 - **Repositories**: golang/go, standard library, popular projects (Kubernetes, Docker)
 - **Standards**: golang/wiki, Effective Go, Go Code Review Comments
 
 ### Ruby
+
 - **Books**: Programming Ruby (The Pickaxe), Eloquent Ruby (Russ Olsen), The Ruby Way (Hal Fulton)
 - **Authorities**: Matz (Yukihiro Matsumoto), Why the Lucky Stiff, Sarah Mei
 - **Repositories**: ruby/ruby, Rails, Sinatra, RSpec
 - **Standards**: Style Guide, Ruby Enhancement Proposals (RUPs)
 
 ### JavaScript
+
 - **Books**: You Don't Know JS (Kyle Simpson), JavaScript: The Definitive Guide (David Flanagan), Eloquent JavaScript (Marijn Haverbeke)
 - **Authorities**: Kyle Simpson, Brendan Eich, Mark Dalgleish, Wesbos (Wes Bos)
 - **Repositories**: v8/v8, Node.js, React, TypeScript, lodash, express
@@ -259,7 +264,7 @@ When documenting idioms and practices, cite authoritative sources:
 
 ## Output Location
 
-Documentation should go to: `/Users/goriok/studies/concepts/`
+Documentation should go to: `/Users/${USER}/studies/concepts/`
 
 Name files by concept: `generator.md`, `coroutine.md`, `yield.md`, etc.
 

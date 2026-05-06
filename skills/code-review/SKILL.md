@@ -107,3 +107,45 @@ Use the template in [template.md](template.md) for the review output structure.
 - ❌ Skipping the guardrail checklist
 - ❌ Applying fixes without user confirmation for WARNING or above on large changes
 - ❌ Leaving the review without a Summary line
+
+---
+
+## Documentation Standards
+
+If a review report is saved to disk, it MUST follow these rules:
+
+**Format & Location**
+- File format: `.md` (Markdown only)
+- Save path: `docs/reviews/` relative to the project root
+- Filename convention: `docs/reviews/YYYY-MM-DD-branch-or-pr-slug.md`
+
+**Frontmatter (mandatory)**
+
+```yaml
+---
+title: "Code Review: [branch or PR title]"
+date: YYYY-MM-DD
+type: review
+status: draft | published
+authors: []
+tags: []
+---
+```
+
+- `tags` — include affected service/module and verdict (approved/needs-fixes)
+- When searching for prior reviews, grep `type: review` and `tags` first
+
+**Diagrams**
+
+If a diagram is needed to illustrate a finding, use Mermaid strict mode:
+
+````markdown
+```mermaid
+%%{init: {"theme": "default"}}%%
+%% strict mode — no implicit node creation %%
+flowchart LR
+    A --> B
+```
+````
+
+No ASCII art diagrams.

@@ -18,19 +18,19 @@ description: Rules for writing git commit messages using Conventional Commits (w
 
 ## Allowed Types
 
-| Type       | When to use                                         |
-|------------|-----------------------------------------------------|
-| `feat`     | New feature or capability                           |
-| `fix`      | Bug fix                                             |
-| `chore`    | Maintenance, deps, tooling (no production code)     |
-| `docs`     | Documentation only                                  |
+| Type       | When to use                                             |
+| ---------- | ------------------------------------------------------- |
+| `feat`     | New feature or capability                               |
+| `fix`      | Bug fix                                                 |
+| `chore`    | Maintenance, deps, tooling (no production code)         |
+| `docs`     | Documentation only                                      |
 | `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `style`    | Formatting, whitespace, missing semicolons          |
-| `perf`     | Performance improvement                             |
-| `test`     | Adding or updating tests                            |
-| `ci`       | CI/CD configuration                                 |
-| `build`    | Build system or external dependency changes         |
-| `revert`   | Reverts a previous commit                           |
+| `style`    | Formatting, whitespace, missing semicolons              |
+| `perf`     | Performance improvement                                 |
+| `test`     | Adding or updating tests                                |
+| `ci`       | CI/CD configuration                                     |
+| `build`    | Build system or external dependency changes             |
+| `revert`   | Reverts a previous commit                               |
 
 ## Examples
 
@@ -78,3 +78,4 @@ Or add a `BREAKING CHANGE:` footer in the body.
 3. **Never push to remote** without explicit user approval
 4. **Stage only relevant files** before committing
 5. When in doubt, prefer `chore` for non-user-facing changes
+6. The commit must not have more than 65 characters

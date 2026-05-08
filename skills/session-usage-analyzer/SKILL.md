@@ -17,13 +17,13 @@ Esta skill invoca um workflow Python determinístico que usa o LiteLLM provider 
 Verifique se o LiteLLM proxy está rodando:
 
 ```bash
-task litellm:status
+oc litellm status
 ```
 
 Se não estiver rodando, inicie:
 
 ```bash
-task litellm:up
+oc litellm up
 ```
 
 ### 2. Executar o Workflow Python

@@ -12,9 +12,8 @@ and to mirror those agents to `~/.claude/agents/` for Claude Code compatibility.
 
 **Tracked files** (only these are in git):
 - `opencode.jsonc` — global opencode config (note: `.jsonc`, not `.json`)
-- `setup.sh` — one-time machine setup script
-- `install-agents.sh` — per-project agent installer
-- `sync-primary-agents.sh` — mirrors primary agents to Claude Code
+- `src/oc/` — Python CLI package (`oc` command, replaces all bash scripts)
+- `pyproject.toml` — Python package definition for the `oc` CLI
 - `AGENTS.md` — this file
 - `agents/` — all 165 agent `.md` files are tracked (all committed, not gitignored)
 - `skills/` — team-shareable skill definitions (all tracked)
@@ -31,26 +30,34 @@ and to mirror those agents to `~/.claude/agents/` for Claude Code compatibility.
 
 ## Commands
 
+The `oc` CLI is the single entry point for all operations. Install it with `uv`:
+
+```bash
+cd ~/.config/opencode
+uv sync
+uv tool install --editable .
+```
+
+Then use `oc --help` to see all subcommands.
+
 ### Setup (run once per machine)
 
 ```bash
-bash ~/.config/opencode/setup.sh
+oc setup
 ```
 
 Clones [agency-agents](https://github.com/msitarzewski/agency-agents), converts agents to opencode
-format, copies them to `~/.config/opencode/agents/`, then calls `sync-primary-agents.sh` automatically.
-
-Note: `setup.sh` runs `convert.sh` **without** the `--tool opencode` flag (the flag is only used in `install-agents.sh`).
+format, copies them to `~/.config/opencode/agents/`, then syncs primary agents to Claude Code.
 
 ### Sync primary agents to Claude Code
 
 ```bash
-bash ~/.config/opencode/sync-primary-agents.sh
+oc agents sync
 ```
 
 Strips `mode` and `permission` frontmatter fields (not supported by Claude Code) and copies these files
 to `~/.claude/agents/`:
-- `alan-turing.md`, `grace-hopper.md`, `tony-hoare.md`, `ada-lovelace.md`, `agents-orchestrator.md`
+- `alan-turing.md`, `grace-hopper.md`, `tony-hoare.md`, `ada-lovelace.md`, `margaret-hamilton.md`, `agents-orchestrator.md`
 
 **Source of truth:** `~/.config/opencode/agents/*.md`
 **Claude Code mirror:** `~/.claude/agents/*.md` — do not edit directly
@@ -61,26 +68,41 @@ Run after editing any primary agent file.
 
 ```bash
 # From inside a project root:
-bash ~/.config/opencode/install-agents.sh
+oc agents install
 
 # With explicit target:
-bash ~/.config/opencode/install-agents.sh /path/to/project
+oc agents install /path/to/project
 ```
 
 Installs agents to `<target>/.opencode/agents/`. Exits with a warning if the directory already exists.
 
-### Package Manager
-
-**npm** is the package manager (`package-lock.json` present). The `opencode.jsonc` references
-`@opencode-ai/plugin` via `package.json` (managed by opencode itself — do not modify manually):
+### LiteLLM proxy
 
 ```bash
-npm install
+oc litellm up          # start proxy
+oc litellm down        # stop proxy
+oc litellm logs        # tail logs
+oc litellm status      # health check
+oc litellm models      # list available models
+oc litellm env-init    # create litellm/.env from .env.example
+oc litellm setup       # full first-time setup
+oc litellm setup --claude-code  # only generate virtual key + configure Claude Code
 ```
 
-### Tests / Lint
+### Other utilities
 
-**None configured.** Do not add a test runner or linter without explicit instruction.
+```bash
+oc agents count        # count installed agents
+oc configs check       # verify opencode config files exist
+oc git status          # git status of this repo
+oc shortcuts install   # install oc/ocw/ocwserve aliases into shell config
+```
+
+### Tests
+
+```bash
+uv run pytest          # run the test suite
+```
 
 ---
 
@@ -105,7 +127,7 @@ Cinco plugins trabalham em camadas:
 | **opencode-workspace**       | Multi-agent bundle   | *(plugin config)*       | Researcher, coder, scribe, reviewer      |
 | **@tarquinen/opencode-dcp**  | Context pruning      | `dcp.jsonc` (gerado)    | Auto-compress quando o contexto enche    |
 
-> **Nota sobre `oh-my-openagent.jsonc`**: os blocos `agents` e `categories` mapeiam agents para modelos z.ai via LiteLLM proxy. Para que o roteamento funcione, o proxy deve estar rodando: `task litellm:up`.
+> **Nota sobre `oh-my-openagent.jsonc`**: os blocos `agents` e `categories` mapeiam agents para modelos z.ai via LiteLLM proxy. Para que o roteamento funcione, o proxy deve estar rodando: `oc litellm up`.
 
 ---
 
@@ -160,21 +182,15 @@ Skills que carregam o framework completo de cada primary agent:
 
 ---
 
-## Shell Script Style Guide
+## Python CLI Style Guide
 
-All Bash scripts (`setup.sh`, `install-agents.sh`, `sync-primary-agents.sh`) follow these conventions:
+The `oc` CLI lives in `src/oc/`. All operations should follow these conventions:
 
-- **Safety flags** immediately after header: `set -euo pipefail`
-- **Logging helpers** — never raw `echo`:
-  ```bash
-  info()  { printf "${GREEN}[opencode]${NC} %s\n" "$*"; }
-  warn()  { printf "${YELLOW}[opencode]${NC} %s\n" "$*"; }
-  error() { printf "${RED}[opencode]${NC} %s\n" "$*" >&2; exit 1; }
-  ```
-- **Temp dirs** with trap cleanup: `TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT`
-- **Variables**: `UPPER_SNAKE_CASE`, always quoted (`"$VAR"`, `"${VAR:-default}"`)
-- **Conditionals**: `[[ ... ]]` not `[ ... ]`
-- **Directory changes**: subshell `(cd "$DIR" && cmd)` not `cd && cmd`
+- **Logging**: use `oc.log.info/warn/error/section` — never raw `print`
+- **Subprocess**: use `oc.proc.run` / `oc.proc.stream` — never `os.system`
+- **Paths**: use constants from `oc.paths` — never hardcode `~/.config/opencode` inline
+- **Error exit**: `log.error(msg)` raises `typer.Exit(1)` automatically
+- **Idempotency**: every write operation should check before acting and warn if already done
 
 ---
 
@@ -193,7 +209,7 @@ color: '#hexcolor'
 ---
 ```
 
-`mode: primary` is used only for the four orchestrators above. Claude Code does not support `mode` or `permission` — `sync-primary-agents.sh` strips them automatically.
+`mode: primary` is used only for the four orchestrators above. Claude Code does not support `mode` or `permission` — `oc agents sync` strips them automatically.
 
 ### File naming
 
@@ -213,6 +229,21 @@ color: '#hexcolor'
 - Use `🔴` blockers, `🟡` suggestions, `💭` nits (review agents)
 - Fenced code blocks with explicit language tags on all examples
 - Close with `**Instructions Reference**` pointing to canonical source
+
+---
+
+## Known Bugs & Limitations
+
+### `/start-work` ignora model overrides configurados (oh-my-openagent ≥ 3.x)
+
+**Sintoma:** Após `/start-work`, o agente `sisyphus` ou `atlas` usa o modelo padrão do plugin
+(`anthropic/claude-opus-4-7`) em vez do modelo configurado em `oh-my-openagent.jsonc`.
+
+**Causa:** O hook `start-work` injeta `output.message["agent"]` mas nunca `output.message["model"]`.
+O override de agente só é aplicado no startup da sessão, não em trocas mid-session.
+
+**Workaround:** Após `/start-work`, trocar o modelo manualmente na UI antes de continuar.
+Bug presente na v3.17.5 e v4.0.0. Detalhes completos: [`docs/runbooks/rb-010-start-work-model-override-bug.md`](docs/runbooks/rb-010-start-work-model-override-bug.md)
 
 ---
 

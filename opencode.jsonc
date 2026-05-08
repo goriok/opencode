@@ -5,83 +5,59 @@
     "edit": "ask",
     "bash": "ask"
   },
-  // Cache optimization flags (MADR 0006)
-  // mcp_lazy: lazy load MCP tools — saves 32k+ tokens per session by deferring tool schema loading
-  // cache_stabilization: freeze date/cache instructions for better prefix cache hit rate
-  // cache_1h_ttl: extend cache TTL from 5min to 1h (costs 2x base input price, avoids re-creation)
-  // NOTE: token-efficient-tools beta header NOT supported (opencode-go provider uses OpenAI SDK)
-  // NOTE: defer_loading (Anthropic native) NOT yet in opencode (issue #23298)
-  // NOTE: cache_control body params already auto-injected by opencode's applyCaching()
   "experimental": {
     "mcp_lazy": true,
     "cache_stabilization": true,
     "cache_1h_ttl": true
   },
-  // LiteLLM proxy local (MADR 0008)
-  // Unifica Claude Code e opencode num endpoint único em localhost:4000
-  // Para ativar: task litellm:up && export LITELLM_MASTER_KEY=sk-litellm-local
-  // Modelos disponíveis: curl http://localhost:4000/v1/models -H "Authorization: Bearer $LITELLM_MASTER_KEY"
   "provider": {
-    "litellm": {
+    "litellm-opencode-go": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "LiteLLM Local Proxy",
+      "name": "LiteLLM Opencode Go",
       "options": {
         "baseURL": "http://localhost:4000/v1",
-        "apiKey": "sk-litellm-local"
+        "apiKey": "{env:LITELLM_OPENCODE_GO_API_KEY}"
       },
       "models": {
-        // Anthropic via proxy
-        "claude-sonnet-4-6":       { "name": "Claude Sonnet 4.6" },
-        "claude-opus-4-7":         { "name": "Claude Opus 4.7" },
-        "claude-haiku-4-5-20251001": { "name": "Claude Haiku 4.5" },
-        // opencode-go via proxy
         "opencode-go/deepseek-v4-pro":   { "name": "DeepSeek V4 Pro" },
         "opencode-go/deepseek-v4-flash": { "name": "DeepSeek V4 Flash" },
         "opencode-go/glm-5.1":           { "name": "GLM 5.1" },
         "opencode-go/kimi-k2.5":         { "name": "Kimi K2.5" },
         "opencode-go/qwen3.5-plus":      { "name": "Qwen3.5 Plus" },
-        "opencode-go/mimo-v2-omni":      { "name": "MiMo V2 Omni" },
-        // z.ai via proxy (MADR: quota 1× off-peak promo until June, peak 14:00-18:00 UTC+8)
-        "zai/glm-5.1":     { "name": "GLM 5.1 (z.ai)" },
-        "zai/glm-4.7":     { "name": "GLM 4.7 (z.ai)" },
-        "zai/glm-4.5-air": { "name": "GLM 4.5 Air (z.ai)" },
-        // GitHub Copilot via proxy — sufixo indica multiplicador de premium requests
-        // Para ativar: autenticar primeiro (ver litellm/config.yaml), descomentar seção Copilot no config.yaml
-        // "copilot/gpt-4.1":           { "name": "GPT-4.1 (Copilot) [free]" },
-        // "copilot/gpt-4o":            { "name": "GPT-4o (Copilot) [free]" },
-        // "copilot/gpt-5-mini":        { "name": "GPT-5 Mini (Copilot) [free]" },
-        // "copilot/gpt-5.2":           { "name": "GPT-5.2 (Copilot) [1x]" },
-        // "copilot/gpt-5.4":           { "name": "GPT-5.4 (Copilot) [1x]" },
-        // "copilot/claude-sonnet-4.6": { "name": "Claude Sonnet 4.6 (Copilot) [1x]" },
-        // "copilot/claude-opus-4.7":   { "name": "Claude Opus 4.7 (Copilot) [5x]" },
-        // "copilot/gemini-2.5-pro":    { "name": "Gemini 2.5 Pro (Copilot) [1x]" },
-        // "copilot/gemini-3-flash":    { "name": "Gemini 3 Flash (Copilot) [0.33x]" },
-        // "copilot/gpt-5.2-codex":     { "name": "GPT-5.2 Codex (Copilot) [1x]" }
+        "opencode-go/mimo-v2-omni":      { "name": "MiMo V2 Omni" }
       }
     },
-    // DeepSeek direct — descomentar se tiver DS_API_KEY no .env
-    // "deepseek": {
-    //   "npm": "@ai-sdk/openai-compatible",
-    //   "name": "DeepSeek Direct",
-    //   "options": {
-    //     "baseURL": "http://localhost:4000/v1",
-    //     "apiKey": "{env:LITELLM_KEY_DEEPSEEK}"
-    //   },
-    //   "models": {
-    //     "deepseek-v4-pro":   { "name": "DeepSeek V4 Pro" },
-    //     "deepseek-v4-flash": { "name": "DeepSeek V4 Flash" }
-    //   }
-    // }
+    "litellm-zai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM Z.AI",
+      "options": {
+        "baseURL": "http://localhost:4000/v1",
+        "apiKey": "{env:LITELLM_ZAI_API_KEY}"
+      },
+      "models": {
+        "zai/glm-5.1":     { "name": "GLM 5.1 (z.ai)" },
+        "zai/glm-4.7":     { "name": "GLM 4.7 (z.ai)" },
+        "zai/glm-4.5-air": { "name": "GLM 4.5 Air (z.ai)" }
+      }
+    },
+    "litellm-deepseek": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM Deepseek",
+      "options": {
+        "baseURL": "http://localhost:4000/v1",
+        "apiKey": "{env:LITELLM_DEEPSEEK_API_KEY}"
+      },
+      "models": {
+        "deepseek-v4-pro":   { "name": "DeepSeek V4 Pro" },
+        "deepseek-v4-flash": { "name": "DeepSeek V4 Flash" }
+      }
+    }
   },
-  // Modelo padrão quando não há override por agent/categoria (oh-my-openagent.jsonc)
-  // "model": "litellm/opencode-go/deepseek-v4-pro",
   "mcp": {
-    // opencode-mem plugin gerencia memória via MCP próprio
-    // Este MCP memory é desabilitado para evitar duplicação
     "memory": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
-      "enabled": false
+      "enabled": true
     }
   },
   "plugin": [

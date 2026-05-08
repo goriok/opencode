@@ -7,10 +7,6 @@
   
   // Config de modelos por agente
   "model": {
-    "default": { "provider": "anthropic", "model": "claude-sonnet-4-20250514" },
-    "oracle": { "provider": "anthropic", "model": "claude-opus-4-5-20250514" },
-    "librarian": { "provider": "anthropic", "model": "claude-haiku-4-5-20251001" },
-    "sisyphus": { "provider": "anthropic", "model": "claude-sonnet-4-20250514" }
   },
   
   // Features experimentais

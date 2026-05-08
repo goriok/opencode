@@ -13,6 +13,8 @@
 | [RB-005](./rb-005-atualizar-agents.md) | Atualizar agents do agency-agents | Nova versão disponível |
 | [RB-006](./rb-006-baseline-comparacao-estrategia.md) | Comparar estratégias com baseline | Avaliar mudança de modelo ou workflow |
 | [RB-007](./rb-007-prometheus-exporter.md) | Iniciar e configurar o Prometheus exporter | Exportar métricas para Grafana |
+| [RB-008](./rb-008-litellm-proxy-setup.md) | Configurar LiteLLM proxy local | Setup local Docker Compose do LiteLLM |
+| [RB-009](./rb-009-litellm-remote.md) | LiteLLM Remoto (Cluster) via kftray | Acessar LiteLLM remoto via port forward |
 
 ## Formato
 

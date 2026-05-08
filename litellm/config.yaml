@@ -1,6 +1,10 @@
+# ─── LiteLLM Central Config ──────────────────────────────────────────────────
+# Source of truth for liteLLM proxy (local Docker and remote cluster).
+# Providers que NÃO estão aqui: opencode-go, z.ai, DeepSeek — são diretos.
+# Sync this file to ~/sources/litellm/config.yaml (local Docker mount).
+
 model_list:
-  # ─── Anthropic (Claude Code Max subscription) ────────────────────────────
-  # Sem api_key — auth via OAuth token repassado pelo forward_client_headers_to_llm_api
+  # ─── Anthropic (Claude Code Max subscription via OAuth) ─────────────────────
   - model_name: claude-sonnet-4-6
     litellm_params:
       model: anthropic/claude-sonnet-4-6
@@ -16,217 +20,42 @@ model_list:
       model: anthropic/claude-haiku-4-5-20251001
       max_retries: 0
 
-  # ─── opencode-go (OpenAI-compat, except MiniMax → Anthropic-compat) ───────
-  # Base: https://opencode.ai/zen/go/v1/chat/completions
-  # MiniMax: https://opencode.ai/zen/go/v1/messages
-
-  - model_name: opencode-go/deepseek-v4-pro
+  # ─── Gemini 3.* (GEMINI_API_KEY) ──────────────────────────────────────────
+  - model_name: gemini/gemini-3.1-flash-lite-preview
     litellm_params:
-      model: openai/deepseek-v4-pro
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
+      model: gemini/gemini-3.1-flash-lite-preview
+      api_key: os.environ/GEMINI_API_KEY
 
-  - model_name: opencode-go/deepseek-v4-flash
+  - model_name: gemini/gemini-3-flash-preview
     litellm_params:
-      model: openai/deepseek-v4-flash
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/GEMINI_API_KEY
 
-  - model_name: opencode-go/glm-5.1
+  - model_name: gemini/gemini-3.1-pro-preview
     litellm_params:
-      model: openai/glm-5.1
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
-
-  - model_name: opencode-go/kimi-k2.5
-    litellm_params:
-      model: openai/kimi-k2.5
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
-
-  - model_name: opencode-go/qwen3.5-plus
-    litellm_params:
-      model: openai/qwen3.5-plus
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
-
-  - model_name: opencode-go/mimo-v2-omni
-    litellm_params:
-      model: openai/mimo-v2-omni
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
-
-  # MiniMax usa endpoint Anthropic-compat
-  - model_name: opencode-go/minimax-m2.5
-    litellm_params:
-      model: anthropic/minimax-m2.5
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
-
-  - model_name: opencode-go/minimax-m2.7
-    litellm_params:
-      model: anthropic/minimax-m2.7
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
-
-  # ─── z.ai / GLM Coding Plan ──────────────────────────────────────────────
-  # Coding Plan endpoint: https://api.z.ai/api/coding/paas/v4
-  # Usa openai/ prefix + api_base manual porque o provider nativo zai/ manda
-  # pro endpoint geral (/api/paas/v4) e toma 429 com Coding Plan.
-  # Ref: https://github.com/BerriAI/litellm/issues/25479
-  # Ref: https://docs.z.ai/devpack/quick-start
-
-  - model_name: zai/glm-5.1
-    litellm_params:
-      model: openai/glm-5.1
-      api_base: https://api.z.ai/api/coding/paas/v4
-      api_key: os.environ/ZAI_API_KEY
-
-  - model_name: zai/glm-4.7
-    litellm_params:
-      model: openai/glm-4.7
-      api_base: https://api.z.ai/api/coding/paas/v4
-      api_key: os.environ/ZAI_API_KEY
-
-  - model_name: zai/glm-4.5-air
-    litellm_params:
-      model: openai/glm-4.5-air
-      api_base: https://api.z.ai/api/coding/paas/v4
-      api_key: os.environ/ZAI_API_KEY
-
-  # ─── DeepSeek (direct) ────────────────────────────────────────────────────
-  # API: https://api.deepseek.com/v1 (OpenAI-compatible)
-  # key: DS_API_KEY — adicionar no .env para ativar, depois descomentar
-  # Modelos disponíveis: GET /v1/models com api key
-
-  # - model_name: deepseek-v4-pro
-  #   litellm_params:
-  #     model: openai/deepseek-v4-pro
-  #     api_base: https://api.deepseek.com/v1
-  #     api_key: os.environ/DS_API_KEY
-  #     rpm: 10
-  #     tpm: 50000
-  # - model_name: deepseek-v4-flash
-  #   litellm_params:
-  #     model: openai/deepseek-v4-flash
-  #     api_base: https://api.deepseek.com/v1
-  #     api_key: os.environ/DS_API_KEY
-  #     rpm: 20
-  #     tpm: 100000
-
-  # ─── GitHub Copilot ──────────────────────────────────────────────────────────
-  # Token: ~/.config/litellm/github_copilot/access-token (OAuth token do apps.json)
-  # Montar volume no docker-compose: ${HOME}/.config/litellm/github_copilot:/root/.config/litellm/github_copilot
-  # ATENÇÃO: LiteLLM autentica na inicialização — crash se não houver token.
-  # Auth: pip install litellm && python3 -c "import litellm; litellm.completion(model='github_copilot/gpt-4.1', messages=[{'role':'user','content':'ping'}])"
-  # Tokens: ~/.config/litellm/github_copilot/{access-token,api-key.json}
-  # Ref: https://docs.litellm.ai/docs/providers/github_copilot
-  # Sufixo rpm indica multiplicador de premium requests do Copilot Individual/Business
-
-  # --- OpenAI (multiplier: 0 — incluído no plano) ---
-  # - model_name: copilot/gpt-4.1
-  #   litellm_params:
-  #     model: github_copilot/gpt-4.1
-  #     rpm: 60
-  # - model_name: copilot/gpt-4o
-  #   litellm_params:
-  #     model: github_copilot/gpt-4o
-  #     rpm: 60
-  # - model_name: copilot/gpt-5-mini
-  #   litellm_params:
-  #     model: github_copilot/gpt-5-mini
-  #     rpm: 60
-  # # --- OpenAI premium (multiplier: 1) ---
-  # - model_name: copilot/gpt-5.2
-  #   litellm_params:
-  #     model: github_copilot/gpt-5.2
-  #     rpm: 15
-  #     tpm: 100000
-  # - model_name: copilot/gpt-5.4
-  #   litellm_params:
-  #     model: github_copilot/gpt-5.4
-  #     rpm: 10    # multiplier: ~3-5x
-  #     tpm: 80000
-  # # --- OpenAI Codex (responses API) (multiplier: 1) ---
-  # - model_name: copilot/gpt-5.2-codex
-  #   model_info:
-  #     mode: responses
-  #   litellm_params:
-  #     model: github_copilot/gpt-5.2-codex
-  #     rpm: 10
-  #     tpm: 80000
-  # - model_name: copilot/gpt-5.3-codex
-  #   model_info:
-  #     mode: responses
-  #   litellm_params:
-  #     model: github_copilot/gpt-5.3-codex
-  #     rpm: 10
-  #     tpm: 80000
-  # # --- Anthropic Claude via Copilot ---
-  # - model_name: copilot/claude-sonnet-4.6
-  #   litellm_params:
-  #     model: github_copilot/claude-sonnet-4.6
-  #     rpm: 15    # multiplier: 1
-  #     tpm: 100000
-  # - model_name: copilot/claude-opus-4.7
-  #   litellm_params:
-  #     model: github_copilot/claude-opus-4.7
-  #     rpm: 5     # multiplier: ~5-10x
-  #     tpm: 30000
-  # # --- Google Gemini ---
-  # - model_name: copilot/gemini-2.5-pro
-  #   litellm_params:
-  #     model: github_copilot/gemini-2.5-pro
-  #     rpm: 15    # multiplier: 1
-  #     tpm: 100000
-  # - model_name: copilot/gemini-3-flash
-  #   litellm_params:
-  #     model: github_copilot/gemini-3-flash-preview
-  #     rpm: 30    # multiplier: 0.33 — mais permissivo por ser barato
-  #     tpm: 120000
-  # - model_name: copilot/gemini-3.1-pro
-  #   litellm_params:
-  #     model: github_copilot/gemini-3.1-pro-preview
-  #     rpm: 10    # multiplier: ~3-5x
-  #     tpm: 80000
-  # # --- xAI Grok ---
-  # - model_name: copilot/grok-code-fast
-  #   litellm_params:
-  #     model: github_copilot/grok-code-fast-1
-  #     rpm: 25    # multiplier: 0.25 — muito barato, mais permissivo
-  #     tpm: 80000
+      model: gemini/gemini-3.1-pro-preview
+      api_key: os.environ/GEMINI_API_KEY
 
 litellm_settings:
-  # ─── Metrics & Monitoring ──────────────────────────────────────────────────
   callbacks:
     - prometheus
 
-  # ─── Redis Cache ──────────────────────────────────────────────────────────
-  # Cache LLM responses para reduzir latency e custo em requests repetidos.
-  # Redis roda no container na porta interna 6379 (host:6380).
-  # Debug: curl http://localhost:4000/cache/ping -H "Authorization: Bearer $LITELLM_MASTER_KEY"
+  drop_params:
+    - reasoningSummary
+  request_timeout: 120
+  num_retries: 0
+
   cache: true
   cache_params:
     type: redis
     host: os.environ/REDIS_HOST
     port: 6379
     namespace: "litellm.cache"
-    ttl: 600                          # 10 min default TTL
+    ttl: 600
     max_connections: 50
-  # Virtual key auth cache — compartilha o mesmo Redis entre workers
-  enable_redis_auth_cache: true
-
-  # ─── General ──────────────────────────────────────────────────────────────
-  drop_params:
-    - reasoningSummary
-  request_timeout: 120
-  # Zero retries global — evita multiplicar 429s do Claude Max OAuth
-  # (opencode-go tem limites altos e não precisa de retry agressivo)
-  num_retries: 0
 
 router_settings:
   routing_strategy: simple-shuffle
-  # Cooldown: após 3 falhas seguidas, pausa o deployment por 5s antes de tentar novamente
   allowed_fails: 3
   cooldown_time: 5
   timeout: 120
@@ -234,5 +63,4 @@ router_settings:
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
   store_model_in_db: true
-  # Repassa o OAuth token do Claude Max subscription direto para a Anthropic API
   forward_client_headers_to_llm_api: true

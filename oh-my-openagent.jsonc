@@ -1,59 +1,127 @@
 {
-  // Plugins/hooks a desabilitar se necessário
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
   "disabled_hooks": [],
   "disabled_agents": [],
   "disabled_skills": [],
   "disabled_mcps": [],
-  
-  // Agent model overrides (oracle, librarian, sisyphus, etc.)
+
+  // ── Agents: Z.AI primary → OpenCode Go fallback ──────────────────────
   "agents": {
-    // Primary orchestrators — z.ai models via LiteLLM proxy
-    // Tier strategy: glm-5.1 (heavy/thinking) → glm-5-turbo (balanced/flagship-fast) → glm-4.7 (standard 1×) → glm-4.5-air (fast)
-    // Peak hours (3× quota): 14:00-18:00 UTC+8 | Off-peak promo 1× until end of June
-    "ada-lovelace":        { "model": "zai/glm-4.7" },                              // Standard — exploratory analysis
-    "alan-turing":         { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "grace-hopper":        { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "maestro":             { "model": "zai/glm-4.7" },                              // 1× always — legacy orchestrator
-    "margaret-hamilton":   { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-<<<<<<< HEAD
-    "tony-hoare":          { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },  // Fix Engineer — Hoare Logic contracts
-    // oh-my-openagent agents
-    "explore":             { "model": "zai/glm-4.7" },                              // 1× always — high-volume grep
-    "librarian":           { "model": "zai/glm-4.7",  "thinking": { "type": "enabled" } },
-    "metis":               { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "momus":               { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "multimodal":          { "model": "zai/glm-4.7" },                              // Standard with vision
-    "oracle":              { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "prometheus":          { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "sisyphus":            { "model": "zai/glm-4.7" },                              // Standard — main session agent
-
-    // opencode-workspace agents
-    "researcher":          { "model": "zai/glm-4.7" },                              // 1× always — fast search
-    "coder":               { "model": "zai/glm-4.7" },                              // Standard — implementation
-    "scribe":              { "model": "zai/glm-4.7" },                              // 1× always — docs
-    "reviewer":            { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },  // Deep review
-    
-
+    "sisyphus": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/deepseek-v4-pro", "opencode-go/kimi-k2.5"]
+    },
+    "oracle": {
+      "model": "zai/glm-5.1",
+      "thinking": { "type": "enabled" },
+      "fallback_models": ["opencode-go/glm-5.1", "opencode-go/deepseek-v4-pro"]
+    },
+    "prometheus": {
+      "model": "zai/glm-5.1",
+      "thinking": { "type": "enabled" },
+      "fallback_models": ["opencode-go/glm-5.1", "opencode-go/deepseek-v4-pro"]
+    },
+    "metis": {
+      "model": "zai/glm-5.1",
+      "thinking": { "type": "enabled" },
+      "fallback_models": ["opencode-go/glm-5.1", "opencode-go/deepseek-v4-pro"]
+    },
+    "momus": {
+      "model": "zai/glm-5.1",
+      "thinking": { "type": "enabled" },
+      "fallback_models": ["opencode-go/glm-5.1", "opencode-go/deepseek-v4-pro"]
+    },
+    "explore": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/deepseek-v4-flash", "opencode-go/qwen3.5-plus"]
+    },
+    "librarian": {
+      "model": "zai/glm-4.7",
+      "thinking": { "type": "enabled" },
+      "fallback_models": ["opencode-go/deepseek-v4-flash", "opencode-go/qwen3.5-plus"]
+    },
+    "multimodal-looker": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/mimo-v2-omni", "opencode-go/deepseek-v4-flash"]
+    },
+    "researcher": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/deepseek-v4-flash", "opencode-go/qwen3.5-plus"]
+    },
+    "coder": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/deepseek-v4-pro", "opencode-go/kimi-k2.5"]
+    },
+    "scribe": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/deepseek-v4-flash", "opencode-go/qwen3.5-plus"]
+    },
+    "reviewer": {
+      "model": "zai/glm-5.1",
+      "thinking": { "type": "enabled" },
+      "fallback_models": ["opencode-go/glm-5.1", "opencode-go/deepseek-v4-pro"]
+    }
   },
-  // Category model overrides — z.ai models via LiteLLM proxy
+
+  // ── Categories: cheap tiers use glm-4.5-air ─────────────────────────
   "categories": {
-    "writing":             { "model": "zai/glm-4.7" },                              // 1× always
-    "quick":               { "model": "zai/glm-4.7" },                              // 1× always
-    "deep":                { "model": "zai/glm-4.7" },                              // Standard
-    "unspecified-low":     { "model": "zai/glm-4.7" },                              // 1× always
-    "unspecified-high":    { "model": "zai/glm-4.7" },                              // Standard
-    "visual-engineering":  { "model": "zai/glm-4.7" },                              // Standard (vision)
-    "ultrabrain":          { "model": "zai/glm-5.1",  "thinking": { "type": "enabled" } },
-    "artistry":            { "model": "zai/glm-4.7" }                               // Standard
+    "writing": {
+      "model": "zai/glm-4.5-air",
+      "fallback_models": ["opencode-go/deepseek-v4-flash"]
+    },
+    "quick": {
+      "model": "zai/glm-4.5-air",
+      "fallback_models": ["opencode-go/deepseek-v4-flash"]
+    },
+    "unspecified-low": {
+      "model": "zai/glm-4.5-air",
+      "fallback_models": ["opencode-go/deepseek-v4-flash"]
+    },
+    "artistry": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/deepseek-v4-flash"]
+    },
+    "deep": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/deepseek-v4-pro", "opencode-go/kimi-k2.5"]
+    },
+    "unspecified-high": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/deepseek-v4-pro", "opencode-go/kimi-k2.5"]
+    },
+    "visual-engineering": {
+      "model": "zai/glm-4.7",
+      "fallback_models": ["opencode-go/mimo-v2-omni", "opencode-go/deepseek-v4-flash"]
+    },
+    "ultrabrain": {
+      "model": "zai/glm-5.1",
+      "thinking": { "type": "enabled" },
+      "fallback_models": ["opencode-go/glm-5.1", "opencode-go/deepseek-v4-pro"]
+    }
   },
-  
-  // Features experimentais
+
+  // ── Runtime fallback: auto-retry on provider errors ──────────────────
+  "runtime_fallback": {
+    "enabled": true,
+    "retry_on_errors": [400, 429, 503, 529],
+    "max_fallback_attempts": 3,
+    "cooldown_seconds": 60,
+    "timeout_seconds": 30,
+    "notify_on_fallback": true
+  },
+
+  // ── Background tasks concurrency ─────────────────────────────────────
+  "background_task": {
+    "defaultConcurrency": 5
+  },
+
+  // ── Experimental ─────────────────────────────────────────────────────
   "experimental": {
-    "aggressive_truncation": true,  // was false — more aggressive context pruning saves tokens but may lose old context
+    "aggressive_truncation": false,
     "auto_resume": false
   },
-  
-  // Hooks específicos
+
+  // ── Hooks ────────────────────────────────────────────────────────────
   "hooks": {
     "thinking_block_validator": { "enabled": true },
     "context_window_monitor": { "enabled": true }

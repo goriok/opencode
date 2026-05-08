@@ -18,6 +18,15 @@ KNOWN_MODELS: dict[str, dict] = {
         "model": "anthropic/claude-haiku-4-5-20251001",
         "max_retries": 0,
     },
+    # ── GitHub Copilot free-quota models ──────────────────────────────────
+    "gpt-4o-mini": {
+        "model": "github_copilot/gpt-4o-mini",
+        "max_retries": 0,
+    },
+    "gemini-2.0-flash-001": {
+        "model": "github_copilot/gemini-2.0-flash-001",
+        "max_retries": 0,
+    },
     # ── Gemini 3.* (GEMINI_API_KEY) ────────────────────────────────────────
     "gemini/gemini-3.1-flash-lite-preview": {
         "model": "gemini/gemini-3.1-flash-lite-preview",

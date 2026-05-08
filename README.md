@@ -206,6 +206,30 @@ Todas as operações são via o comando `oc` (Python CLI instalado com `uv`):
 
 Veja `oc --help` para todos os subcomandos.
 
+### Instalação e manutenção do CLI
+
+```bash
+# Instalar (primeira vez)
+cd ~/.config/opencode
+uv tool install --editable .
+
+# Reinstalar após mudanças no pyproject.toml (novas dependências)
+uv tool install --editable . --reinstall
+
+# Verificar instalação
+uv tool list          # mostra: oc v1.0.0
+which oc              # ~/.local/bin/oc
+
+# Desinstalar
+uv tool uninstall oc
+```
+
+O `--editable` faz com que edições em `src/oc/` tenham efeito imediato sem reinstalar.
+O PATH é configurado automaticamente via `~/.local/bin/env` (sourced no `.zshrc`/`.bashrc`).
+
+> **Conflito com alias**: Se `oc` ainda abrir o opencode TUI, você tem `alias oc="opencode"` no shell.
+> Remova o alias ou use `alias op="opencode"` e libere `oc` para o CLI Python.
+
 ---
 
 ## ⚙️ Configuration Files

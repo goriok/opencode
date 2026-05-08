@@ -34,11 +34,22 @@ The `oc` CLI is the single entry point for all operations. Install it with `uv`:
 
 ```bash
 cd ~/.config/opencode
-uv sync
 uv tool install --editable .
 ```
 
 Then use `oc --help` to see all subcommands.
+
+### Como o `uv tool` funciona
+
+`uv tool install --editable .` instala o pacote definido em `pyproject.toml` como uma ferramenta global:
+
+- O binário `oc` fica em `~/.local/bin/oc` (adicionado ao PATH pelo `~/.local/bin/env`, sourced no `.bashrc`/`.zshrc`)
+- O `--editable` significa que edições em `src/oc/` têm efeito imediato — não precisa reinstalar
+- Para atualizar após mudanças no `pyproject.toml` (novas deps): `uv tool install --editable . --reinstall`
+- Para verificar a instalação: `uv tool list` e `which oc`
+- Para desinstalar: `uv tool uninstall oc`
+
+O ambiente isolado da tool fica em `~/.local/share/uv/tools/oc/`. Não interfere com o `.venv` do projeto (usado para `uv run pytest`).
 
 ### Setup (run once per machine)
 

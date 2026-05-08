@@ -13,8 +13,8 @@ This repository manages the shared AI agent ecosystem for OpenCode — **191 sub
 git clone <repo-url> ~/.config/opencode
 cd ~/.config/opencode
 
-# Install the CLI
-uv tool install --editable .
+# Install the ocx CLI (handles uv detection, editable install, PATH check)
+./bootstrap.sh
 
 # Install everything (agents + sync to Claude Code)
 ocx setup

@@ -24,12 +24,14 @@ curl -fsSL https://opencode.ai/install | bash
 git clone <repo-url> ~/.config/opencode
 ```
 
-### 4. Instalar o CLI `oc`
+### 4. Instalar o CLI `ocx`
 
 ```bash
 cd ~/.config/opencode
-uv tool install --editable .
+./bootstrap.sh
 ```
+
+O script detecta `uv` (instala se faltar), roda `uv tool install --editable .` e verifica o PATH.
 
 ### 5. Rodar setup
 
@@ -75,7 +77,7 @@ nano ~/.config/opencode/litellm/.env
 # Preencha: ZAI_API_KEY=sua_key_aqui
 
 # Reinicie o proxy para carregar a nova key:
-ocx litellm down && oc litellm up
+ocx litellm down && ocx litellm up
 ```
 
 Modelos z.ai disponíveis via proxy: `zai/glm-5.1`, `zai/glm-5-turbo`, `zai/glm-4.7`, `zai/glm-4.5-air`

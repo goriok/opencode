@@ -1,7 +1,7 @@
 """Tests for frontmatter stripping in agents sync — highest-risk logic."""
 
 import pytest
-from oc.commands.agents import _strip_opencode_frontmatter
+from ocx.commands.agents import _strip_opencode_frontmatter
 
 
 def _fm(*lines: str) -> str:

@@ -262,7 +262,7 @@ wheels = [
 ]
 
 [[package]]
-name = "oc"
+name = "ocx"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [

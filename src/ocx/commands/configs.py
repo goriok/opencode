@@ -1,6 +1,6 @@
 import typer
 
-from oc.paths import OPENCODE_CONFIGS, OPENCODE_DIR
+from ocx.paths import OPENCODE_CONFIGS, OPENCODE_DIR
 
 app = typer.Typer(help="Check opencode configuration files.")
 

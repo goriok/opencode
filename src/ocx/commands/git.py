@@ -2,8 +2,8 @@ import subprocess
 
 import typer
 
-from oc import log
-from oc.paths import OPENCODE_DIR
+from ocx import log
+from ocx.paths import OPENCODE_DIR
 
 app = typer.Typer(help="Git helpers for the opencode config repo.")
 

@@ -8,8 +8,8 @@ from pathlib import Path
 import httpx
 import typer
 
-from oc import log, proc
-from oc.paths import (
+from ocx import log, proc
+from ocx.paths import (
     CLAUDE_SETTINGS,
     LITELLM_DIR,
     LITELLM_ENV,

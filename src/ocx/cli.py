@@ -1,9 +1,9 @@
 import typer
 
-from oc.commands import agents, configs, git, litellm, provider, setup, shortcuts, tier
+from ocx.commands import agents, configs, git, litellm, provider, setup, shortcuts, tier
 
 app = typer.Typer(
-    name="oc",
+    name="ocx",
     help="opencode config CLI — manage agents, LiteLLM proxy, shortcuts, and more.",
     no_args_is_help=True,
 )

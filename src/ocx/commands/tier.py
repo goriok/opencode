@@ -11,10 +11,10 @@ import yaml
 from rich.console import Console
 from rich.table import Table
 
-from oc import log
-from oc.paths import LITELLM_CONFIG, OH_MY_OPENAGENT, PROVIDERS_DIR, TIER_STATE, TIERS_DIR
-from oc.providers import cost_label, load_catalog, resolve_model
-from oc.tier_apply import loads_jsonc, render_litellm, render_plugin, validate_tier
+from ocx import log
+from ocx.paths import LITELLM_CONFIG, OH_MY_OPENAGENT, PROVIDERS_DIR, TIER_STATE, TIERS_DIR
+from ocx.providers import cost_label, load_catalog, resolve_model
+from ocx.tier_apply import loads_jsonc, render_litellm, render_plugin, validate_tier
 
 app = typer.Typer(help="Manage model-budget tier profiles (free/low/med/high/max).")
 

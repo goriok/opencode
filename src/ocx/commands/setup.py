@@ -3,8 +3,8 @@ from pathlib import Path
 
 import typer
 
-from oc import log, proc
-from oc.paths import AGENCY_AGENTS_REPO, AGENTS_DIR, LITELLM_DIR
+from ocx import log, proc
+from ocx.paths import AGENCY_AGENTS_REPO, AGENTS_DIR, LITELLM_DIR
 
 app = typer.Typer(help="Full machine setup.")
 
@@ -29,7 +29,7 @@ def run_setup() -> None:
         log.info(f"Done! {count} agents installed to {AGENTS_DIR}")
 
     log.info("Syncing primary agents to Claude Code...")
-    from oc.commands.agents import sync
+    from ocx.commands.agents import sync
     sync()
 
     setup_litellm_sh = LITELLM_DIR / "setup-litellm.sh"

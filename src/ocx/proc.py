@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from oc import log
+from ocx import log
 
 
 def run(

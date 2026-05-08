@@ -6,9 +6,9 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from oc import log
-from oc.paths import PROVIDERS_DIR
-from oc.providers import cost_label, load_catalog
+from ocx import log
+from ocx.paths import PROVIDERS_DIR
+from ocx.providers import cost_label, load_catalog
 
 app = typer.Typer(help="Inspect provider model catalogs (eligibility, cost mechanics).")
 

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import typer
 
-from oc import log
+from ocx import log
 
 app = typer.Typer(help="Manage shell shortcuts (oc, ocw, ocwserve).")
 

@@ -4,8 +4,8 @@ from pathlib import Path
 
 import typer
 
-from oc import log, proc
-from oc.paths import (
+from ocx import log, proc
+from ocx.paths import (
     AGENCY_AGENTS_REPO,
     AGENTS_DIR,
     CLAUDE_AGENTS_DIR,
@@ -132,5 +132,5 @@ def count() -> None:
 @app.command()
 def update() -> None:
     """Re-clone agency-agents and reinstall (full refresh). Alias for `oc setup`."""
-    from oc.commands.setup import run_setup
+    from ocx.commands.setup import run_setup
     run_setup()

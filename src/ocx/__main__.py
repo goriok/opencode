@@ -1,4 +1,4 @@
-from oc.cli import app
+from ocx.cli import app
 
 if __name__ == "__main__":
     app()

@@ -6,7 +6,7 @@ import textwrap
 import pytest
 import yaml
 
-from oc.tier_apply import loads_jsonc, parse_jsonc, render_litellm, render_plugin, validate_tier
+from ocx.tier_apply import loads_jsonc, parse_jsonc, render_litellm, render_plugin, validate_tier
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 

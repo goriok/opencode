@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 from typing import Any, Optional
 
-from oc.tier_litellm_models import KNOWN_MODELS
+from ocx.tier_litellm_models import KNOWN_MODELS
 
 # Keys in oh-my-openagent.jsonc that are NOT model assignments; preserve verbatim.
 _PASSTHROUGH_KEYS = {
@@ -39,7 +39,7 @@ def validate_tier(
     2. Eligibility (when catalog is provided): every model referenced must be listed
        in the provider catalog and allowed at this tier.
     """
-    from oc.providers import validate_eligibility
+    from ocx.providers import validate_eligibility
 
     base_agents = set(base_plugin.get("agents", {}).keys())
     base_categories = set(base_plugin.get("categories", {}).keys())

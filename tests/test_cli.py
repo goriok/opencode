@@ -2,7 +2,7 @@
 
 from typer.testing import CliRunner
 
-from oc.cli import app
+from ocx.cli import app
 
 runner = CliRunner()
 
@@ -43,7 +43,7 @@ def test_shortcuts_help():
 
 
 def test_configs_check(tmp_path, monkeypatch):
-    monkeypatch.setattr("oc.commands.configs.OPENCODE_DIR", tmp_path)
+    monkeypatch.setattr("ocx.commands.configs.OPENCODE_DIR", tmp_path)
     result = runner.invoke(app, ["configs", "check"])
     assert result.exit_code == 0
     assert "opencode.jsonc" in result.output
@@ -52,7 +52,7 @@ def test_configs_check(tmp_path, monkeypatch):
 def test_agents_count(tmp_path, monkeypatch):
     (tmp_path / "alan-turing.md").write_text("# agent")
     (tmp_path / "grace-hopper.md").write_text("# agent")
-    monkeypatch.setattr("oc.commands.agents.AGENTS_DIR", tmp_path)
+    monkeypatch.setattr("ocx.commands.agents.AGENTS_DIR", tmp_path)
     result = runner.invoke(app, ["agents", "count"])
     assert result.exit_code == 0
     assert "2" in result.output

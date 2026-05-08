@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from oc.providers import cost_label, load_catalog, resolve_model, validate_eligibility
+from ocx.providers import cost_label, load_catalog, resolve_model, validate_eligibility
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 

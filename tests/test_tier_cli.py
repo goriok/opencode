@@ -7,8 +7,8 @@ import pytest
 import yaml
 from typer.testing import CliRunner
 
-from oc.cli import app
-from oc.paths import TIERS_DIR
+from ocx.cli import app
+from ocx.paths import TIERS_DIR
 
 runner = CliRunner()
 
@@ -16,8 +16,8 @@ runner = CliRunner()
 @pytest.fixture
 def tmp_state(tmp_path, monkeypatch):
     """Redirect TIER_STATE to a temp path so tests don't touch the real state file."""
-    import oc.commands.tier as tier_mod
-    import oc.paths as paths_mod
+    import ocx.commands.tier as tier_mod
+    import ocx.paths as paths_mod
 
     fake_state = tmp_path / ".tier-state.json"
     monkeypatch.setattr(paths_mod, "TIER_STATE", fake_state)
@@ -58,8 +58,8 @@ def test_tier_diff_free_max():
 
 def test_tier_set_dry_run_no_writes(tmp_path, monkeypatch):
     """--dry-run must not write any files."""
-    import oc.commands.tier as tier_mod
-    import oc.paths as paths_mod
+    import ocx.commands.tier as tier_mod
+    import ocx.paths as paths_mod
 
     fake_plugin = tmp_path / "oh-my-openagent.jsonc"
     fake_litellm = tmp_path / "config.yaml"
@@ -95,8 +95,8 @@ def test_tier_set_dry_run_no_writes(tmp_path, monkeypatch):
 
 def test_tier_set_writes_state(tmp_path, monkeypatch):
     """oc tier set must update the state file with the active tier name."""
-    import oc.commands.tier as tier_mod
-    import oc.paths as paths_mod
+    import ocx.commands.tier as tier_mod
+    import ocx.paths as paths_mod
 
     real_plugin = Path.home() / ".config" / "opencode" / "oh-my-openagent.jsonc"
     real_litellm = Path.home() / ".config" / "opencode" / "litellm" / "config.yaml"
@@ -125,8 +125,8 @@ def test_tier_set_writes_state(tmp_path, monkeypatch):
 
 def test_tier_set_validator_catches_missing_agent(tmp_path, monkeypatch):
     """oc tier set must fail if the tier YAML is missing an agent from the base."""
-    import oc.commands.tier as tier_mod
-    import oc.paths as paths_mod
+    import ocx.commands.tier as tier_mod
+    import ocx.paths as paths_mod
 
     real_plugin = Path.home() / ".config" / "opencode" / "oh-my-openagent.jsonc"
     if not real_plugin.exists():

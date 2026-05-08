@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from oc.cli import app
-from oc.commands.shortcuts import _MARKER, _install_to, _ZSH_BASH_BLOCK
+from ocx.cli import app
+from ocx.commands.shortcuts import _MARKER, _install_to, _ZSH_BASH_BLOCK
 
 runner = CliRunner()
 
@@ -44,6 +44,6 @@ def test_install_to_creates_parent_dirs(tmp_path):
 
 def test_cli_shortcuts_install_zsh(tmp_path, monkeypatch):
     config = tmp_path / ".zshrc"
-    monkeypatch.setattr("oc.commands.shortcuts.Path.home", lambda: tmp_path)
+    monkeypatch.setattr("ocx.commands.shortcuts.Path.home", lambda: tmp_path)
     result = runner.invoke(app, ["shortcuts", "install", "--shell", "zsh"])
     assert result.exit_code == 0

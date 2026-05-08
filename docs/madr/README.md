@@ -13,6 +13,8 @@
 | [0005](./0005-prometheus-exporter-token-metrics.md) | Prometheus exporter for token metrics | Proposed |
 | [0006](./0006-cache-optimization-opencode.md) | Cache optimization for opencode token usage | Accepted |
 | [0007](./0007-opencode-go-model-strategy.md) | Opencode Go model routing strategy (4→7 models) | Accepted |
+| [0008](./0008-litellm-proxy.md) | LiteLLM local proxy | Accepted |
+| [0009](./0009-tier-routing-contract.md) | Tier-routing contract: agents/skills delegate to `oh-my-openagent.jsonc` | Accepted |
 
 ## Formato
 

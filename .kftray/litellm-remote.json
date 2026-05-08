@@ -1,0 +1,13 @@
+[
+  {
+    "alias": "litellm-remote",
+    "context": "default",
+    "kubeconfig": "",
+    "local_port": 4001,
+    "namespace": "litellm",
+    "protocol": "tcp",
+    "remote_port": 4000,
+    "service": "litellm",
+    "workload_type": "service"
+  }
+]

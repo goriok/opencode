@@ -1,0 +1,5 @@
+# kftray runtime database (SQLite)
+configs.db
+
+# kftray logs
+logs/

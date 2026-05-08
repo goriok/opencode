@@ -1,0 +1,100 @@
+name: copilot-lowest
+providers_used: [copilot]
+description: >
+  GitHub Copilot (qualquer plano) — sem consumo de premium requests.
+  Usa apenas modelos gratuitos incluídos no plano base: gpt-4o-mini e gemini-2.0-flash-001.
+  Ideal para uso ilimitado sem desgaste de quota.
+
+budget:
+  max_usd_month: 0
+  notes: >
+    gpt-4o-mini e gemini-2.0-flash-001 não consomem premium requests no Copilot.
+    Zero custo adicional além da assinatura base do Copilot.
+    Capacidade limitada vs. modelos Claude — use para tasks rotineiras e volume.
+
+agents:
+  sisyphus:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  oracle:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  prometheus:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  metis:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  momus:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  explore:
+    model: gpt-4o-mini
+    fallback_models: []
+
+  librarian:
+    model: gpt-4o-mini
+    fallback_models: []
+
+  multimodal-looker:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  researcher:
+    model: gpt-4o-mini
+    fallback_models: []
+
+  coder:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  scribe:
+    model: gpt-4o-mini
+    fallback_models: []
+
+  reviewer:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+categories:
+  writing:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  quick:
+    model: gpt-4o-mini
+    fallback_models: []
+
+  unspecified-low:
+    model: gpt-4o-mini
+    fallback_models: []
+
+  artistry:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  deep:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  unspecified-high:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  visual-engineering:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+  ultrabrain:
+    model: gemini-2.0-flash-001
+    fallback_models: [gpt-4o-mini]
+
+litellm:
+  models:
+    - gpt-4o-mini
+    - gemini-2.0-flash-001

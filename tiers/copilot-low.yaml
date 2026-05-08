@@ -1,0 +1,99 @@
+name: copilot-low
+providers_used: [copilot]
+description: >
+  GitHub Copilot (Pro ou Pro+) — modo economia máxima.
+  100% Claude Haiku (0.25 premium req/chamada).
+  Ideal para stretching de quota: 300 req/mês Pro → ~1200 chamadas; 1500 req Pro+ → ~6000 chamadas.
+
+budget:
+  max_usd_month: 10
+  notes: >
+    Copilot Pro: $10/mo, ~300 premium req → ~1200 chamadas com Haiku.
+    Copilot Pro+: $39/mo, ~1500 premium req → ~6000 chamadas com Haiku.
+    Sem Sonnet ou Opus — preserva quota para volume alto.
+
+agents:
+  sisyphus:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  oracle:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  prometheus:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  metis:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  momus:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  explore:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  librarian:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  multimodal-looker:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  researcher:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  coder:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  scribe:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  reviewer:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+categories:
+  writing:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  quick:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  unspecified-low:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  artistry:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  deep:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  unspecified-high:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  visual-engineering:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  ultrabrain:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+litellm:
+  models:
+    - claude-haiku-4-5-20251001

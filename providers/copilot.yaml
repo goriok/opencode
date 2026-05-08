@@ -25,4 +25,16 @@ models:
   claude-haiku-4-5-20251001:
     multiplier: 0.25
     context_k: 200
-    tiers: [low, med, high, max, copilot-pro, copilot-pro+]
+    tiers: [low, med, high, max, copilot-pro, copilot-pro+, copilot-low]
+
+  gpt-4o-mini:
+    multiplier: 0
+    context_k: 128
+    notes: "Sem custo de premium request — incluído no plano base do Copilot."
+    tiers: [copilot-lowest]
+
+  gemini-2.0-flash-001:
+    multiplier: 0
+    context_k: 1000
+    notes: "Sem custo de premium request — incluído no plano base do Copilot."
+    tiers: [copilot-lowest]

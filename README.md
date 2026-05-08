@@ -201,6 +201,11 @@ Todas as operações são via o comando `oc` (Python CLI instalado com `uv`):
 | `oc litellm up/down/logs` | Gerencia o proxy LiteLLM |
 | `oc litellm status/models` | Health check e lista de modelos |
 | `oc litellm setup [--claude-code]` | Setup completo ou só Claude Code |
+| `oc tier list` | Lista os perfis de tier disponíveis |
+| `oc tier set <name>` | Aplica um tier (reescreve oh-my-openagent + litellm config) |
+| `oc tier show <name>` | Mostra os modelos do tier |
+| `oc tier diff <a> <b>` | Compara dois tiers lado a lado |
+| `oc tier current` | Mostra o tier ativo |
 | `oc configs check` | Verifica arquivos de config |
 | `oc git status` | Status git deste repo |
 

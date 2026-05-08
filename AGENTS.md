@@ -193,6 +193,41 @@ Skills que carregam o framework completo de cada primary agent:
 
 ---
 
+## Budget Tiers
+
+Model assignments and budget caps are managed via `oc tier`. Five profiles are available:
+
+| Tier | Budget | Primary models | Use case |
+|------|--------|----------------|----------|
+| `free` | $0 | opencode-go only | Exploration, low-stakes tasks |
+| `low` | ~$5/mo | opencode-go primary, zai for reasoning | Light daily usage |
+| `med` | ~$20/mo | zai primary, opencode-go fallback | **Default — matches current config** |
+| `high` | ~$50/mo | zai/glm-5.1 everywhere | High-quality reasoning |
+| `max` | ~$200/mo | Anthropic Opus/Sonnet primary | Maximum quality |
+
+### Workflow
+
+```bash
+oc tier list                  # see all tiers + current marker
+oc tier diff free max         # compare model assignments side-by-side
+oc tier set low               # switch to low-cost blend
+oc tier set low --dry-run     # preview without writing
+oc tier current               # see active tier
+```
+
+**What changes on `oc tier set <name>`:**
+1. `oh-my-openagent.jsonc` — agents and categories blocks are fully replaced.
+2. `litellm/config.yaml` — model_list is rebuilt; `general_settings.max_budget` is set.
+3. `.tier-state.json` — records the active tier (gitignored).
+
+After switching tiers, restart the proxy: `oc litellm down && oc litellm up`.
+
+**Tier profiles** live in `tiers/<name>.yaml` — edit them to customize models per agent.
+`oh-my-openagent.jsonc` and `litellm/config.yaml` are now generated artifacts; manual edits
+to their `agents`/`categories`/`model_list` blocks will be overwritten on the next `oc tier set`.
+
+---
+
 ## Python CLI Style Guide
 
 The `oc` CLI lives in `src/oc/`. All operations should follow these conventions:

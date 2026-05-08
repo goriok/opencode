@@ -33,3 +33,6 @@ token-baselines/
 
 # LiteLLM proxy secrets
 litellm/.env
+
+# Tier system state (active tier selection — personal, not shared)
+.tier-state.json

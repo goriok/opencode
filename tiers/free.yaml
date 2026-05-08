@@ -1,0 +1,98 @@
+name: free
+description: "Zero-cost blend — opencode-go only (no zai, no Anthropic). Best for exploration and low-stakes tasks."
+
+budget:
+  max_usd_month: 0
+  notes: "opencode-go models are free-tier; no LiteLLM-proxied models included."
+
+agents:
+  sisyphus:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  oracle:
+    model: opencode-go/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/deepseek-v4-pro]
+
+  prometheus:
+    model: opencode-go/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/deepseek-v4-pro]
+
+  metis:
+    model: opencode-go/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/deepseek-v4-pro]
+
+  momus:
+    model: opencode-go/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/deepseek-v4-pro]
+
+  explore:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  librarian:
+    model: opencode-go/deepseek-v4-flash
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  multimodal-looker:
+    model: opencode-go/mimo-v2-omni
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  researcher:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  coder:
+    model: opencode-go/deepseek-v4-pro
+    fallback_models: [opencode-go/kimi-k2.5]
+
+  scribe:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  reviewer:
+    model: opencode-go/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/deepseek-v4-pro]
+
+categories:
+  writing:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: []
+
+  quick:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: []
+
+  unspecified-low:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: []
+
+  artistry:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: []
+
+  deep:
+    model: opencode-go/deepseek-v4-pro
+    fallback_models: [opencode-go/kimi-k2.5]
+
+  unspecified-high:
+    model: opencode-go/deepseek-v4-pro
+    fallback_models: [opencode-go/kimi-k2.5]
+
+  visual-engineering:
+    model: opencode-go/mimo-v2-omni
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  ultrabrain:
+    model: opencode-go/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/deepseek-v4-pro]
+
+litellm:
+  models: []

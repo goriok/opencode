@@ -1,0 +1,100 @@
+name: low
+description: "Low-cost blend (~$5/mo cap). opencode-go primary for cheap tasks, zai for reasoning-heavy agents."
+
+budget:
+  max_usd_month: 5
+  notes: "Soft cap applied to LiteLLM-proxied providers (Anthropic, Gemini) only."
+
+agents:
+  sisyphus:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  oracle:
+    model: zai/glm-4.7
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  prometheus:
+    model: zai/glm-4.7
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  metis:
+    model: zai/glm-4.7
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  momus:
+    model: zai/glm-4.7
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  explore:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  librarian:
+    model: zai/glm-4.5-air
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  multimodal-looker:
+    model: opencode-go/mimo-v2-omni
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  researcher:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  coder:
+    model: opencode-go/deepseek-v4-pro
+    fallback_models: [opencode-go/kimi-k2.5]
+
+  scribe:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: [opencode-go/qwen3.5-plus]
+
+  reviewer:
+    model: zai/glm-4.7
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/glm-5.1, opencode-go/deepseek-v4-pro]
+
+categories:
+  writing:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: []
+
+  quick:
+    model: zai/glm-4.5-air
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  unspecified-low:
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: []
+
+  artistry:
+    model: zai/glm-4.5-air
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  deep:
+    model: zai/glm-4.7
+    fallback_models: [opencode-go/deepseek-v4-pro, opencode-go/kimi-k2.5]
+
+  unspecified-high:
+    model: zai/glm-4.7
+    fallback_models: [opencode-go/deepseek-v4-pro, opencode-go/kimi-k2.5]
+
+  visual-engineering:
+    model: opencode-go/mimo-v2-omni
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  ultrabrain:
+    model: zai/glm-4.7
+    thinking: { type: enabled }
+    fallback_models: [opencode-go/glm-5.1, opencode-go/deepseek-v4-pro]
+
+litellm:
+  models:
+    - claude-haiku-4-5-20251001
+    - gemini/gemini-3.1-flash-lite-preview

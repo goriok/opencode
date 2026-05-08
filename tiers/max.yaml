@@ -1,0 +1,105 @@
+name: max
+description: "Maximum quality (~$200/mo cap). Anthropic Claude Opus for primary agents, zai/glm-5.1 for fast paths."
+
+budget:
+  max_usd_month: 200
+  notes: "Soft cap applied to LiteLLM-proxied providers (Anthropic, Gemini) only."
+
+agents:
+  sisyphus:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  oracle:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
+
+  prometheus:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
+
+  metis:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
+
+  momus:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
+
+  explore:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  librarian:
+    model: claude-sonnet-4-6
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-flash]
+
+  multimodal-looker:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1, opencode-go/mimo-v2-omni]
+
+  researcher:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  coder:
+    model: claude-opus-4-7
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  scribe:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-flash]
+
+  reviewer:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
+
+categories:
+  writing:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1]
+
+  quick:
+    model: zai/glm-4.7
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  unspecified-low:
+    model: zai/glm-4.7
+    fallback_models: [opencode-go/deepseek-v4-flash]
+
+  artistry:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1]
+
+  deep:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
+
+  unspecified-high:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
+
+  visual-engineering:
+    model: claude-sonnet-4-6
+    fallback_models: [zai/glm-5.1, opencode-go/mimo-v2-omni]
+
+  ultrabrain:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
+
+litellm:
+  models:
+    - claude-opus-4-7
+    - claude-sonnet-4-6
+    - claude-haiku-4-5-20251001
+    - gemini/gemini-3.1-flash-lite-preview
+    - gemini/gemini-3-flash-preview
+    - gemini/gemini-3.1-pro-preview

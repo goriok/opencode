@@ -14,84 +14,84 @@ budget:
 
 agents:
   sisyphus:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   oracle:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   prometheus:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   metis:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   momus:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   explore:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   librarian:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   multimodal-looker:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   researcher:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   coder:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   scribe:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   reviewer:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
 categories:
   writing:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   quick:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   unspecified-low:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   artistry:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   deep:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   unspecified-high:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   visual-engineering:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
   ultrabrain:
-    model: claude-haiku-4-5-20251001
+    model: copilot/claude-haiku-4-5-20251001
     fallback_models: []
 
 litellm:

@@ -11,7 +11,7 @@ models:
     usd_per_mtok_in: 1.00
     usd_per_mtok_out: 5.00
     context_k: 200
-    tiers: [free, low, med, high, max, copilot-pro, copilot-pro+]
+    tiers: [free, low, med, high, max, copilot-pro, copilot-pro+, copilot-low]
 
   claude-sonnet-4-6:
     usd_per_mtok_in: 3.00

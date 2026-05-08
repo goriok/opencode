@@ -9,7 +9,7 @@
 ### 1. Instalar dependências
 
 ```bash
-brew install sqlite3 node bun git
+brew install git uv
 ```
 
 ### 2. Instalar OpenCode
@@ -24,19 +24,20 @@ curl -fsSL https://opencode.ai/install | bash
 git clone <repo-url> ~/.config/opencode
 ```
 
-### 4. Rodar setup
+### 4. Instalar o CLI `oc`
 
 ```bash
-bash ~/.config/opencode/setup.sh
+cd ~/.config/opencode
+uv tool install --editable .
 ```
 
-Isso clona agency-agents, converte, e instala os 191 agentes.
-
-### 5. Sincronizar agentes primários
+### 5. Rodar setup
 
 ```bash
-bash ~/.config/opencode/sync-primary-agents.sh
+oc setup
 ```
+
+Isso clona agency-agents, converte, e instala os agentes. Já sincroniza os primários automaticamente.
 
 ### 6. Instalar plugins
 
@@ -58,7 +59,7 @@ opencode --version                        # Confirmar versão
 ### 8. Configurar LiteLLM proxy
 
 ```bash
-bash ~/.config/opencode/litellm/setup-litellm.sh
+oc litellm setup
 ```
 
 Isso cria o `.env`, sobe o proxy Docker, gera a virtual key e configura o Claude Code automaticamente. Ver [RB-008](./rb-008-litellm-proxy-setup.md) para detalhes.
@@ -74,31 +75,21 @@ nano ~/.config/opencode/litellm/.env
 # Preencha: ZAI_API_KEY=sua_key_aqui
 
 # Reinicie o proxy para carregar a nova key:
-cd ~/.config/opencode && task litellm:down && task litellm:up
+oc litellm down && oc litellm up
 ```
 
 Modelos z.ai disponíveis via proxy: `zai/glm-5.1`, `zai/glm-5-turbo`, `zai/glm-4.7`, `zai/glm-4.5-air`
-
-### 10. Gerar primeiro baseline de tokens
-
-```bash
-bash ~/.config/opencode/token-tracker.sh --baseline "setup" --open
-```
 
 ## Validação
 
 - [ ] `opencode` abre sem erros
 - [ ] Agentes primários aparecem no menu
-- [ ] `token-tracker.sh --dry-run` mostra dados
-- [ ] Dashboard abre no browser com dados
-- [ ] `task litellm:status` retorna `"I'm alive!"`
-- [ ] `task litellm:models` lista 15 modelos (3 Anthropic + 8 opencode-go + 4 z.ai)
+- [ ] `oc litellm status` retorna `"I'm alive!"`
+- [ ] `oc litellm models` lista modelos (3 Anthropic + opencode-go + z.ai)
 - [ ] `claude -p "ping"` retorna `pong` (via proxy)
 - [ ] `localhost:4000/ui` abre com a virtual key `claude-code-max`
 
 ## Troubleshooting
 
-- **sqlite3 não encontrado**: `brew install sqlite3`
-- **Agentes não aparecem**: Re-executar `setup.sh`
+- **Agentes não aparecem**: Re-executar `oc setup`
 - **Plugin não instala**: Verificar `opencode.jsonc` e permissões
-- **Dashboard vazio**: Ver RB-003

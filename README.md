@@ -2,7 +2,7 @@
 
 > Global configuration, agent personas, plugins, and operational tooling for the [opencode](https://opencode.ai) CLI.
 
-This repository manages the shared AI agent ecosystem for OpenCode — **191 subagents**, **5 primary orchestrators**, **12 skills**, **4 plugins**, and a **token tracking dashboard** — all coordinated through layered orchestration with ISO-25010, ATAM, and RM-ODP frameworks.
+This repository manages the shared AI agent ecosystem for OpenCode — **191 subagents**, **5 primary orchestrators**, **12 skills**, **4 plugins** — all coordinated through layered orchestration with ISO-25010, ATAM, and RM-ODP frameworks.
 
 ---
 
@@ -11,12 +11,16 @@ This repository manages the shared AI agent ecosystem for OpenCode — **191 sub
 ```bash
 # Clone
 git clone <repo-url> ~/.config/opencode
+cd ~/.config/opencode
 
-# Install everything (agents + plugins + sync)
-bash ~/.config/opencode/setup.sh
+# Install the CLI
+uv tool install --editable .
 
-# Generate your first token dashboard
-bash ~/.config/opencode/token-tracker.sh --baseline "setup" --open
+# Install everything (agents + sync to Claude Code)
+oc setup
+
+# Start the LiteLLM proxy
+oc litellm setup
 ```
 
 After setup, OpenCode will have all 191 agents installed and the primary orchestrators synced to Claude Code.
@@ -30,13 +34,10 @@ After setup, OpenCode will have all 191 agents installed and the primary orchest
 ├── AGENTS.md                    # Agent guidance (for AI agents operating in this repo)
 ├── README.md                    # This file
 ├── opencode.jsonc               # Main OpenCode configuration
-├── setup.sh                     # One-time machine setup
-├── install-agents.sh            # Per-project agent installer
-├── sync-primary-agents.sh       # Sync primaries to Claude Code
-├── install-opencode-shortcuts.sh # Shell aliases
-├── token-tracker.sh             # Token usage dashboard generator
+├── pyproject.toml               # Python package for the `oc` CLI
+├── src/oc/                      # CLI source (commands: setup, agents, litellm, shortcuts, …)
 │
-├── agents/                      # 191 agent .md files (gitignored, installed by setup.sh)
+├── agents/                      # 191 agent .md files (all tracked in git, installed by oc setup)
 │   ├── alan-turing.md           #   ↳ Tracked: SDLC orchestrator
 │   ├── grace-hopper.md          #   ↳ Tracked: Troubleshooting orchestrator
 │   ├── ada-lovelace.md          #   ↳ Tracked: Exploratory analysis
@@ -120,7 +121,7 @@ Five orchestrators coordinate specialist subagents under structured frameworks:
 
 ### Subagent Squads
 
-Each primary agent delegates to a squad of 15-19 specialist subagents from the agency-agents collection (installed by `setup.sh`). See [AGENTS.md](./AGENTS.md) for the full squad rosters.
+Each primary agent delegates to a squad of 15-19 specialist subagents from the agency-agents collection (installed by `oc setup`). See [AGENTS.md](./AGENTS.md) for the full squad rosters.
 
 ---
 
@@ -155,34 +156,16 @@ Four plugins work in harmonic layers:
 
 ---
 
-## 📊 Token Tracker
+## 📊 Session Usage Analyzer
 
-A Bash script that generates a self-contained HTML dashboard from OpenCode's SQLite database:
+Para analisar consumo de tokens da sessão atual, use a skill `session-usage-analyzer`:
 
 ```bash
-# Dashboard of last 30 days
-bash ~/.config/opencode/token-tracker.sh --open
-
-# Quick stats in terminal
-bash ~/.config/opencode/token-tracker.sh --dry-run --days 7
-
-# Save baseline before strategy change
-bash ~/.config/opencode/token-tracker.sh --baseline "pre-experiment"
-
-# Compare current vs baseline
-bash ~/.config/opencode/token-tracker.sh --compare "pre-experiment" --open
+# Dentro do opencode ou Claude Code
+/session-usage-analyzer
 ```
 
-### Key Metrics
-
-| Metric | What it measures | Why it matters |
-|--------|-----------------|----------------|
-| **Cache Hit Rate** | `% of tokens served from cache` | Higher = more efficient context reuse |
-| **Output Ratio** | `% of tokens that are output` | Higher = more actual work vs context overhead |
-| **Cost/Output Token** | `cost ÷ output tokens` | Lower = better cost efficiency |
-| **Tokens/Day** | `total tokens ÷ active days` | Baseline volume for comparison |
-
-See [handbooks/token-tracker.md](./docs/handbooks/token-tracker.md) for full reference.
+O workflow Python está em `workflows/session-usage-analyzer.py`.
 
 ---
 
@@ -204,17 +187,24 @@ This repo uses three distinct documentation formats, each answering a different 
 
 ---
 
-## 🛠 Scripts
+## 🛠 CLI (`oc`)
 
-| Script | Purpose | Usage |
-|--------|---------|-------|
-| `setup.sh` | One-time machine setup (clone + install agents + sync) | `bash ~/.config/opencode/setup.sh` |
-| `install-agents.sh` | Install agents into a specific project | `bash install-agents.sh /path/to/project` |
-| `sync-primary-agents.sh` | Copy primaries to `~/.claude/agents/` | `bash sync-primary-agents.sh` |
-| `install-opencode-shortcuts.sh` | Shell aliases for common commands | `bash install-opencode-shortcuts.sh` |
-| `token-tracker.sh` | Generate token usage dashboard | `bash token-tracker.sh --open` |
+Todas as operações são via o comando `oc` (Python CLI instalado com `uv`):
 
-All scripts follow the [Shell Script Style Guide](./AGENTS.md#shell-script-style-guide) from AGENTS.md: `set -euo pipefail`, colored logging helpers, `mktemp -d` with trap cleanup, `UPPER_SNAKE_CASE` variables.
+| Comando | Propósito |
+|---------|-----------|
+| `oc setup` | Setup inicial: instala agents, sincroniza primários |
+| `oc agents sync` | Sincroniza primários para `~/.claude/agents/` |
+| `oc agents install [path]` | Instala agents em um projeto |
+| `oc agents count` | Conta agents instalados |
+| `oc shortcuts install` | Instala aliases de shell (oc, ocw, ocwserve) |
+| `oc litellm up/down/logs` | Gerencia o proxy LiteLLM |
+| `oc litellm status/models` | Health check e lista de modelos |
+| `oc litellm setup [--claude-code]` | Setup completo ou só Claude Code |
+| `oc configs check` | Verifica arquivos de config |
+| `oc git status` | Status git deste repo |
+
+Veja `oc --help` para todos os subcomandos.
 
 ---
 

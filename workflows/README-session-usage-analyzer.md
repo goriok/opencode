@@ -8,8 +8,8 @@ Python workflow que analisa o consumo de tokens em sessões do opencode usando o
 
 - Python 3.10 ou superior
 - LiteLLM proxy rodando em `http://localhost:4100`
-  - Para verificar: `task litellm:status`
-  - Para iniciar: `task litellm:up`
+  - Para verificar: `oc litellm status`
+  - Para iniciar: `oc litellm up`
 
 ### Instalar dependências
 
@@ -123,7 +123,7 @@ Make sure LiteLLM is running at http://localhost:4100
 
 **Solução:**
 ```bash
-task litellm:up
+oc litellm up
 ```
 
 ### No current session found

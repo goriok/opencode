@@ -269,7 +269,7 @@ endpoint (workaround for LiteLLM bug #25479 — native `zai/` provider routes to
 
 1. Generate a key at https://z.ai/manage-apikey/apikey-list
 2. Add to `litellm/.env`: `ZAI_API_KEY=your_key_here`
-3. Restart proxy: `task litellm:down && task litellm:up`
+3. Restart proxy: `oc litellm down && oc litellm up`
 
 ### Caveat
 

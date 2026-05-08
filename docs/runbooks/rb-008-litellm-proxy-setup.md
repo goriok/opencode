@@ -22,10 +22,10 @@ comentados — OAuth device flow crasha o proxy na inicialização. Para ativar,
 ## Setup automático (nova máquina)
 
 ```bash
-bash ~/.config/opencode/litellm/setup-litellm.sh
+oc litellm setup
 ```
 
-O script faz tudo: cria `.env`, sobe o proxy, gera virtual key e configura `~/.claude/settings.json`.
+Cria `.env`, sobe o proxy, gera virtual key e configura `~/.claude/settings.json` automaticamente.
 
 ---
 
@@ -60,7 +60,7 @@ nano ~/.config/opencode/litellm/.env
 ### 3. Subir o proxy
 
 ```bash
-cd ~/.config/opencode && task litellm:up
+oc litellm up
 ```
 
 Aguarde ~20s para migrations do Postgres rodarem.
@@ -68,14 +68,14 @@ Aguarde ~20s para migrations do Postgres rodarem.
 ### 4. Verificar
 
 ```bash
-task litellm:status    # "I'm alive!"
-task litellm:models    # lista 15 modelos (3 Anthropic + 8 opencode-go + 4 z.ai)
+oc litellm status    # "I'm alive!"
+oc litellm models    # lista modelos (3 Anthropic + 8 opencode-go + 4 z.ai)
 ```
 
 ### 5. Configurar Claude Code
 
 ```bash
-bash ~/.config/opencode/litellm/setup-litellm.sh --claude-code
+oc litellm setup --claude-code
 ```
 
 Ou manualmente — gere a virtual key:
@@ -104,7 +104,7 @@ Adicione ao `~/.claude/settings.json`:
 claude -p "ping"
 # deve retornar: pong
 
-task litellm:logs
+oc litellm logs
 # deve mostrar: POST /v1/messages?beta=true 200 OK
 ```
 
@@ -139,11 +139,11 @@ No opencode, use `/models` e selecione modelos do grupo `LiteLLM Local Proxy`:
 ## Operação diária
 
 ```bash
-task litellm:up      # inicia (se não estiver rodando)
-task litellm:down    # para
-task litellm:logs    # monitora chamadas em tempo real
-task litellm:status  # health check rápido
-task litellm:models  # lista modelos disponíveis
+oc litellm up      # inicia (se não estiver rodando)
+oc litellm down    # para
+oc litellm logs    # monitora chamadas em tempo real
+oc litellm status  # health check rápido
+oc litellm models  # lista modelos disponíveis
 ```
 
 O container tem `restart: unless-stopped` — reinicia automaticamente com o Docker.
@@ -152,10 +152,10 @@ O container tem `restart: unless-stopped` — reinicia automaticamente com o Doc
 
 ## Validação completa
 
-- [ ] `task litellm:status` retorna `"I'm alive!"`
-- [ ] `task litellm:models` lista 15 modelos (3 Anthropic + 8 opencode-go + 4 z.ai)
+- [ ] `oc litellm status` retorna `"I'm alive!"`
+- [ ] `oc litellm models` lista modelos (3 Anthropic + 8 opencode-go + 4 z.ai)
 - [ ] `claude -p "ping"` retorna `pong`
-- [ ] `task litellm:logs` mostra `POST /v1/messages 200 OK`
+- [ ] `oc litellm logs` mostra `POST /v1/messages 200 OK`
 - [ ] `http://localhost:4000/ui` abre; virtual key `claude-code-max` aparece com `Last Active` atualizado
 - [ ] z.ai models respondem via proxy (`zai/glm-4.5-air` retorna 200 OK)
 
@@ -173,20 +173,20 @@ O container tem `restart: unless-stopped` — reinicia automaticamente com o Doc
 **Claude Code com erro de autenticação após restart**
 - Virtual key foi perdida (Postgres apagado?) — regenere:
   ```bash
-  bash ~/.config/opencode/litellm/setup-litellm.sh --claude-code
+  oc litellm setup --claude-code
   ```
 - Atualize `ANTHROPIC_CUSTOM_HEADERS` em `~/.claude/settings.json`
 
 **Proxy não sobe**
 ```bash
-task litellm:logs          # ver erro de startup
+oc litellm logs            # ver erro de startup
 docker compose ps          # verificar containers
 ```
 
 **opencode-go com 401**
 - API key expirou — renove em `opencode.ai/auth`
 - Atualize `OPENCODE_GO_API_KEY` em `~/.config/opencode/litellm/.env`
-- Reinicie: `task litellm:down && task litellm:up`
+- Reinicie: `oc litellm down && oc litellm up`
 
 **UI não aceita login**
 - Use o valor exato de `LITELLM_MASTER_KEY` do `.env` (não a virtual key)

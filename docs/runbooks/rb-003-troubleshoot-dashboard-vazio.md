@@ -1,8 +1,8 @@
 # RB-003 — Troubleshoot: Dashboard Vazio ou com Erros
 
-**Quando usar**: Dashboard não mostra dados, gráficos vazios, ou erros ao gerar.
-**Tempo estimado**: 5-10 minutos
-**Pré-requisitos**: `token-tracker.sh` instalado
+> **⚠️ Depreciado**: O `token-tracker.sh` foi removido. Este runbook não se aplica mais.
+
+**Status**: Descontinuado — `token_tracker` foi removido do repositório.
 
 ## Diagnóstico
 

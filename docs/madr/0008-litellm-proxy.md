@@ -110,7 +110,7 @@ Com `num_retries: 2` (padrão router) + `max_retries` não zerado, cada request 
 **Positivas:**
 - Logging unificado no UI (`localhost:4000/ui`) com spend por virtual key
 - Budget caps configuráveis por key via `POST /key/generate`
-- `task litellm:up/down/logs/status/models` para operação diária
+- `oc litellm up/down/logs/status/models` para operação diária
 - Claude Code Max sem API key paga — usa OAuth subscription
 
 **Negativas:**
@@ -120,12 +120,12 @@ Com `num_retries: 2` (padrão router) + `max_retries` não zerado, cada request 
 
 **Riscos:**
 - Endpoint opencode-go (`https://opencode.ai/zen/go/v1`) pode mudar — monitorar
-- Virtual key expira se o Postgres for apagado — regenerar com `setup-litellm.sh --claude-code`
+- Virtual key expira se o Postgres for apagado — regenerar com `oc litellm setup --claude-code`
 
 ## Setup em nova máquina
 
 ```bash
-bash ~/.config/opencode/litellm/setup-litellm.sh
+oc litellm setup
 # opencode → /connect zai-coding-plan
 ```
 

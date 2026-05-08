@@ -1,8 +1,10 @@
 # RB-002 — Gerar Dashboard de Tokens
 
-**Quando usar**: Verificar uso de tokens, custo, eficiência de cache, ou comparar períodos.
-**Tempo estimado**: 30 segundos
-**Pré-requisitos**: OpenCode com dados no SQLite, `sqlite3` e `python3` instalados
+> **⚠️ Depreciado**: O `token-tracker.sh` foi removido. Esta funcionalidade não está mais disponível.
+> Para análise de sessão, use a skill `session-usage-analyzer` ou `oc litellm models`.
+
+**Quando usar**: ~~Verificar uso de tokens, custo, eficiência de cache, ou comparar períodos.~~
+**Status**: Descontinuado — `token_tracker` foi removido do repositório.
 
 ## Passos
 

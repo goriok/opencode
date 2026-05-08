@@ -1,6 +1,9 @@
 # Token Tracker — Handbook
 
-> Dashboard de uso de tokens do OpenCode com baseline comparison para avaliação de estratégias de IA.
+> **⚠️ Depreciado**: O `token-tracker.sh` foi removido. Este handbook é histórico apenas.
+> Para análise de sessão, use a skill `session-usage-analyzer`.
+
+> ~~Dashboard de uso de tokens do OpenCode com baseline comparison para avaliação de estratégias de IA.~~
 
 ## O que é
 

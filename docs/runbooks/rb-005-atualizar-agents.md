@@ -2,46 +2,33 @@
 
 **Quando usar**: Nova versão do agency-agents disponível, ou agentes desatualizados.
 **Tempo estimado**: 5-10 minutos
-**Pré-requisitos**: Git, setup.sh já executado antes
+**Pré-requisitos**: Git, `oc` instalado
 
 ## Passos
 
 ### 1. Verificar versão atual
 
 ```bash
-ls ~/.config/opencode/agents/ | wc -l
+oc agents count
 # Anotar o número
 ```
 
 ### 2. Rodar setup novamente
 
 ```bash
-bash ~/.config/opencode/setup.sh
+oc setup
 ```
 
-O script detecta instalação existente e atualiza.
+Re-clona agency-agents e reinstala os agentes. Já sincroniza os primários automaticamente.
 
-### 3. Verificar agentes primários
-
-```bash
-ls ~/.claude/agents/
-# Deve ter: alan-turing.md, grace-hopper.md, ada-lovelace.md, maestro.md
-```
-
-### 4. Sincronizar primários
-
-```bash
-bash ~/.config/opencode/sync-primary-agents.sh
-```
-
-### 5. Validar
+### 3. Validar
 
 ```bash
 # Contar agentes
-ls ~/.config/opencode/agents/ | wc -l
+oc agents count
 
 # Verificar que primários estão intactos
-cat ~/.claude/agents/alan-turing.md | head -5
+head -5 ~/.claude/agents/alan-turing.md
 ```
 
 ## Validação
@@ -52,6 +39,6 @@ cat ~/.claude/agents/alan-turing.md | head -5
 
 ## Troubleshooting
 
-- **Setup falha**: `rm -rf ~/.config/opencode/agents/` e re-executar
-- **Primários desapareceram**: Re-executar `sync-primary-agents.sh`
+- **Setup falha**: `rm -rf ~/.config/opencode/agents/` e re-executar `oc setup`
+- **Primários desapareceram**: Re-executar `oc agents sync`
 - **Conflito de versão**: Verificar se agency-agents repo está atualizado

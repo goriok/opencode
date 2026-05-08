@@ -1,8 +1,8 @@
 # RB-006 — Comparar Estratégias com Baseline
 
-**Quando usar**: Avaliar se uma mudança de modelo, agente, ou workflow melhorou a eficiência.
-**Tempo estimado**: 5 minutos
-**Pré-requisitos**: Baseline salvo antes da mudança
+> **⚠️ Depreciado**: O `token-tracker.sh` foi removido. Este runbook não se aplica mais.
+
+**Status**: Descontinuado — `token_tracker` foi removido do repositório.
 
 ## Contexto
 

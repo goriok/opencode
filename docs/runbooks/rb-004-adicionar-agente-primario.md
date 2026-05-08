@@ -63,7 +63,7 @@ Adicionar o agente na seção de agentes (se aplicável).
 ### 5. Sincronizar para Claude Code
 
 ```bash
-bash ~/.config/opencode/sync-primary-agents.sh
+oc agents sync
 ```
 
 ### 6. Testar
@@ -87,4 +87,4 @@ ls ~/.claude/agents/nome-do-agente.md
 
 - **Agente não aparece**: Verificar frontmatter YAML
 - **Skill não carrega**: Verificar campo `description` no SKILL.md
-- **Sync falha**: Verificar permissões do script
+- **Sync falha**: Verificar se `oc` está instalado (`uv tool install --editable ~/.config/opencode`)

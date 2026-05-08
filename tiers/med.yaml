@@ -1,4 +1,5 @@
 name: med
+providers_used: [zai, opencode-go]
 description: >
   opencode-go $10/mo + z.ai Coding Plan Pro $30/mo = $40/mo total.
   z.ai Pro: 400 prompts/5h — glm-5.1 com thinking para reasoning e review.

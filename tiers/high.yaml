@@ -1,4 +1,5 @@
 name: high
+providers_used: [zai, opencode-go]
 description: >
   opencode-go $10/mo + z.ai Coding Plan Max $80/mo + DeepSeek API direto = ~$100/mo.
   z.ai Max: 1600 prompts/5h — glm-5.1 com thinking em tudo que importa.

@@ -1,4 +1,5 @@
 name: free
+providers_used: [opencode-go]
 description: >
   Zero custo variável — opencode-go $10/mo cobre tudo via crédito flat.
   Maximiza volume: deepseek-v4-flash (~31k req/5h) para tudo rotineiro,

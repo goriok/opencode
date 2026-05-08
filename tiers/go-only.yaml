@@ -1,23 +1,16 @@
-name: low
-providers_used: [zai, opencode-go]
+name: go-only
+providers_used: [opencode-go]
 description: >
-  opencode-go $10/mo + z.ai Coding Plan $10/mo = $20/mo total.
-  z.ai entra apenas para reasoning pesado (glm-4.7 com thinking).
-  Flash e Qwen para volume. DeepSeek-v4-pro para coding crítico.
+  Solo opencode-go — $10/mo flat ($60/mo crédito).
+  kimi-k2.5 para coding; glm-5.1 para reasoning (via go); flash para volume.
+  mimo-v2-omni exclusivo para multimodal. Sem z.ai, Anthropic, ou Copilot.
 
 budget:
-  max_usd_month: 20
+  max_usd_month: 10
   notes: >
-    opencode-go: $10/mo flat ($60/mês em crédito).
-    z.ai Coding Plan Lite: ~$10/mo (80 prompts/5h, avançados custam 2x off-peak).
-    glm-4.7 via Coding Plan: consumo 2x off-peak (equivale ~40 prompts avançados/5h).
-    Nenhuma chamada API direta ao z.ai — tudo via Coding Plan.
-
-# Estratégia: z.ai Coding Plan para reasoning (oracle, prometheus, reviewer),
-# opencode-go para tudo rotineiro e coding.
-# glm-4.7 é o sweet spot do Coding Plan: capaz + menos quota que glm-5.1.
-# kimi-k2.5 é o melhor modelo de coding no opencode-go.
-# deepseek-v4-flash para volume barato.
+    opencode-go: $10/mo flat → $12/5h de crédito.
+    kimi-k2.5 @ $0.50/Mtok, glm-5.1 @ $0.60/Mtok, flash @ $0.14/Mtok.
+    Para uso intenso de coding: preferir kimi-k2.5 + flash para volume.
 
 agents:
   sisyphus:
@@ -25,14 +18,14 @@ agents:
     fallback_models: [opencode-go/qwen3.5-plus]
 
   oracle:
-    model: zai/glm-4.7
+    model: opencode-go/glm-5.1
     thinking: { type: enabled }
-    fallback_models: [opencode-go/glm-5.1, opencode-go/kimi-k2.5]
+    fallback_models: [opencode-go/kimi-k2.5]
 
   prometheus:
-    model: zai/glm-4.7
+    model: opencode-go/glm-5.1
     thinking: { type: enabled }
-    fallback_models: [opencode-go/glm-5.1, opencode-go/deepseek-v4-pro]
+    fallback_models: [opencode-go/deepseek-v4-pro]
 
   metis:
     model: opencode-go/deepseek-v4-pro
@@ -40,9 +33,9 @@ agents:
     fallback_models: [opencode-go/kimi-k2.5]
 
   momus:
-    model: zai/glm-4.7
+    model: opencode-go/glm-5.1
     thinking: { type: enabled }
-    fallback_models: [opencode-go/glm-5.1, opencode-go/deepseek-v4-pro]
+    fallback_models: [opencode-go/deepseek-v4-pro]
 
   explore:
     model: opencode-go/deepseek-v4-flash
@@ -65,13 +58,13 @@ agents:
     fallback_models: [opencode-go/deepseek-v4-pro]
 
   scribe:
-    model: opencode-go/deepseek-v4-flash
-    fallback_models: [opencode-go/qwen3.5-plus]
+    model: opencode-go/qwen3.5-plus
+    fallback_models: [opencode-go/deepseek-v4-flash]
 
   reviewer:
-    model: zai/glm-4.7
+    model: opencode-go/glm-5.1
     thinking: { type: enabled }
-    fallback_models: [opencode-go/glm-5.1, opencode-go/kimi-k2.5]
+    fallback_models: [opencode-go/kimi-k2.5]
 
 categories:
   writing:
@@ -91,8 +84,8 @@ categories:
     fallback_models: [opencode-go/deepseek-v4-flash]
 
   deep:
-    model: zai/glm-4.7
-    fallback_models: [opencode-go/deepseek-v4-pro, opencode-go/kimi-k2.5]
+    model: opencode-go/deepseek-v4-pro
+    fallback_models: [opencode-go/kimi-k2.5]
 
   unspecified-high:
     model: opencode-go/deepseek-v4-pro
@@ -103,11 +96,9 @@ categories:
     fallback_models: [opencode-go/deepseek-v4-flash]
 
   ultrabrain:
-    model: zai/glm-4.7
+    model: opencode-go/glm-5.1
     thinking: { type: enabled }
-    fallback_models: [opencode-go/glm-5.1, opencode-go/kimi-k2.5]
+    fallback_models: [opencode-go/kimi-k2.5]
 
 litellm:
-  models:
-    - claude-haiku-4-5-20251001
-    - gemini/gemini-3.1-flash-lite-preview
+  models: []

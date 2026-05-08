@@ -1,0 +1,109 @@
+name: copilot-pro+
+providers_used: [copilot]
+description: >
+  Solo GitHub Copilot Pro+ — $39/mo, 1500 premium requests/mo.
+  Claude Opus 4.7 (10 premium req) para agentes de reasoning e review crítico.
+  Claude Sonnet 4.6 (1 premium req) para tasks de alta qualidade.
+  Haiku (0.25 premium req) para volume.
+
+budget:
+  max_usd_month: 39
+  notes: >
+    GitHub Copilot Pro+: $39/mo, 1500 premium requests/mo.
+    claude-opus-4-7 = 10 premium req/chamada → ~150 chamadas/mês.
+    claude-sonnet-4-6 = 1 premium req/chamada → ~1500 chamadas/mês.
+    claude-haiku-4-5-20251001 = 0.25 premium req/chamada → ~6000 chamadas/mês.
+
+agents:
+  sisyphus:
+    model: claude-sonnet-4-6
+    fallback_models: [claude-haiku-4-5-20251001]
+
+  oracle:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [claude-sonnet-4-6]
+
+  prometheus:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [claude-sonnet-4-6]
+
+  metis:
+    model: claude-sonnet-4-6
+    fallback_models: [claude-haiku-4-5-20251001]
+
+  momus:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [claude-sonnet-4-6]
+
+  explore:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  librarian:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  multimodal-looker:
+    model: claude-sonnet-4-6
+    fallback_models: [claude-haiku-4-5-20251001]
+
+  researcher:
+    model: claude-sonnet-4-6
+    fallback_models: [claude-haiku-4-5-20251001]
+
+  coder:
+    model: claude-opus-4-7
+    fallback_models: [claude-sonnet-4-6]
+
+  scribe:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  reviewer:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [claude-sonnet-4-6]
+
+categories:
+  writing:
+    model: claude-sonnet-4-6
+    fallback_models: [claude-haiku-4-5-20251001]
+
+  quick:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  unspecified-low:
+    model: claude-haiku-4-5-20251001
+    fallback_models: []
+
+  artistry:
+    model: claude-sonnet-4-6
+    fallback_models: [claude-haiku-4-5-20251001]
+
+  deep:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [claude-sonnet-4-6]
+
+  unspecified-high:
+    model: claude-sonnet-4-6
+    fallback_models: [claude-haiku-4-5-20251001]
+
+  visual-engineering:
+    model: claude-sonnet-4-6
+    fallback_models: [claude-haiku-4-5-20251001]
+
+  ultrabrain:
+    model: claude-opus-4-7
+    thinking: { type: enabled }
+    fallback_models: [claude-sonnet-4-6]
+
+litellm:
+  models:
+    - claude-opus-4-7
+    - claude-sonnet-4-6
+    - claude-haiku-4-5-20251001

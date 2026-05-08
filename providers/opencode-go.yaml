@@ -1,0 +1,49 @@
+provider: opencode-go
+quota_unit: usd_credit
+description: >
+  opencode-go $10/mo flat → ~$60/mo credit ($12/5h window).
+  Billed per-token in USD credit; no prompt quotas.
+  Best-in-class coding via kimi-k2.5; deepseek-v4-flash for high-volume cheap tasks;
+  mimo-v2-omni is the only multimodal option in the stack.
+
+subscription_tiers:
+  standard: { monthly_usd: 10, credit_per_month_usd: 60, credit_per_5h_usd: 12 }
+
+models:
+  deepseek-v4-flash:
+    usd_per_mtok_in: 0.14
+    usd_per_mtok_out: 0.28
+    context_k: 64
+    tiers: [free, low, med, high, max, go-only]
+
+  deepseek-v4-pro:
+    usd_per_mtok_in: 0.435
+    usd_per_mtok_out: 1.10
+    context_k: 1000
+    tiers: [free, low, med, high, max, go-only]
+
+  kimi-k2.5:
+    usd_per_mtok_in: 0.50
+    usd_per_mtok_out: 2.50
+    context_k: 128
+    tiers: [free, low, med, high, max, go-only]
+
+  glm-5.1:
+    usd_per_mtok_in: 0.60
+    usd_per_mtok_out: 2.20
+    thinking_capable: true
+    context_k: 128
+    tiers: [free, low, med, high, max, go-only]
+
+  qwen3.5-plus:
+    usd_per_mtok_in: 0.20
+    usd_per_mtok_out: 0.80
+    context_k: 128
+    tiers: [free, low, med, high, max, go-only]
+
+  mimo-v2-omni:
+    usd_per_mtok_in: 0.30
+    usd_per_mtok_out: 1.20
+    multimodal: true
+    context_k: 64
+    tiers: [free, low, med, high, max, go-only]

@@ -1,0 +1,28 @@
+provider: copilot
+quota_unit: premium_request
+description: >
+  GitHub Copilot Pro+ $39/mo — 1500 premium requests/mo (post Jun-2026: 3900 credits).
+  Each model consumes a different number of premium requests per call.
+  Claude Opus 4.7 costs ~10× more premium requests than Sonnet 4.6.
+  Accessed via LiteLLM anthropic route using Copilot OAuth token.
+
+subscription_tiers:
+  pro:       { monthly_usd: 10,  premium_req_per_month: 300 }
+  pro_plus:  { monthly_usd: 39,  premium_req_per_month: 1500 }
+
+models:
+  claude-sonnet-4-6:
+    multiplier: 1
+    context_k: 200
+    tiers: [max, copilot-pro, copilot-pro+]
+
+  claude-opus-4-7:
+    multiplier: 10
+    thinking_capable: true
+    context_k: 200
+    tiers: [max, copilot-pro+]
+
+  claude-haiku-4-5-20251001:
+    multiplier: 0.25
+    context_k: 200
+    tiers: [low, med, high, max, copilot-pro, copilot-pro+]

@@ -1,0 +1,25 @@
+provider: gemini
+quota_unit: usd_token
+description: >
+  Google Gemini API via GEMINI_API_KEY — pay-per-token.
+  Routed through LiteLLM proxy. Gemini 3.* models are preview/experimental.
+  Flash-lite is extremely cheap for high-volume summarization/classification.
+
+models:
+  gemini-3.1-flash-lite-preview:
+    usd_per_mtok_in: 0.075
+    usd_per_mtok_out: 0.30
+    context_k: 1000
+    tiers: [free, low, med, high, max]
+
+  gemini-3-flash-preview:
+    usd_per_mtok_in: 0.30
+    usd_per_mtok_out: 1.00
+    context_k: 1000
+    tiers: [low, med, high, max]
+
+  gemini-3.1-pro-preview:
+    usd_per_mtok_in: 1.25
+    usd_per_mtok_out: 5.00
+    context_k: 2000
+    tiers: [med, high, max]

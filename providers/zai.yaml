@@ -1,0 +1,28 @@
+provider: zai
+quota_unit: prompt
+description: >
+  z.ai Coding Plan. 5h prompt quotas: Lite 80, Pro 400, Max 1600.
+  Off-peak multipliers: glm-5.1 costs 2×, glm-4.7 costs 1×, glm-4.5-air costs 0.2×.
+  No per-token billing — flat quota per session window.
+
+subscription_tiers:
+  lite:  { monthly_usd: 10, prompts_per_5h: 80 }
+  pro:   { monthly_usd: 30, prompts_per_5h: 400 }
+  max:   { monthly_usd: 80, prompts_per_5h: 1600 }
+
+models:
+  glm-4.7:
+    multiplier: 1
+    context_k: 128
+    tiers: [low, med, high, max, zai-lite, zai-pro, zai-max]
+
+  glm-5.1:
+    multiplier: 2
+    thinking_capable: true
+    context_k: 203
+    tiers: [med, high, max, zai-lite, zai-pro, zai-max]
+
+  glm-4.5-air:
+    multiplier: 0.2
+    context_k: 128
+    tiers: [free, low, med, high, max, zai-lite, zai-pro, zai-max]

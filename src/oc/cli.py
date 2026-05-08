@@ -1,6 +1,6 @@
 import typer
 
-from oc.commands import agents, configs, git, litellm, setup, shortcuts, tier
+from oc.commands import agents, configs, git, litellm, provider, setup, shortcuts, tier
 
 app = typer.Typer(
     name="oc",
@@ -14,6 +14,7 @@ app.add_typer(shortcuts.app, name="shortcuts")
 app.add_typer(configs.app, name="configs")
 app.add_typer(git.app, name="git")
 app.add_typer(tier.app, name="tier")
+app.add_typer(provider.app, name="provider")
 
 
 @app.command(name="setup")

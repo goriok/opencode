@@ -1,4 +1,5 @@
 name: max
+providers_used: [copilot, zai, opencode-go]
 description: >
   GitHub Copilot Pro+ $39/mo + opencode-go $10/mo + z.ai Max $80/mo = ~$130/mo.
   Claude Opus 4.7 via Copilot Pro+ para agentes primários (sem custo por token).

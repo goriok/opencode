@@ -12,7 +12,8 @@ from rich.console import Console
 from rich.table import Table
 
 from oc import log
-from oc.paths import LITELLM_CONFIG, OH_MY_OPENAGENT, TIER_STATE, TIERS_DIR
+from oc.paths import LITELLM_CONFIG, OH_MY_OPENAGENT, PROVIDERS_DIR, TIER_STATE, TIERS_DIR
+from oc.providers import cost_label, load_catalog, resolve_model
 from oc.tier_apply import loads_jsonc, render_litellm, render_plugin, validate_tier
 
 app = typer.Typer(help="Manage model-budget tier profiles (free/low/med/high/max).")
@@ -65,6 +66,10 @@ def _available_tiers() -> list[str]:
     return ordered + extras
 
 
+def _load_catalog() -> dict:
+    return load_catalog(PROVIDERS_DIR)
+
+
 def _budget_str(tier: dict) -> str:
     usd = tier.get("budget", {}).get("max_usd_month")
     if usd is None:
@@ -72,6 +77,15 @@ def _budget_str(tier: dict) -> str:
     if usd == 0:
         return "free"
     return f"${usd}/mo"
+
+
+def _mode_str(tier: dict) -> str:
+    providers = tier.get("providers_used", [])
+    if len(providers) == 1:
+        return f"solo:{providers[0]}"
+    if len(providers) > 1:
+        return "blended"
+    return "?"
 
 
 def _plugin_diff_rows(tier_a: dict, tier_b: dict, base_plugin: dict) -> list[tuple[str, str, str, str]]:
@@ -100,12 +114,13 @@ def tier_list() -> None:
     table.add_column("", width=2)
     table.add_column("Tier", style="bold")
     table.add_column("Budget")
+    table.add_column("Mode")
     table.add_column("Description")
 
     for name in tiers:
         tier = _load_tier(name)
         marker = "▶" if name == current else ""
-        table.add_row(marker, name, _budget_str(tier), tier.get("description", ""))
+        table.add_row(marker, name, _budget_str(tier), _mode_str(tier), tier.get("description", ""))
 
     _console.print(table)
     if current is None:
@@ -118,22 +133,32 @@ def show(name: str) -> None:
     tier = _load_tier(name)
     base = _load_base_plugin()
     rendered = render_plugin(tier, base)
+    catalog = _load_catalog()
 
     _console.print(f"\n[bold cyan]{name}[/bold cyan] — {tier.get('description', '')}")
-    _console.print(f"Budget: [green]{_budget_str(tier)}[/green]")
+    _console.print(f"Budget: [green]{_budget_str(tier)}[/green]  Mode: {_mode_str(tier)}")
 
     table = Table(show_header=True, header_style="bold")
     table.add_column("Type", style="dim")
     table.add_column("Name")
     table.add_column("Model")
+    table.add_column("Cost")
     table.add_column("Fallback(s)")
 
     for agent_name, cfg in rendered.get("agents", {}).items():
         fallback = ", ".join(cfg.get("fallback_models", [])) or "—"
-        table.add_row("agent", agent_name, cfg["model"], fallback)
+        model_str = cfg["model"]
+        provider_name, model_name = resolve_model(model_str)
+        provider_cat = catalog.get(provider_name, {})
+        clabel = cost_label(provider_cat, model_name) if provider_cat else "—"
+        table.add_row("agent", agent_name, model_str, clabel, fallback)
     for cat_name, cfg in rendered.get("categories", {}).items():
         fallback = ", ".join(cfg.get("fallback_models", [])) or "—"
-        table.add_row("category", cat_name, cfg["model"], fallback)
+        model_str = cfg["model"]
+        provider_name, model_name = resolve_model(model_str)
+        provider_cat = catalog.get(provider_name, {})
+        clabel = cost_label(provider_cat, model_name) if provider_cat else "—"
+        table.add_row("category", cat_name, model_str, clabel, fallback)
 
     _console.print(table)
 
@@ -193,10 +218,11 @@ def tier_set(
     tier = _load_tier(name)
     base_plugin = _load_base_plugin()
     base_litellm = _load_base_litellm()
+    catalog = _load_catalog()
 
-    # Validate completeness.
+    # Validate completeness + eligibility.
     try:
-        validate_tier(tier, base_plugin)
+        validate_tier(tier, base_plugin, catalog=catalog)
     except ValueError as exc:
         log.error(str(exc))
 

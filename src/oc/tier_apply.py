@@ -9,7 +9,7 @@ Neither function touches the filesystem — all I/O is in commands/tier.py.
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, Optional
 
 from oc.tier_litellm_models import KNOWN_MODELS
 
@@ -27,8 +27,20 @@ _PASSTHROUGH_KEYS = {
 }
 
 
-def validate_tier(tier: dict[str, Any], base_plugin: dict[str, Any]) -> None:
-    """Raise ValueError if tier is missing agents or categories present in base_plugin."""
+def validate_tier(
+    tier: dict[str, Any],
+    base_plugin: dict[str, Any],
+    catalog: Optional[dict] = None,
+) -> None:
+    """Raise ValueError if tier is incomplete or references ineligible models.
+
+    Two checks are run:
+    1. Completeness: every agent/category present in base_plugin must appear in tier.
+    2. Eligibility (when catalog is provided): every model referenced must be listed
+       in the provider catalog and allowed at this tier.
+    """
+    from oc.providers import validate_eligibility
+
     base_agents = set(base_plugin.get("agents", {}).keys())
     base_categories = set(base_plugin.get("categories", {}).keys())
     tier_agents = set(tier.get("agents", {}).keys())
@@ -45,6 +57,9 @@ def validate_tier(tier: dict[str, Any], base_plugin: dict[str, Any]) -> None:
 
     if errors:
         raise ValueError("\n".join(errors))
+
+    if catalog:
+        validate_eligibility(tier, catalog)
 
 
 def _build_agent_entry(agent_cfg: dict[str, Any]) -> dict[str, Any]:

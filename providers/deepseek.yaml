@@ -1,0 +1,20 @@
+provider: deepseek
+quota_unit: usd_token
+description: >
+  DeepSeek direct API — pay-per-token, no subscription.
+  v4-flash is extremely cheap for volume tasks (promo pricing).
+  v4-pro has 1M context — best cost/quality ratio for long-context coding via API.
+  Note: same models available cheaper via opencode-go subscription.
+
+models:
+  deepseek-v4-flash:
+    usd_per_mtok_in: 0.14
+    usd_per_mtok_out: 0.28
+    context_k: 64
+    tiers: [free, low, med, high, max]
+
+  deepseek-v4-pro:
+    usd_per_mtok_in: 0.435
+    usd_per_mtok_out: 1.10
+    context_k: 1000
+    tiers: [low, med, high, max]

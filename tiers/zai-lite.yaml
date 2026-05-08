@@ -1,0 +1,105 @@
+name: zai-lite
+providers_used: [zai]
+description: >
+  Solo z.ai Coding Plan Lite — $10/mo, 80 prompts/5h.
+  glm-4.7 (1× quota) para tudo. glm-5.1 apenas para reasoning crítico (2× quota).
+  Conservar quota é a prioridade.
+
+budget:
+  max_usd_month: 10
+  notes: >
+    z.ai Coding Plan Lite: 80 prompts/5h off-peak.
+    glm-5.1 custa 2×: oracle, prometheus, momus, reviewer, ultrabrain.
+    Restante usa glm-4.7 (1×) para conservar quota.
+
+agents:
+  sisyphus:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  oracle:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  prometheus:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  metis:
+    model: zai/glm-4.7
+    thinking: { type: enabled }
+    fallback_models: []
+
+  momus:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  explore:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  librarian:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  multimodal-looker:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  researcher:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  coder:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  scribe:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  reviewer:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+categories:
+  writing:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  quick:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  unspecified-low:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  artistry:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  deep:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  unspecified-high:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  visual-engineering:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  ultrabrain:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+litellm:
+  models: []

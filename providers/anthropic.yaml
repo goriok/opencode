@@ -1,0 +1,27 @@
+provider: anthropic
+quota_unit: usd_token
+description: >
+  Anthropic direct API — pay-per-token, no subscription quota.
+  Models also accessible via Copilot Pro+ (see providers/copilot.yaml) or
+  Claude Code Max subscription (fixed monthly, no per-token cost).
+  Routed through LiteLLM proxy for unified access.
+
+models:
+  claude-haiku-4-5-20251001:
+    usd_per_mtok_in: 1.00
+    usd_per_mtok_out: 5.00
+    context_k: 200
+    tiers: [free, low, med, high, max, copilot-pro, copilot-pro+]
+
+  claude-sonnet-4-6:
+    usd_per_mtok_in: 3.00
+    usd_per_mtok_out: 15.00
+    context_k: 200
+    tiers: [med, high, max, copilot-pro, copilot-pro+]
+
+  claude-opus-4-7:
+    usd_per_mtok_in: 15.00
+    usd_per_mtok_out: 75.00
+    thinking_capable: true
+    context_k: 200
+    tiers: [max, copilot-pro+]

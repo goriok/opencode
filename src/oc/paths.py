@@ -30,6 +30,7 @@ PRIMARY_AGENTS = [
 AGENCY_AGENTS_REPO = "https://github.com/msitarzewski/agency-agents"
 
 TIERS_DIR = OPENCODE_DIR / "tiers"
+PROVIDERS_DIR = OPENCODE_DIR / "providers"
 TIER_STATE = OPENCODE_DIR / ".tier-state.json"
 OH_MY_OPENAGENT = OPENCODE_DIR / "oh-my-openagent.jsonc"
 LITELLM_CONFIG = LITELLM_DIR / "config.yaml"

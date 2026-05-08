@@ -1,0 +1,105 @@
+name: zai-max
+providers_used: [zai]
+description: >
+  Solo z.ai Coding Plan Max — $80/mo, 1600 prompts/5h.
+  glm-5.1 com thinking para todos os agentes críticos.
+  Quota abundante: pode usar glm-5.1 mais livremente que nos planos menores.
+
+budget:
+  max_usd_month: 80
+  notes: >
+    z.ai Coding Plan Max: 1600 prompts/5h.
+    glm-5.1 custa 2× off-peak → ~800 prompts efetivos/5h para thinking.
+    Uso intenso: todos os agentes de análise, coding, review em glm-5.1.
+
+agents:
+  sisyphus:
+    model: zai/glm-5.1
+    fallback_models: [zai/glm-4.7]
+
+  oracle:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  prometheus:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  metis:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  momus:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  explore:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  librarian:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  multimodal-looker:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  researcher:
+    model: zai/glm-5.1
+    fallback_models: [zai/glm-4.7]
+
+  coder:
+    model: zai/glm-5.1
+    fallback_models: [zai/glm-4.7]
+
+  scribe:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  reviewer:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+categories:
+  writing:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  quick:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  unspecified-low:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  artistry:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  deep:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+  unspecified-high:
+    model: zai/glm-5.1
+    fallback_models: [zai/glm-4.7]
+
+  visual-engineering:
+    model: zai/glm-4.7
+    fallback_models: []
+
+  ultrabrain:
+    model: zai/glm-5.1
+    thinking: { type: enabled }
+    fallback_models: [zai/glm-4.7]
+
+litellm:
+  models: []

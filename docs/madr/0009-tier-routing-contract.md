@@ -25,7 +25,7 @@ exclusivamente pelo plugin `oh-my-openagent` via o JSONC central.
 
 ```
 tiers/<name>.yaml
-   └─ render_plugin()         src/oc/tier_apply.py:65-99
+   └─ render_plugin()         src/ocx/tier_apply.py:65-99
         └─ oh-my-openagent.jsonc          ← ÚNICO arquivo lido pelo plugin em runtime
               └─ plugin oh-my-openagent   carregado por opencode.jsonc:66
 ```
@@ -59,7 +59,7 @@ Guard test em `tests/test_agents_no_model_override.py` falha se algum `agents/*.
 
 ## Referências
 
-- `src/oc/tier_apply.py:44-99` — `render_plugin`, `_build_agent_entry`, `validate_tier`
-- `src/oc/providers.py` — `validate_eligibility`, `cost_label`
+- `src/ocx/tier_apply.py:44-99` — `render_plugin`, `_build_agent_entry`, `validate_tier`
+- `src/ocx/providers.py` — `validate_eligibility`, `cost_label`
 - `AGENTS.md` §"Provider catalog"
 - MADR 0003 (plugin coexistence), 0007 (opencode-go strategy), 0008 (LiteLLM proxy)

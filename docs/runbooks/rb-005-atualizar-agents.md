@@ -2,21 +2,21 @@
 
 **Quando usar**: Nova versão do agency-agents disponível, ou agentes desatualizados.
 **Tempo estimado**: 5-10 minutos
-**Pré-requisitos**: Git, `oc` instalado
+**Pré-requisitos**: Git, `ocx` instalado
 
 ## Passos
 
 ### 1. Verificar versão atual
 
 ```bash
-oc agents count
+ocx agents count
 # Anotar o número
 ```
 
 ### 2. Rodar setup novamente
 
 ```bash
-oc setup
+ocx setup
 ```
 
 Re-clona agency-agents e reinstala os agentes. Já sincroniza os primários automaticamente.
@@ -25,7 +25,7 @@ Re-clona agency-agents e reinstala os agentes. Já sincroniza os primários auto
 
 ```bash
 # Contar agentes
-oc agents count
+ocx agents count
 
 # Verificar que primários estão intactos
 head -5 ~/.claude/agents/alan-turing.md
@@ -39,6 +39,6 @@ head -5 ~/.claude/agents/alan-turing.md
 
 ## Troubleshooting
 
-- **Setup falha**: `rm -rf ~/.config/opencode/agents/` e re-executar `oc setup`
-- **Primários desapareceram**: Re-executar `oc agents sync`
+- **Setup falha**: `rm -rf ~/.config/opencode/agents/` e re-executar `ocx setup`
+- **Primários desapareceram**: Re-executar `ocx agents sync`
 - **Conflito de versão**: Verificar se agency-agents repo está atualizado

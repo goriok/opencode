@@ -34,7 +34,7 @@ uv tool install --editable .
 ### 5. Rodar setup
 
 ```bash
-oc setup
+ocx setup
 ```
 
 Isso clona agency-agents, converte, e instala os agentes. Já sincroniza os primários automaticamente.
@@ -59,7 +59,7 @@ opencode --version                        # Confirmar versão
 ### 8. Configurar LiteLLM proxy
 
 ```bash
-oc litellm setup
+ocx litellm setup
 ```
 
 Isso cria o `.env`, sobe o proxy Docker, gera a virtual key e configura o Claude Code automaticamente. Ver [RB-008](./rb-008-litellm-proxy-setup.md) para detalhes.
@@ -75,7 +75,7 @@ nano ~/.config/opencode/litellm/.env
 # Preencha: ZAI_API_KEY=sua_key_aqui
 
 # Reinicie o proxy para carregar a nova key:
-oc litellm down && oc litellm up
+ocx litellm down && oc litellm up
 ```
 
 Modelos z.ai disponíveis via proxy: `zai/glm-5.1`, `zai/glm-5-turbo`, `zai/glm-4.7`, `zai/glm-4.5-air`
@@ -84,12 +84,12 @@ Modelos z.ai disponíveis via proxy: `zai/glm-5.1`, `zai/glm-5-turbo`, `zai/glm-
 
 - [ ] `opencode` abre sem erros
 - [ ] Agentes primários aparecem no menu
-- [ ] `oc litellm status` retorna `"I'm alive!"`
-- [ ] `oc litellm models` lista modelos (3 Anthropic + opencode-go + z.ai)
+- [ ] `ocx litellm status` retorna `"I'm alive!"`
+- [ ] `ocx litellm models` lista modelos (3 Anthropic + opencode-go + z.ai)
 - [ ] `claude -p "ping"` retorna `pong` (via proxy)
 - [ ] `localhost:4000/ui` abre com a virtual key `claude-code-max`
 
 ## Troubleshooting
 
-- **Agentes não aparecem**: Re-executar `oc setup`
+- **Agentes não aparecem**: Re-executar `ocx setup`
 - **Plugin não instala**: Verificar `opencode.jsonc` e permissões

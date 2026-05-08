@@ -17,10 +17,10 @@ cd ~/.config/opencode
 uv tool install --editable .
 
 # Install everything (agents + sync to Claude Code)
-oc setup
+ocx setup
 
 # Start the LiteLLM proxy
-oc litellm setup
+ocx litellm setup
 ```
 
 After setup, OpenCode will have all 191 agents installed and the primary orchestrators synced to Claude Code.
@@ -34,10 +34,10 @@ After setup, OpenCode will have all 191 agents installed and the primary orchest
 ├── AGENTS.md                    # Agent guidance (for AI agents operating in this repo)
 ├── README.md                    # This file
 ├── opencode.jsonc               # Main OpenCode configuration
-├── pyproject.toml               # Python package for the `oc` CLI
-├── src/oc/                      # CLI source (commands: setup, agents, litellm, shortcuts, …)
+├── pyproject.toml               # Python package for the `ocx` CLI
+├── src/ocx/                      # CLI source (commands: setup, agents, litellm, shortcuts, …)
 │
-├── agents/                      # 191 agent .md files (all tracked in git, installed by oc setup)
+├── agents/                      # 191 agent .md files (all tracked in git, installed by ocx setup)
 │   ├── alan-turing.md           #   ↳ Tracked: SDLC orchestrator
 │   ├── grace-hopper.md          #   ↳ Tracked: Troubleshooting orchestrator
 │   ├── ada-lovelace.md          #   ↳ Tracked: Exploratory analysis
@@ -121,7 +121,7 @@ Five orchestrators coordinate specialist subagents under structured frameworks:
 
 ### Subagent Squads
 
-Each primary agent delegates to a squad of 15-19 specialist subagents from the agency-agents collection (installed by `oc setup`). See [AGENTS.md](./AGENTS.md) for the full squad rosters.
+Each primary agent delegates to a squad of 15-19 specialist subagents from the agency-agents collection (installed by `ocx setup`). See [AGENTS.md](./AGENTS.md) for the full squad rosters.
 
 ---
 
@@ -187,27 +187,27 @@ This repo uses three distinct documentation formats, each answering a different 
 
 ---
 
-## 🛠 CLI (`oc`)
+## 🛠 CLI (`ocx`)
 
-Todas as operações são via o comando `oc` (Python CLI instalado com `uv`):
+Todas as operações são via o comando `ocx` (Python CLI instalado com `uv`):
 
 | Comando | Propósito |
 |---------|-----------|
-| `oc setup` | Setup inicial: instala agents, sincroniza primários |
-| `oc agents sync` | Sincroniza primários para `~/.claude/agents/` |
-| `oc agents install [path]` | Instala agents em um projeto |
-| `oc agents count` | Conta agents instalados |
-| `oc shortcuts install` | Instala aliases de shell (oc, ocw, ocwserve) |
-| `oc litellm up/down/logs` | Gerencia o proxy LiteLLM |
-| `oc litellm status/models` | Health check e lista de modelos |
-| `oc litellm setup [--claude-code]` | Setup completo ou só Claude Code |
-| `oc tier list` | Lista os perfis de tier disponíveis |
-| `oc tier set <name>` | Aplica um tier (reescreve oh-my-openagent + litellm config) |
-| `oc tier show <name>` | Mostra os modelos do tier |
-| `oc tier diff <a> <b>` | Compara dois tiers lado a lado |
-| `oc tier current` | Mostra o tier ativo |
-| `oc configs check` | Verifica arquivos de config |
-| `oc git status` | Status git deste repo |
+| `ocx setup` | Setup inicial: instala agents, sincroniza primários |
+| `ocx agents sync` | Sincroniza primários para `~/.claude/agents/` |
+| `ocx agents install [path]` | Instala agents em um projeto |
+| `ocx agents count` | Conta agents instalados |
+| `ocx shortcuts install` | Instala aliases de shell (oc, ocw, ocwserve) |
+| `ocx litellm up/down/logs` | Gerencia o proxy LiteLLM |
+| `ocx litellm status/models` | Health check e lista de modelos |
+| `ocx litellm setup [--claude-code]` | Setup completo ou só Claude Code |
+| `ocx tier list` | Lista os perfis de tier disponíveis |
+| `ocx tier set <name>` | Aplica um tier (reescreve oh-my-openagent + litellm config) |
+| `ocx tier show <name>` | Mostra os modelos do tier |
+| `ocx tier diff <a> <b>` | Compara dois tiers lado a lado |
+| `ocx tier current` | Mostra o tier ativo |
+| `ocx configs check` | Verifica arquivos de config |
+| `ocx git status` | Status git deste repo |
 
 Veja `oc --help` para todos os subcomandos.
 
@@ -222,14 +222,14 @@ uv tool install --editable .
 uv tool install --editable . --reinstall
 
 # Verificar instalação
-uv tool list          # mostra: oc v1.0.0
+uv tool list          # mostra: ocx v1.0.0
 which oc              # ~/.local/bin/oc
 
 # Desinstalar
-uv tool uninstall oc
+uv tool uninstall ocx
 ```
 
-O `--editable` faz com que edições em `src/oc/` tenham efeito imediato sem reinstalar.
+O `--editable` faz com que edições em `src/ocx/` tenham efeito imediato sem reinstalar.
 O PATH é configurado automaticamente via `~/.local/bin/env` (sourced no `.zshrc`/`.bashrc`).
 
 > **Conflito com alias**: Se `oc` ainda abrir o opencode TUI, você tem `alias oc="opencode"` no shell.

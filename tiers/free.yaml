@@ -1,9 +1,23 @@
 name: free
-description: "Zero-cost blend — opencode-go only (no zai, no Anthropic). Best for exploration and low-stakes tasks."
+description: >
+  Zero custo variável — opencode-go $10/mo cobre tudo via crédito flat.
+  Maximiza volume: deepseek-v4-flash (~31k req/5h) para tudo rotineiro,
+  glm-5.1 e kimi-k2.5 apenas para reasoning pesado e coding crítico.
 
 budget:
-  max_usd_month: 0
-  notes: "opencode-go models are free-tier; no LiteLLM-proxied models included."
+  max_usd_month: 10
+  notes: >
+    opencode-go: $10/mo flat → $12 de crédito por janela 5h / $60 por mês.
+    DeepSeek-v4-flash é o mais barato da plataforma (~31650 req/5h).
+    Sem z.ai API direto, sem Anthropic.
+
+# Estratégia: tudo via opencode-go.
+# - Flash para volume (explore, scribe, researcher, sisyphus)
+# - Pro para coding e reasoning estruturado (coder, deep tasks)
+# - glm-5.1 para oracle/reviewer que precisam de thinking real
+# - kimi-k2.5 como fallback de coding (forte em código)
+# - qwen3.5-plus como fallback de texto (eficiente)
+# - mimo-v2-omni exclusivo para multimodal (única opção)
 
 agents:
   sisyphus:
@@ -13,7 +27,7 @@ agents:
   oracle:
     model: opencode-go/glm-5.1
     thinking: { type: enabled }
-    fallback_models: [opencode-go/deepseek-v4-pro]
+    fallback_models: [opencode-go/kimi-k2.5]
 
   prometheus:
     model: opencode-go/glm-5.1
@@ -21,9 +35,9 @@ agents:
     fallback_models: [opencode-go/deepseek-v4-pro]
 
   metis:
-    model: opencode-go/glm-5.1
+    model: opencode-go/deepseek-v4-pro
     thinking: { type: enabled }
-    fallback_models: [opencode-go/deepseek-v4-pro]
+    fallback_models: [opencode-go/kimi-k2.5]
 
   momus:
     model: opencode-go/glm-5.1
@@ -36,7 +50,6 @@ agents:
 
   librarian:
     model: opencode-go/deepseek-v4-flash
-    thinking: { type: enabled }
     fallback_models: [opencode-go/qwen3.5-plus]
 
   multimodal-looker:
@@ -48,8 +61,8 @@ agents:
     fallback_models: [opencode-go/qwen3.5-plus]
 
   coder:
-    model: opencode-go/deepseek-v4-pro
-    fallback_models: [opencode-go/kimi-k2.5]
+    model: opencode-go/kimi-k2.5
+    fallback_models: [opencode-go/deepseek-v4-pro]
 
   scribe:
     model: opencode-go/deepseek-v4-flash
@@ -58,12 +71,12 @@ agents:
   reviewer:
     model: opencode-go/glm-5.1
     thinking: { type: enabled }
-    fallback_models: [opencode-go/deepseek-v4-pro]
+    fallback_models: [opencode-go/kimi-k2.5]
 
 categories:
   writing:
-    model: opencode-go/deepseek-v4-flash
-    fallback_models: []
+    model: opencode-go/qwen3.5-plus
+    fallback_models: [opencode-go/deepseek-v4-flash]
 
   quick:
     model: opencode-go/deepseek-v4-flash
@@ -74,8 +87,8 @@ categories:
     fallback_models: []
 
   artistry:
-    model: opencode-go/deepseek-v4-flash
-    fallback_models: []
+    model: opencode-go/qwen3.5-plus
+    fallback_models: [opencode-go/deepseek-v4-flash]
 
   deep:
     model: opencode-go/deepseek-v4-pro
@@ -92,7 +105,7 @@ categories:
   ultrabrain:
     model: opencode-go/glm-5.1
     thinking: { type: enabled }
-    fallback_models: [opencode-go/deepseek-v4-pro]
+    fallback_models: [opencode-go/kimi-k2.5]
 
 litellm:
   models: []

@@ -151,12 +151,15 @@ def test_parse_jsonc_strips_block_comments():
     assert parsed == {"key": "value"}
 
 
-# ── Round-trip: med.yaml must reproduce current oh-my-openagent.jsonc ─────────
+# ── Round-trip: render is idempotent — applying a tier twice gives identical output ──
 
-def test_med_tier_round_trip(tmp_path):
-    """Applying tiers/med.yaml to current oh-my-openagent.jsonc should produce
-    semantically identical agents and categories blocks."""
-    import importlib.resources
+def test_tier_render_is_idempotent():
+    """render_plugin(tier, render_plugin(tier, base)) == render_plugin(tier, base).
+
+    The YAML tier files are the source of truth; oh-my-openagent.jsonc is a generated
+    artifact. This test verifies the render function is stable (not that it matches
+    any particular on-disk state).
+    """
     from pathlib import Path
 
     opencode_dir = Path.home() / ".config" / "opencode"
@@ -169,19 +172,29 @@ def test_med_tier_round_trip(tmp_path):
     tier = yaml.safe_load(med_path.read_text())
     base = loads_jsonc(plugin_path.read_text())
 
-    validate_tier(tier, base)
-    result = render_plugin(tier, base)
+    first = render_plugin(tier, base)
+    second = render_plugin(tier, first)
 
-    # agents block must be semantically equal.
-    for agent_name, base_entry in base["agents"].items():
-        result_entry = result["agents"][agent_name]
-        assert result_entry["model"] == base_entry["model"], f"agent {agent_name}: model mismatch"
-        if "thinking" in base_entry:
-            assert result_entry.get("thinking") == base_entry["thinking"], f"agent {agent_name}: thinking mismatch"
-        if base_entry.get("fallback_models"):
-            assert result_entry.get("fallback_models") == base_entry["fallback_models"], f"agent {agent_name}: fallback mismatch"
+    assert first["agents"] == second["agents"], "render is not idempotent for agents"
+    assert first["categories"] == second["categories"], "render is not idempotent for categories"
 
-    # categories block must be semantically equal.
-    for cat_name, base_entry in base["categories"].items():
-        result_entry = result["categories"][cat_name]
-        assert result_entry["model"] == base_entry["model"], f"category {cat_name}: model mismatch"
+
+def test_all_tiers_are_complete():
+    """Every tier YAML must define all agents and categories present in the active config."""
+    from pathlib import Path
+
+    opencode_dir = Path.home() / ".config" / "opencode"
+    plugin_path = opencode_dir / "oh-my-openagent.jsonc"
+    tiers_dir = opencode_dir / "tiers"
+
+    if not plugin_path.exists() or not tiers_dir.exists():
+        pytest.skip("config files not found")
+
+    base = loads_jsonc(plugin_path.read_text())
+
+    for tier_file in sorted(tiers_dir.glob("*.yaml")):
+        tier = yaml.safe_load(tier_file.read_text())
+        try:
+            validate_tier(tier, base)
+        except ValueError as exc:
+            pytest.fail(f"Tier '{tier_file.name}' is incomplete: {exc}")

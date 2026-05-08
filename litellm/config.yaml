@@ -1,66 +1,46 @@
-# ─── LiteLLM Central Config ──────────────────────────────────────────────────
-# Source of truth for liteLLM proxy (local Docker and remote cluster).
-# Providers que NÃO estão aqui: opencode-go, z.ai, DeepSeek — são diretos.
-# Sync this file to ~/sources/litellm/config.yaml (local Docker mount).
-
 model_list:
-  # ─── Anthropic (Claude Code Max subscription via OAuth) ─────────────────────
-  - model_name: claude-sonnet-4-6
-    litellm_params:
-      model: anthropic/claude-sonnet-4-6
-      max_retries: 0
-
-  - model_name: claude-opus-4-7
-    litellm_params:
-      model: anthropic/claude-opus-4-7
-      max_retries: 0
-
-  - model_name: claude-haiku-4-5-20251001
-    litellm_params:
-      model: anthropic/claude-haiku-4-5-20251001
-      max_retries: 0
-
-  # ─── Gemini 3.* (GEMINI_API_KEY) ──────────────────────────────────────────
-  - model_name: gemini/gemini-3.1-flash-lite-preview
-    litellm_params:
-      model: gemini/gemini-3.1-flash-lite-preview
-      api_key: os.environ/GEMINI_API_KEY
-
-  - model_name: gemini/gemini-3-flash-preview
-    litellm_params:
-      model: gemini/gemini-3-flash-preview
-      api_key: os.environ/GEMINI_API_KEY
-
-  - model_name: gemini/gemini-3.1-pro-preview
-    litellm_params:
-      model: gemini/gemini-3.1-pro-preview
-      api_key: os.environ/GEMINI_API_KEY
-
+- model_name: claude-sonnet-4-6
+  litellm_params:
+    model: anthropic/claude-sonnet-4-6
+    max_retries: 0
+- model_name: claude-haiku-4-5-20251001
+  litellm_params:
+    model: anthropic/claude-haiku-4-5-20251001
+    max_retries: 0
+- model_name: gemini/gemini-3.1-flash-lite-preview
+  litellm_params:
+    model: gemini/gemini-3.1-flash-lite-preview
+    api_key: os.environ/GEMINI_API_KEY
+- model_name: gemini/gemini-3-flash-preview
+  litellm_params:
+    model: gemini/gemini-3-flash-preview
+    api_key: os.environ/GEMINI_API_KEY
+- model_name: gemini/gemini-3.1-pro-preview
+  litellm_params:
+    model: gemini/gemini-3.1-pro-preview
+    api_key: os.environ/GEMINI_API_KEY
 litellm_settings:
   callbacks:
-    - prometheus
-
+  - prometheus
   drop_params:
-    - reasoningSummary
+  - reasoningSummary
   request_timeout: 120
   num_retries: 0
-
   cache: true
   cache_params:
     type: redis
     host: os.environ/REDIS_HOST
     port: 6379
-    namespace: "litellm.cache"
+    namespace: litellm.cache
     ttl: 600
     max_connections: 50
-
 router_settings:
   routing_strategy: simple-shuffle
   allowed_fails: 3
   cooldown_time: 5
   timeout: 120
-
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
   store_model_in_db: true
   forward_client_headers_to_llm_api: true
+  max_budget: 40

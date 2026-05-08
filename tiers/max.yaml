@@ -1,14 +1,34 @@
 name: max
-description: "Maximum quality (~$200/mo cap). Anthropic Claude Opus for primary agents, zai/glm-5.1 for fast paths."
+description: >
+  GitHub Copilot Pro+ $39/mo + opencode-go $10/mo + z.ai Max $80/mo = ~$130/mo.
+  Claude Opus 4.7 via Copilot Pro+ para agentes primários (sem custo por token).
+  Claude Sonnet 4.6 via Copilot para tasks intermediárias.
+  z.ai glm-5.1 como fallback soberano (thinking, 203K ctx).
+  opencode-go para volume e multimodal.
 
 budget:
-  max_usd_month: 200
-  notes: "Soft cap applied to LiteLLM-proxied providers (Anthropic, Gemini) only."
+  max_usd_month: 130
+  notes: >
+    GitHub Copilot Pro+: $39/mo, 1500 premium requests/mês (pós jun-2026: 3900 créditos).
+    Claude Opus 4.7 via Copilot = sem custo por token dentro do allowance.
+    z.ai Coding Plan Max: $80/mo (1600 prompts/5h com glm-5.1 thinking).
+    opencode-go: $10/mo flat (fallback e multimodal).
+    DeepSeek API não necessária — Copilot + z.ai cobrem todas as faixas de qualidade.
+
+# Estratégia:
+# - Claude Opus 4.7 via Copilot para os 4 agentes de reasoning mais críticos
+#   (oracle, prometheus, momus, reviewer) — melhor qualidade disponível
+# - Claude Sonnet 4.6 via Copilot para sisyphus, coder, librarian, researcher
+#   (alta qualidade, menos quota que Opus)
+# - z.ai glm-5.1 como fallback primário (thinking, sem Anthropic rate limit)
+# - opencode-go kimi-k2.5 como fallback de coding
+# - opencode-go mimo-v2-omni para multimodal (único com essa capacidade)
+# - opencode-go deepseek-v4-flash para categories rápidas (conserva Copilot quota)
 
 agents:
   sisyphus:
     model: claude-sonnet-4-6
-    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
+    fallback_models: [zai/glm-5.1, opencode-go/kimi-k2.5]
 
   oracle:
     model: claude-opus-4-7
@@ -21,9 +41,9 @@ agents:
     fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
 
   metis:
-    model: claude-opus-4-7
+    model: claude-sonnet-4-6
     thinking: { type: enabled }
-    fallback_models: [zai/glm-5.1, opencode-go/glm-5.1]
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
 
   momus:
     model: claude-opus-4-7
@@ -32,16 +52,15 @@ agents:
 
   explore:
     model: claude-sonnet-4-6
-    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
+    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-flash]
 
   librarian:
     model: claude-sonnet-4-6
-    thinking: { type: enabled }
-    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-flash]
+    fallback_models: [zai/glm-4.7, opencode-go/deepseek-v4-flash]
 
   multimodal-looker:
-    model: claude-sonnet-4-6
-    fallback_models: [zai/glm-5.1, opencode-go/mimo-v2-omni]
+    model: opencode-go/mimo-v2-omni
+    fallback_models: [claude-sonnet-4-6, opencode-go/deepseek-v4-flash]
 
   researcher:
     model: claude-sonnet-4-6
@@ -49,11 +68,11 @@ agents:
 
   coder:
     model: claude-opus-4-7
-    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
+    fallback_models: [zai/glm-5.1, opencode-go/kimi-k2.5]
 
   scribe:
     model: claude-sonnet-4-6
-    fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-flash]
+    fallback_models: [opencode-go/qwen3.5-plus, zai/glm-4.7]
 
   reviewer:
     model: claude-opus-4-7
@@ -63,19 +82,19 @@ agents:
 categories:
   writing:
     model: claude-sonnet-4-6
-    fallback_models: [zai/glm-5.1]
+    fallback_models: [opencode-go/qwen3.5-plus, zai/glm-4.7]
 
   quick:
-    model: zai/glm-4.7
-    fallback_models: [opencode-go/deepseek-v4-flash]
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: []
 
   unspecified-low:
-    model: zai/glm-4.7
-    fallback_models: [opencode-go/deepseek-v4-flash]
+    model: opencode-go/deepseek-v4-flash
+    fallback_models: []
 
   artistry:
     model: claude-sonnet-4-6
-    fallback_models: [zai/glm-5.1]
+    fallback_models: [zai/glm-5.1, opencode-go/qwen3.5-plus]
 
   deep:
     model: claude-opus-4-7
@@ -87,8 +106,8 @@ categories:
     fallback_models: [zai/glm-5.1, opencode-go/deepseek-v4-pro]
 
   visual-engineering:
-    model: claude-sonnet-4-6
-    fallback_models: [zai/glm-5.1, opencode-go/mimo-v2-omni]
+    model: opencode-go/mimo-v2-omni
+    fallback_models: [claude-sonnet-4-6, opencode-go/deepseek-v4-flash]
 
   ultrabrain:
     model: claude-opus-4-7

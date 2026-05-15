@@ -2,6 +2,7 @@
 name: kanban-force-card
 description: Cria, atualiza ou comenta cards no Kanban Force via MCP. Invocar quando o usuário pedir para criar card, atualizar card, mover card, comentar card ou qualquer operação no board do Kanban Force.
 argument-hint: "[criar|atualizar|comentar|mover] [descrição da operação]"
+tool: opencode-only
 ---
 
 # Kanban Force — Gestão de Cards

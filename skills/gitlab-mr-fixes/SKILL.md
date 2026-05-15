@@ -3,6 +3,7 @@ name: gitlab-mr-fixes
 description: Aplica correções em MRs do GitLab após review — implementa mudanças no código, responde comentários de reviewers, aplica sugestões, e valida RED->GREEN quando há testes envolvidos. Invocar com a URL do MR.
 disable-model-invocation: true
 argument-hint: <gitlab-mr-url>
+tool: opencode-only
 ---
 
 # GitLab MR Fixes

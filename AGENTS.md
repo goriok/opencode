@@ -180,6 +180,30 @@ These five agents are the only custom ones defined here. All other agents come f
 | `changelog-update` | `skills/changelog-update/SKILL.md` | Atualização de changelog |
 | `cve-impact-analysis` | `skills/cve-impact-analysis/SKILL.md` | Análise de impacto de CVE |
 
+### Skill Sync — Convenção `tool:`
+
+Todo `SKILL.md` pode ter um campo `tool:` no frontmatter. O comando `ocx agents sync` usa esse campo para decidir o que copiar para `~/.claude/skills/`.
+
+| Valor | Comportamento |
+|---|---|
+| `shared` (default, se ausente) | Copiado para `~/.claude/skills/` com transformações automáticas |
+| `opencode-only` | Permanece só em opencode — não é copiado para o Claude |
+| `claude-only` | Copiado para `~/.claude/skills/` sem transformações (já no dialeto Claude Code) |
+
+**Transformações aplicadas em skills `shared`:**
+
+| opencode | Claude Code |
+|---|---|
+| `Task tool` | `Agent tool` |
+| `show_options` tool | `AskUserQuestion` tool |
+
+**Source of truth:** `~/.config/opencode/skills/` — incluindo skills claude-only.
+
+**DO NOT EDIT** os arquivos em `~/.claude/skills/` diretamente — são sobrescritos pelo sync.  
+Use `ocx agents sync --check` para detectar drift antes de commitar.
+
+**Escape hatch:** envolva conteúdo com `<!-- skip-sync -->` ... `<!-- /skip-sync -->` para preservar byte-a-byte durante o sync.
+
 ### Companion Skills (orchestrators primários)
 
 Skills que carregam o framework completo de cada primary agent:

@@ -2,6 +2,7 @@
 name: kanban-force-planner
 description: Planejamento e organização de demandas no Kanban Force via MCP — hierarquia de cards, Gantt (dtStart/dtEnd), predecessores/sucessores, bloqueios e priorização. Invocar quando o usuário pedir para planejar sprints, organizar roadmap, criar hierarquia de cards, definir datas, ou analisar dependências.
 argument-hint: "[planejar|roadmap|gantt|hierarquia|sprint|priorizar] [descrição do objetivo]"
+tool: opencode-only
 ---
 
 # Kanban Force — Planejamento e Organização

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: $AGENT_NAME
+  namespace: $AGENT_NAME
+spec:
+  selector:
+    app: $AGENT_NAME
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080

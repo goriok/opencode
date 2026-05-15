@@ -33,154 +33,96 @@
     }
   },
   "agents": {
-    "sisyphus": {
-      "model": "zai/glm-4.7",
-      "fallback_models": [
-        "opencode-go/deepseek-v4-pro",
-        "opencode-go/kimi-k2.5"
-      ]
-    },
-    "oracle": {
-      "model": "zai/glm-5.1",
-      "thinking": {
-        "type": "enabled"
-      },
-      "fallback_models": [
-        "opencode-go/glm-5.1",
-        "opencode-go/kimi-k2.5"
-      ]
-    },
+    // Planning layer — highest capability models
     "prometheus": {
-      "model": "zai/glm-5.1",
-      "thinking": {
-        "type": "enabled"
-      },
+      "model": "github-copilot/claude-opus-4-7",
+      "variant": "max",
       "fallback_models": [
-        "opencode-go/glm-5.1",
-        "opencode-go/deepseek-v4-pro"
+        "github-copilot/gpt-5.5"
       ]
     },
     "metis": {
-      "model": "zai/glm-4.7",
-      "thinking": {
-        "type": "enabled"
-      },
+      "model": "github-copilot/claude-sonnet-4-6",
       "fallback_models": [
-        "opencode-go/deepseek-v4-pro",
-        "opencode-go/kimi-k2.5"
+        "github-copilot/claude-opus-4-7"
       ]
     },
     "momus": {
-      "model": "zai/glm-5.1",
-      "thinking": {
-        "type": "enabled"
-      },
+      "model": "github-copilot/gpt-5.5",
       "fallback_models": [
-        "opencode-go/glm-5.1",
-        "opencode-go/deepseek-v4-pro"
+        "github-copilot/claude-opus-4-7"
       ]
     },
-    "explore": {
-      "model": "zai/glm-4.7",
+    // Primary agents
+    "sisyphus": {
+      "model": "github-copilot/claude-opus-4-7",
+      "variant": "max",
       "fallback_models": [
-        "opencode-go/deepseek-v4-flash",
-        "opencode-go/qwen3.5-plus"
+        "github-copilot/gpt-5.5"
       ]
     },
-    "librarian": {
-      "model": "zai/glm-4.7",
+    // Subagents — specialized workers
+    "oracle": {
+      "model": "github-copilot/gpt-5.5",
       "fallback_models": [
-        "opencode-go/deepseek-v4-flash",
-        "opencode-go/qwen3.5-plus"
+        "github-copilot/gemini-3.1-pro",
+        "github-copilot/claude-opus-4-7"
       ]
     },
-    "multimodal-looker": {
-      "model": "opencode-go/mimo-v2-omni",
+    "sisyphus-junior": {
+      "model": "github-copilot/claude-sonnet-4-6",
       "fallback_models": [
-        "opencode-go/deepseek-v4-flash"
-      ]
-    },
-    "researcher": {
-      "model": "zai/glm-4.7",
-      "fallback_models": [
-        "opencode-go/deepseek-v4-flash",
-        "opencode-go/qwen3.5-plus"
-      ]
-    },
-    "coder": {
-      "model": "opencode-go/kimi-k2.5",
-      "fallback_models": [
-        "opencode-go/deepseek-v4-pro",
-        "zai/glm-4.7"
-      ]
-    },
-    "scribe": {
-      "model": "opencode-go/qwen3.5-plus",
-      "fallback_models": [
-        "opencode-go/deepseek-v4-flash"
-      ]
-    },
-    "reviewer": {
-      "model": "zai/glm-5.1",
-      "thinking": {
-        "type": "enabled"
-      },
-      "fallback_models": [
-        "opencode-go/glm-5.1",
-        "opencode-go/kimi-k2.5"
+        "github-copilot/gpt-5.5"
       ]
     }
   },
   "categories": {
     "writing": {
-      "model": "opencode-go/qwen3.5-plus",
+      "model": "github-copilot/claude-sonnet-4-6",
       "fallback_models": [
-        "opencode-go/deepseek-v4-flash"
+        "github-copilot/gemini-3.1-pro"
       ]
     },
     "quick": {
-      "model": "opencode-go/deepseek-v4-flash"
+      "model": "github-copilot/gpt-5.4-mini",
+      "fallback_models": [
+        "github-copilot/claude-haiku-4-5"
+      ]
     },
     "unspecified-low": {
-      "model": "opencode-go/deepseek-v4-flash"
+      "model": "github-copilot/claude-sonnet-4-6"
     },
     "artistry": {
-      "model": "zai/glm-4.7",
+      "model": "github-copilot/gemini-3.1-pro",
       "fallback_models": [
-        "opencode-go/qwen3.5-plus"
+        "github-copilot/claude-opus-4-7"
       ]
     },
     "deep": {
-      "model": "zai/glm-5.1",
-      "thinking": {
-        "type": "enabled"
-      },
+      "model": "github-copilot/gpt-5.5",
       "fallback_models": [
-        "opencode-go/deepseek-v4-pro",
-        "opencode-go/kimi-k2.5"
+        "github-copilot/claude-opus-4-7",
+        "github-copilot/gemini-3.1-pro"
       ]
     },
     "unspecified-high": {
-      "model": "zai/glm-4.7",
+      "model": "github-copilot/claude-opus-4-7",
+      "variant": "max",
       "fallback_models": [
-        "opencode-go/deepseek-v4-pro",
-        "opencode-go/kimi-k2.5"
+        "github-copilot/gpt-5.5"
       ]
     },
     "visual-engineering": {
-      "model": "opencode-go/mimo-v2-omni",
+      "model": "github-copilot/gemini-3.1-pro",
       "fallback_models": [
-        "opencode-go/deepseek-v4-flash"
+        "github-copilot/claude-opus-4-7"
       ]
     },
     "ultrabrain": {
-      "model": "zai/glm-5.1",
-      "thinking": {
-        "type": "enabled"
-      },
+      "model": "github-copilot/gpt-5.5",
       "fallback_models": [
-        "opencode-go/glm-5.1",
-        "opencode-go/kimi-k2.5"
+        "github-copilot/gemini-3.1-pro",
+        "github-copilot/claude-opus-4-7"
       ]
     }
   }

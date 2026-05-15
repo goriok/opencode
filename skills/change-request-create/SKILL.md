@@ -4,6 +4,7 @@ description: Cria uma Change Request (CR) consolidada em docs/change_requests/ a
 disable-model-invocation: true
 argument-hint: [período ou tag base opcional]
 allowed-tools: Read, Grep, Glob, Bash
+tool: opencode-only
 ---
 
 # Change Request Create

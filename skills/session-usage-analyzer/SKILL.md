@@ -2,6 +2,7 @@
 name: session-usage-analyzer
 description: Analisa consumo de tokens da sessão opencode atual, identifica gargalos, sugere otimizações e avalia problemas de custo. Invocar quando o usuário pedir para analisar sessão, consumo de tokens, custo, otimizar uso, ou "quanto estou gastando".
 argument-hint: "[session-id|current]"
+tool: opencode-only
 ---
 
 # Session Usage Analyzer

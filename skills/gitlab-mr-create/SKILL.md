@@ -3,6 +3,7 @@ name: gitlab-mr-create
 description: Cria um Merge Request no GitLab — coleta metadados da branch, gera título, descrição e changelog no template padrão, e abre o MR via API. Invocar com o project_id ou URL do projeto.
 disable-model-invocation: true
 argument-hint: <gitlab-project-url-or-id> [target-branch]
+tool: opencode-only
 ---
 
 # GitLab MR Create

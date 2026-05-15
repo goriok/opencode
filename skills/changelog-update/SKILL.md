@@ -3,6 +3,7 @@ name: changelog-update
 description: Atualiza o CHANGELOG.md do projeto idmagalu-front com entradas novas, seguindo o padrão atual do arquivo (Era 1). Invocar quando o usuário pedir para atualizar, registrar ou documentar mudanças no CHANGELOG.
 disable-model-invocation: true
 allowed-tools: Read, Grep, Glob, Bash
+tool: opencode-only
 ---
 
 # Changelog Update

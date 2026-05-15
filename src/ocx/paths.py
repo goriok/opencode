@@ -3,7 +3,9 @@ from pathlib import Path
 HOME = Path.home()
 OPENCODE_DIR = HOME / ".config" / "opencode"
 AGENTS_DIR = OPENCODE_DIR / "agents"
+SKILLS_DIR = OPENCODE_DIR / "skills"
 CLAUDE_AGENTS_DIR = HOME / ".claude" / "agents"
+CLAUDE_SKILLS_DIR = HOME / ".claude" / "skills"
 CLAUDE_SETTINGS = HOME / ".claude" / "settings.json"
 LITELLM_DIR = OPENCODE_DIR / "litellm"
 LITELLM_ENV = LITELLM_DIR / ".env"

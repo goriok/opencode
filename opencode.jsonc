@@ -58,6 +58,11 @@
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
       "enabled": true
+    },
+    "recall": {
+      "type": "local",
+      "command": ["recall-mcp"],
+      "enabled": true
     }
   },
   "plugin": [

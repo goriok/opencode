@@ -2,7 +2,7 @@
 
 > Global configuration, agent personas, plugins, and operational tooling for the [opencode](https://opencode.ai) CLI.
 
-This repository manages the shared AI agent ecosystem for OpenCode — **191 subagents**, **5 primary orchestrators**, **12 skills**, **4 plugins** — all coordinated through layered orchestration with ISO-25010, ATAM, and RM-ODP frameworks.
+This repository manages the shared AI agent ecosystem for OpenCode — **84 agents**, **6 primary orchestrators**, **34 skills**, **4 plugins** — all coordinated through layered orchestration with ISO-25010, ATAM, and RM-ODP frameworks.
 
 ---
 
@@ -23,7 +23,7 @@ ocx setup
 ocx litellm setup
 ```
 
-After setup, OpenCode will have all 191 agents installed and the primary orchestrators synced to Claude Code.
+After setup, OpenCode will have all 84 agents installed and the primary orchestrators synced to Claude Code.
 
 ---
 
@@ -37,12 +37,12 @@ After setup, OpenCode will have all 191 agents installed and the primary orchest
 ├── pyproject.toml               # Python package for the `ocx` CLI
 ├── src/ocx/                      # CLI source (commands: setup, agents, litellm, shortcuts, …)
 │
-├── agents/                      # 191 agent .md files (all tracked in git, installed by ocx setup)
-│   ├── alan-turing.md           #   ↳ Tracked: SDLC orchestrator
-│   ├── grace-hopper.md          #   ↳ Tracked: Troubleshooting orchestrator
-│   ├── ada-lovelace.md          #   ↳ Tracked: Exploratory analysis
-│   ├── margaret-hamilton.md     #   ↳ Tracked: Deep analysis
-│   └── maestro.md              #   ↳ Tracked: Legacy (superseded)
+├── agents/                      # 84 agent .md files (all tracked in git)
+│   ├── alan-turing.md           #   ↳ SDLC orchestrator
+│   ├── grace-hopper.md          #   ↳ Troubleshooting orchestrator
+│   ├── ada-lovelace.md          #   ↳ Exploratory analysis
+│   ├── margaret-hamilton.md     #   ↳ Deep analysis
+│   └── agents-orchestrator.md  #   ↳ General orchestrator
 │
 ├── skills/                      # Companion skills for primary agents
 │   ├── alan-turing/             #   /alan-turing invocation
@@ -121,7 +121,7 @@ Five orchestrators coordinate specialist subagents under structured frameworks:
 
 ### Subagent Squads
 
-Each primary agent delegates to a squad of 15-19 specialist subagents from the agency-agents collection (installed by `ocx setup`). See [AGENTS.md](./AGENTS.md) for the full squad rosters.
+Each primary agent delegates to specialist subagents from the 84-agent catalog. See [AGENTS.md](./AGENTS.md) for details.
 
 ---
 
@@ -209,7 +209,7 @@ Todas as operações são via o comando `ocx` (Python CLI instalado com `uv`):
 | `ocx configs check` | Verifica arquivos de config |
 | `ocx git status` | Status git deste repo |
 
-Veja `oc --help` para todos os subcomandos.
+Veja `ocx --help` para todos os subcomandos.
 
 ### Instalação e manutenção do CLI
 
@@ -223,7 +223,7 @@ uv tool install --editable . --reinstall
 
 # Verificar instalação
 uv tool list          # mostra: ocx v1.0.0
-which oc              # ~/.local/bin/oc
+which ocx             # ~/.local/bin/ocx
 
 # Desinstalar
 uv tool uninstall ocx
@@ -245,29 +245,20 @@ O PATH é configurado automaticamente via `~/.local/bin/env` (sourced no `.zshrc
 | `oh-my-openagent.jsonc` | Model configs, agent assignments, hooks | ✅ |
 | `opencode-mem.jsonc` | Persistent memory config | ✅ |
 | `dcp.jsonc` | Dynamic Context Pruning config | ❌ (generated) |
-| `agents/*.md` | 191 agent definitions | ❌ (installed) |
+| `agents/*.md` | 84 agent definitions | ✅ (tracked) |
 | `agents/alan-turing.md` etc. | 5 primary orchestrators | ✅ (tracked exceptions) |
 
 ---
 
-## 🔧 Shell Script Style Guide
+## 🧪 Testing
 
-All scripts in this repo follow consistent conventions (detailed in [AGENTS.md](./AGENTS.md)):
+```bash
+uv run pytest          # run full test suite
+uv run pytest tests/test_cli.py  # single file
+```
 
-- **Safety**: `set -euo pipefail` on every script
-- **Logging**: Colored helpers (`info`, `warn`, `error`) — never raw `echo`
-- **Temp dirs**: `mktemp -d` with `trap 'rm -rf "$TMP"' EXIT`
-- **Variables**: `UPPER_SNAKE_CASE`, quoted expansions (`"$VAR"`, `"${VAR:-default}"`)
-- **Conditionals**: `[[ ... ]]` (not `[ ... ]`)
-- **Directory changes**: Subshells `(cd "$DIR" && command)` to avoid side effects
-
----
-
-## 🧪 Testing & Linting
-
-- **No tests** — This is a configuration/agent-definition repository with no application logic
-- **No linter** — Shell scripts follow the style guide above; do not add linting tooling without explicit instruction
-- **Package manager**: Bun (`bun.lock` present, but `node_modules/` is gitignored)
+- Tests live in `tests/` (9 test files, pytest-discovered)
+- No linter — do not add linting tooling without explicit instruction
 
 ---
 
@@ -339,7 +330,7 @@ The following are **gitignored** and must never be manually added:
           │            │              │
           ▼            ▼              ▼
    ┌──────────────────────────────────────────┐
-   │         AGENCY-AGENTS (191)              │
+   │         AGENCY-AGENTS (84)               │
    │  backend-architect, security-engineer,   │
    │  sre, code-reviewer, api-tester, ...     │
    └──────────────────────────────────────────┘
